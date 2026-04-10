@@ -280,7 +280,7 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v12 &nbsp;&middot;&nbsp; 09.04.26</div>
+      <div class="login-version">Posizionamento Navi &mdash; v12 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
     </div>
   </div>
 </div>
@@ -872,6 +872,8 @@ function showScreen(name) {
 // ═══════════════════════════════════════════
 // LOGIN
 // ═══════════════════════════════════════════
+const _ld = document.getElementById('loginDate');
+if(_ld){const _d=new Date();_ld.textContent=_d.getDate().toString().padStart(2,'0')+'.'+ (_d.getMonth()+1).toString().padStart(2,'0')+'.'+_d.getFullYear().toString().slice(2);}
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
@@ -913,9 +915,9 @@ async function doLogin() {
 async function loadLookups() {
   [navi, reparti, mansioni, qualifiche] = await Promise.all([
     sbGet('pn_navi?order=nome'),
-    sbGet('pn_reparti?order=nome'),
-    sbGet('pn_mansioni?order=nome'),
-    sbGet('pn_qualifiche?order=nome')
+    sbGet('pn_reparti?order=ordine.asc.nullsfirst,nome'),
+    sbGet('pn_mansioni?order=ordine.asc.nullsfirst,nome'),
+    sbGet('pn_qualifiche?order=ordine.asc.nullsfirst,nome')
   ]);
 }
 
