@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Posizionamento Navi — v18</title>
+<title>Posizionamento Navi — v20</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -67,6 +67,50 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .btn-topbar:hover{background:rgba(255,255,255,.18);}
 .btn-orange{font-size:11px;padding:5px 0;width:110px;border-radius:6px;background:rgba(186,117,23,.2);color:#FAC775;border:1px solid rgba(250,199,117,.5);cursor:pointer;font-weight:500;font-family:inherit;text-align:center;}
 .btn-orange:hover{background:rgba(186,117,23,.45);}
+.btn-orange.active{background:rgba(186,117,23,.55);border-color:#FAC775;}
+/* Storico panel */
+.storico-overlay{position:fixed;inset:0;background:rgba(15,42,74,.35);z-index:150;display:none;}
+.storico-overlay.show{display:block;}
+.storico-panel{position:fixed;top:0;right:0;bottom:0;width:680px;max-width:95vw;background:var(--white);box-shadow:-4px 0 30px rgba(0,0,0,.18);display:flex;flex-direction:column;z-index:151;transform:translateX(100%);transition:transform .25s ease;}
+.storico-panel.show{transform:translateX(0);}
+.storico-head{padding:16px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.storico-title{font-size:14px;font-weight:600;color:var(--navy);display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.storico-close{font-size:18px;color:var(--muted);cursor:pointer;border:none;background:none;line-height:1;padding:0;}
+.storico-filters{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.storico-filters select,.storico-filters input{height:30px;border:1px solid var(--border);border-radius:6px;padding:0 8px;font-size:11px;font-family:inherit;color:var(--text);background:var(--white);outline:none;}
+.storico-filters input{width:170px;}
+.storico-body{flex:1;overflow-y:auto;}
+.storico-table{width:100%;border-collapse:collapse;font-size:11px;}
+.storico-table thead th{padding:7px 10px;text-align:left;font-size:10px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);background:#f8fafc;white-space:nowrap;position:sticky;top:0;}
+.storico-table tbody td{padding:6px 10px;border-bottom:1px solid #f1f5f9;vertical-align:middle;}
+.storico-table tbody tr:last-child td{border-bottom:none;}
+.storico-table tbody tr:hover td{background:#f8fafc;}
+.badge-sbarca{font-size:10px;padding:2px 7px;border-radius:5px;background:#fff3dc;color:#854F0B;font-weight:600;}
+.badge-trasborda{font-size:10px;padding:2px 7px;border-radius:5px;background:#e0f2fe;color:#075985;font-weight:600;}
+.badge-rimosso{font-size:10px;padding:2px 7px;border-radius:5px;background:#f1f5f9;color:var(--muted);font-weight:600;}
+.nave-dest{font-size:10px;color:#075985;font-weight:500;}
+.storico-footer{padding:10px 20px;border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.storico-count{font-size:11px;color:var(--muted);}
+/* Modal cancellazione aggiornato */
+.opzione-rimozione{border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;margin-bottom:8px;transition:border-color .15s,background .15s;}
+.opzione-rimozione:hover{border-color:#cbd5e1;}
+.opzione-rimozione.sel{border-color:var(--navy);background:#f8fafc;}
+.opzione-rimozione.sel-danger{border-color:var(--danger);background:#fff5f5;}
+.op-top{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
+.op-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all .15s;}
+.opzione-rimozione.sel .op-dot{border-color:var(--navy);background:var(--navy);}
+.opzione-rimozione.sel-danger .op-dot{border-color:var(--danger);background:var(--danger);}
+.op-label{font-size:12px;font-weight:600;color:var(--text);}
+.opzione-rimozione.sel-danger .op-label{color:var(--danger);}
+.op-desc{font-size:11px;color:var(--muted);padding-left:22px;line-height:1.4;}
+.op-extra{padding-left:22px;margin-top:8px;display:none;}
+.opzione-rimozione.sel .op-extra,.opzione-rimozione.sel-danger .op-extra{display:block;}
+.op-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.op-row:last-child{margin-bottom:0;}
+.op-lbl{font-size:11px;color:var(--muted);min-width:72px;}
+.op-inp{height:32px;border:1.5px solid var(--border);border-radius:7px;padding:0 8px;font-size:11px;font-family:inherit;color:var(--text);background:var(--white);flex:1;outline:none;}
+.op-inp:focus{border-color:var(--navy);}
+.btn-danger-sm{padding:7px 18px;border-radius:8px;border:none;background:var(--danger);color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
 
 
 .btn-logout{font-size:11px;color:#fff;font-weight:600;background:none;border:none;cursor:pointer;font-family:inherit;}
@@ -312,7 +356,7 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v18 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div class="login-version">Posizionamento Navi &mdash; v20 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
     </div>
   </div>
 </div>
@@ -342,6 +386,7 @@ select.mform-control{cursor:pointer;}
       <span class="brand">Posizionamento Navi</span>
       <span class="topbar-badge" id="posNaveLabel" style="display:none">—</span>
       <button class="btn-orange" onclick="toggleStatPanel()" id="btnStatPanel">&#9776; Statistiche</button>
+      <button class="btn-orange" onclick="toggleStorico()" id="btnStorico">&#128203; Storico</button>
       <button class="btn-orange" onclick="generaPDF()">&#128196; PDF</button>
     </div>
     <div class="topbar-right">
@@ -719,16 +764,83 @@ select.mform-control{cursor:pointer;}
 
 <!-- MODAL ELIMINA -->
 <div class="modal-overlay" id="modalConfirm">
-  <div class="modal modal-confirm">
-    <div class="modal-title">Conferma eliminazione</div>
-    <p id="confirmMsg">Sei sicuro di voler eliminare questo elemento?</p>
-    <div class="modal-actions" style="justify-content:center">
+  <div class="modal" style="max-width:430px;">
+    <div class="modal-title">Rimuovi dal posizionamento</div>
+    <p style="font-size:11px;color:var(--muted);margin-bottom:14px;">Seleziona il motivo della rimozione</p>
+    <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:16px;font-size:12px;">
+      <strong id="confirmNome">—</strong>
+      <span style="color:var(--muted);font-size:11px;" id="confirmInfo"></span>
+    </div>
+    <div id="opzioniRimozione">
+      <div class="opzione-rimozione sel" id="op-sbarca" onclick="selOpzione('sbarca')">
+        <div class="op-top"><div class="op-dot"></div><span class="op-label">&#9875; Sbarca</span></div>
+        <div class="op-desc">Il marittimo lascia la nave &mdash; salvato nello storico sbarchi</div>
+        <div class="op-extra">
+          <div class="op-row"><span class="op-lbl">Data sbarco</span><input class="op-inp" type="date" id="dataSbarco"></div>
+        </div>
+      </div>
+      <div class="opzione-rimozione" id="op-trasborda" onclick="selOpzione('trasborda')">
+        <div class="op-top"><div class="op-dot"></div><span class="op-label">&#8646; Trasborda</span></div>
+        <div class="op-desc">Si sposta su un'altra nave &mdash; salvato nello storico</div>
+        <div class="op-extra">
+          <div class="op-row"><span class="op-lbl">Data</span><input class="op-inp" type="date" id="dataTrasborda"></div>
+          <div class="op-row"><span class="op-lbl">Nave dest.</span><select class="op-inp" id="naveDestino"><option value="">— seleziona —</option></select></div>
+        </div>
+      </div>
+      <div class="opzione-rimozione" id="op-rimosso" onclick="selOpzione('rimosso')">
+        <div class="op-top"><div class="op-dot"></div><span class="op-label">&#10005; Inserimento errato</span></div>
+        <div class="op-desc">Non era imbarcato, nessuno storico verrà salvato</div>
+      </div>
+    </div>
+    <div class="modal-actions" style="justify-content:flex-end;margin-top:16px;">
       <button class="btn-cancel" onclick="closeConfirm()">Annulla</button>
-      <button class="btn-danger" onclick="confirmDelete()">Elimina</button>
+      <button class="btn-danger" id="btnConfirmDel" onclick="confirmDelete()">Conferma sbarco</button>
     </div>
   </div>
 </div>
 
+<!-- PANNELLO STORICO -->
+<div class="storico-overlay" id="storicoOverlay" onclick="closeStorico()"></div>
+<div class="storico-panel" id="storicoPanel">
+  <div class="storico-head">
+    <div class="storico-title">
+      <span>&#128203; Storico sbarchi &amp; trasbordi</span>
+      <button class="storico-close" onclick="closeStorico()">&#10005;</button>
+    </div>
+    <div class="storico-filters">
+      <select id="storicoFiltroNave" onchange="renderStorico()"><option value="">Tutte le navi</option></select>
+      <select id="storicoFiltroTipo" onchange="renderStorico()">
+        <option value="">Tutti i tipi</option>
+        <option value="sbarca">Sbarco</option>
+        <option value="trasborda">Trasbordo</option>
+        <option value="rimosso">Rimosso</option>
+      </select>
+      <input type="text" id="storicoSearch" placeholder="&#128269; Nome o matricola..." oninput="renderStorico()">
+    </div>
+  </div>
+  <div class="storico-body">
+    <table class="storico-table">
+      <thead>
+        <tr>
+          <th>Nome / Matr.</th>
+          <th>Qualifica</th>
+          <th>Reparto</th>
+          <th>Nave</th>
+          <th>Imbarco</th>
+          <th>Sbarco</th>
+          <th>GG</th>
+          <th>Tipo</th>
+          <th>Destinazione</th>
+          <th>Operatore</th>
+        </tr>
+      </thead>
+      <tbody id="storicoBody"></tbody>
+    </table>
+  </div>
+  <div class="storico-footer">
+    <span class="storico-count" id="storicoCount">—</span>
+  </div>
+</div>
 
 <!-- STATISTICHE PANEL -->
 <div class="stat-panel" id="statPanel">
@@ -868,6 +980,22 @@ select.mform-control{cursor:pointer;}
       <div style="border-top:1px solid var(--border);padding-top:12px;">
         <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#43; Prossimo imbarco confermato</div>
         Quando un dipendente nella sezione <em>Prossimi imbarchi confermati</em> si imbarca, clicca l'icona <strong>+</strong> verde per confermarne l'imbarco e scegliere la data.
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:12px;">
+        <div style="font-weight:600;color:var(--danger);font-size:12px;margin-bottom:4px;">&#128465; Rimozione dal posizionamento</div>
+        Clicca l'icona <strong>cestino</strong> sulla riga. Apparirà una finestra con tre opzioni:
+        <ul style="margin-top:6px;padding-left:18px;display:flex;flex-direction:column;gap:4px;">
+          <li><strong style="color:var(--navy);">&#9875; Sbarca</strong> — il marittimo lascia la nave. Inserisci la data di sbarco. Il movimento viene salvato nello storico.</li>
+          <li><strong style="color:#075985;">&#8646; Trasborda</strong> — si sposta su un'altra nave. Inserisci la data e seleziona la nave di destinazione. Salvato nello storico.</li>
+          <li><strong style="color:var(--danger);">&#10005; Inserimento errato</strong> — non era imbarcato. Viene rimosso senza lasciare traccia nello storico.</li>
+        </ul>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:12px;">
+        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#128203; Storico sbarchi</div>
+        Clicca il bottone <strong>Storico</strong> vicino a PDF per aprire il pannello laterale con tutti i movimenti registrati (sbarchi, trasbordi). Puoi filtrare per nave, tipo di movimento e cercare per nome o matricola.<br>
+        <span style="color:var(--navy);font-weight:500;">Admin/Semi-admin:</span> vedono lo storico di tutte le navi. Il commissario vede solo la propria nave.
       </div>
 
       <div style="border-top:1px solid var(--border);padding-top:12px;">
@@ -1841,25 +1969,187 @@ async function saveLookup(){
 }
 
 // ─── Delete ───
-function openConfirmDel(type,id,nome){
+let opzioneRimozione = 'sbarca';
+
+function selOpzione(op) {
+  opzioneRimozione = op;
+  ['sbarca','trasborda','rimosso'].forEach(o => {
+    const el = document.getElementById('op-'+o);
+    el.classList.remove('sel','sel-danger');
+  });
+  if(op === 'rimosso') {
+    document.getElementById('op-rimosso').classList.add('sel-danger');
+    document.getElementById('btnConfirmDel').textContent = 'Rimuovi';
+    document.getElementById('btnConfirmDel').className = 'btn-danger';
+  } else {
+    document.getElementById('op-'+op).classList.add('sel');
+    document.getElementById('btnConfirmDel').textContent = op === 'sbarca' ? 'Conferma sbarco' : 'Conferma trasbordo';
+    document.getElementById('btnConfirmDel').className = 'btn-danger';
+  }
+}
+
+function openConfirmDel(type,id,nome) {
   deleteTarget={type,id};
-  document.getElementById('confirmMsg').textContent='Sei sicuro di voler eliminare "'+nome+'"?';
-  document.getElementById('modalConfirm').classList.add('show');
+  if(type === 'pos') {
+    // Trova il record posizionamento per mostrare info
+    const p = posizionamento.find(x => x.id === id);
+    const rep = p && (p.pn_reparti||p.pn_Reparti) ? (p.pn_reparti||p.pn_Reparti).nome : '';
+    document.getElementById('confirmNome').textContent = nome;
+    document.getElementById('confirmInfo').textContent = rep ? ' · ' + rep : '';
+    // Default date oggi
+    const oggi = new Date().toISOString().split('T')[0];
+    document.getElementById('dataSbarco').value = oggi;
+    document.getElementById('dataTrasborda').value = oggi;
+    // Popola navi destinazione
+    const sel = document.getElementById('naveDestino');
+    sel.innerHTML = '<option value="">— seleziona —</option>' + navi.filter(n => n.id !== utente.nave_id).map(n => '<option value="'+n.id+'">'+n.nome+'</option>').join('');
+    // Reset opzione
+    selOpzione('sbarca');
+    document.getElementById('modalConfirm').classList.add('show');
+  } else {
+    // Per altri tipi (commissari, lookup) usa il modal semplificato
+    opzioneRimozione = 'rimosso';
+    document.getElementById('confirmNome').textContent = nome;
+    document.getElementById('confirmInfo').textContent = '';
+    document.getElementById('opzioniRimozione').style.display = 'none';
+    document.getElementById('btnConfirmDel').textContent = 'Elimina';
+    document.getElementById('modalConfirm').classList.add('show');
+  }
 }
-function closeConfirm(){document.getElementById('modalConfirm').classList.remove('show');deleteTarget=null;}
-async function confirmDelete(){
-  if(!deleteTarget)return;
-  const {type,id}=deleteTarget;
-  const tableMap={pos:'pn_posizionamento',commissari:'pn_utenti',semiadmin:'pn_utenti',navi:'pn_navi',reparti:'pn_reparti',mansioni:'pn_mansioni',qualifiche:'pn_qualifiche'};
-  try{
-    await sbDelete(tableMap[type],id);
-    closeConfirm();showToast('Eliminato','success');
-    if(type==='pos'){await loadPosizionamento();}
-    else if(type==='commissari'){commissari=await sbGet('pn_utenti?ruolo=eq.commissario&select=*,pn_navi(id,nome)&order=nome');renderComm();}
-    else if(type==='semiadmin'){semiadmins=await sbGet('pn_utenti?ruolo=eq.semiadmin&select=*&order=nome');renderSemiadmin();}
-    else{await loadLookups();populateSelects();renderLookup(type);}
-  }catch(e){showToast('Errore eliminazione','error');}
+
+function closeConfirm() {
+  document.getElementById('modalConfirm').classList.remove('show');
+  document.getElementById('opzioniRimozione').style.display = 'block';
+  deleteTarget = null;
 }
+
+async function confirmDelete() {
+  if(!deleteTarget) return;
+  const {type, id} = deleteTarget;
+  const tableMap = {pos:'pn_posizionamento',commissari:'pn_utenti',semiadmin:'pn_utenti',navi:'pn_navi',reparti:'pn_reparti',mansioni:'pn_mansioni',qualifiche:'pn_qualifiche'};
+  try {
+    if(type === 'pos' && opzioneRimozione !== 'rimosso') {
+      // Salva nello storico prima di eliminare
+      const p = posizionamento.find(x => x.id === id);
+      const dip = p ? (p.pn_dipendenti || p.pn_Dipendenti) : null;
+      const rep = p ? (p.pn_reparti || p.pn_Reparti) : null;
+      const qual = dip ? (dip.pn_qualifiche || dip.pn_Qualifiche) : null;
+      const dataS = opzioneRimozione === 'sbarca' ? document.getElementById('dataSbarco').value : document.getElementById('dataTrasborda').value;
+      const naveDestId = opzioneRimozione === 'trasborda' ? parseInt(document.getElementById('naveDestino').value) || null : null;
+      if(opzioneRimozione === 'trasborda' && !naveDestId) { showToast('Seleziona la nave di destinazione', 'error'); return; }
+      const ggABordo = p && p.data_imbarco && dataS ? Math.max(0, Math.floor((new Date(dataS) - new Date(p.data_imbarco)) / 86400000)) : null;
+      await sbPost('pn_storico', {
+        nave_id: utente.nave_id,
+        dipendente_id: dip ? dip.id : null,
+        cognome_nome: dip ? dip.cognome_nome : '—',
+        matricola: dip ? dip.matricola : null,
+        qualifica: qual ? qual.nome : null,
+        reparto: rep ? rep.nome : null,
+        data_imbarco: p ? p.data_imbarco : null,
+        data_sbarco: dataS || null,
+        gg_a_bordo: ggABordo,
+        tipo: opzioneRimozione,
+        nave_destinazione_id: naveDestId,
+        operatore: utente.nome
+      });
+    }
+    await sbDelete(tableMap[type], id);
+    closeConfirm();
+    showToast(opzioneRimozione === 'sbarca' ? 'Sbarco registrato' : opzioneRimozione === 'trasborda' ? 'Trasbordo registrato' : 'Eliminato', 'success');
+    if(type === 'pos') { await loadPosizionamento(); }
+    else if(type === 'commissari') { commissari = await sbGet('pn_utenti?ruolo=eq.commissario&select=*,pn_navi(id,nome)&order=nome'); renderComm(); }
+    else if(type === 'semiadmin') { semiadmins = await sbGet('pn_utenti?ruolo=eq.semiadmin&select=*&order=nome'); renderSemiadmin(); }
+    else { await loadLookups(); populateSelects(); renderLookup(type); }
+  } catch(e) { showToast('Errore: ' + e.message, 'error'); }
+}
+
+// ═══════════════════════════════════════════
+// STORICO
+// ═══════════════════════════════════════════
+let storicoData = [];
+
+async function toggleStorico() {
+  const panel = document.getElementById('storicoPanel');
+  const overlay = document.getElementById('storicoOverlay');
+  const btn = document.getElementById('btnStorico');
+  if(panel.classList.contains('show')) {
+    closeStorico();
+  } else {
+    btn.classList.add('active');
+    // Popola filtro navi
+    const naveSel = document.getElementById('storicoFiltroNave');
+    const isMulti = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
+    if(isMulti) {
+      naveSel.innerHTML = '<option value="">Tutte le navi</option>' + navi.map(n => '<option value="'+n.id+'">'+n.nome+'</option>').join('');
+      naveSel.style.display = 'inline-block';
+    } else {
+      naveSel.innerHTML = '<option value="'+utente.nave_id+'">'+utente.nave_nome+'</option>';
+      naveSel.style.display = 'none';
+    }
+    await loadStorico();
+    overlay.classList.add('show');
+    panel.classList.add('show');
+  }
+}
+
+function closeStorico() {
+  document.getElementById('storicoPanel').classList.remove('show');
+  document.getElementById('storicoOverlay').classList.remove('show');
+  document.getElementById('btnStorico').classList.remove('active');
+}
+
+async function loadStorico() {
+  try {
+    const isMulti = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
+    const query = isMulti
+      ? 'pn_storico?order=created_at.desc&limit=200'
+      : 'pn_storico?nave_id=eq.' + utente.nave_id + '&order=created_at.desc&limit=200';
+    storicoData = await sbGet(query);
+    renderStorico();
+  } catch(e) { storicoData = []; renderStorico(); }
+}
+
+function renderStorico() {
+  const filtroNave = document.getElementById('storicoFiltroNave').value;
+  const filtroTipo = document.getElementById('storicoFiltroTipo').value;
+  const search = (document.getElementById('storicoSearch').value || '').toLowerCase();
+
+  let lista = storicoData;
+  if(filtroNave) lista = lista.filter(r => String(r.nave_id) === filtroNave);
+  if(filtroTipo) lista = lista.filter(r => r.tipo === filtroTipo);
+  if(search) lista = lista.filter(r => (r.cognome_nome||'').toLowerCase().includes(search) || (r.matricola||'').toLowerCase().includes(search));
+
+  const naveNomeMap = {};
+  navi.forEach(n => { naveNomeMap[n.id] = n.nome; });
+
+  const tbody = document.getElementById('storicoBody');
+  document.getElementById('storicoCount').textContent = lista.length + ' movimenti trovati';
+  if(lista.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--muted);font-style:italic;">Nessun movimento trovato</td></tr>';
+    return;
+  }
+  tbody.innerHTML = lista.map(r => {
+    const badgeCls = r.tipo === 'sbarca' ? 'badge-sbarca' : r.tipo === 'trasborda' ? 'badge-trasborda' : 'badge-rimosso';
+    const badgeTxt = r.tipo === 'sbarca' ? 'Sbarco' : r.tipo === 'trasborda' ? 'Trasbordo' : 'Rimosso';
+    const dest = r.nave_destinazione_id ? '<span class="nave-dest">&#8594; ' + (naveNomeMap[r.nave_destinazione_id] || '—') + '</span>' : '—';
+    const naveSrc = naveNomeMap[r.nave_id] || '—';
+    const gg = r.gg_a_bordo !== null && r.gg_a_bordo !== undefined ? r.gg_a_bordo + 'gg' : '—';
+    return '<tr>'
+      + '<td><div style="font-weight:500;font-size:11px">' + escHtml(r.cognome_nome||'—') + '</div><div style="font-size:10px;color:var(--muted)">#' + (r.matricola||'—') + '</div></td>'
+      + '<td style="font-size:10px">' + escHtml(r.qualifica||'—') + '</td>'
+      + '<td style="font-size:10px">' + escHtml(r.reparto||'—') + '</td>'
+      + '<td style="font-size:10px">' + naveSrc + '</td>'
+      + '<td style="font-size:10px;text-align:center">' + (r.data_imbarco ? fmtDate(r.data_imbarco) : '—') + '</td>'
+      + '<td style="font-size:10px;text-align:center">' + (r.data_sbarco ? fmtDate(r.data_sbarco) : '—') + '</td>'
+      + '<td style="font-size:10px;text-align:center">' + gg + '</td>'
+      + '<td><span class="' + badgeCls + '">' + badgeTxt + '</span></td>'
+      + '<td>' + dest + '</td>'
+      + '<td style="font-size:10px;color:var(--muted)">' + escHtml(r.operatore||'—') + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+
 
 // ═══════════════════════════════════════════
 // UTILS
@@ -1869,7 +2159,8 @@ function calcGG(d){const diff=Math.floor((new Date()-new Date(d))/86400000);retu
 function showToast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+(type||'');setTimeout(()=>{t.className='toast';},3000);}
 
 ['modalPos','modalPromuovi','modalComm','modalLookup','modalConfirm','modalSposta','modalHelp'].forEach(id=>{
-  document.getElementById(id).addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
 });
 // ── SPOSTA REPARTO ──
 let spostaId = null;
@@ -2441,7 +2732,7 @@ function generaPDF() {
           // Footer su ogni pagina
           doc.setFontSize(7);
           doc.setTextColor(150, 150, 150);
-          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v18', 12, pageH - 5);
+          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v20', 12, pageH - 5);
           doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, pageH - 5, { align: 'right' });
         }
       });
