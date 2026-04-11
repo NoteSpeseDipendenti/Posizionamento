@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Posizionamento Navi — v12</title>
+<title>Posizionamento Navi — v18</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -72,6 +72,37 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .btn-logout{font-size:11px;color:#fff;font-weight:600;background:none;border:none;cursor:pointer;font-family:inherit;}
 .btn-help{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.12);color:rgba(255,255,255,.9);border:.5px solid rgba(255,255,255,.2);cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;}
 .btn-help:hover{background:rgba(255,255,255,.22);}
+.btn-msg{position:relative;font-size:11px;padding:5px 11px;border-radius:6px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:.5px solid rgba(255,255,255,.2);cursor:pointer;font-family:inherit;font-weight:500;}
+.btn-msg:hover{background:rgba(255,255,255,.14);}
+.btn-msg.has-unread{background:rgba(186,117,23,.25);color:#FAC775;border-color:rgba(250,199,117,.6);font-weight:600;}
+.btn-msg .msg-dot{display:none;width:7px;height:7px;border-radius:50%;background:#EF9F27;margin-right:4px;vertical-align:middle;}
+.btn-msg.has-unread .msg-dot{display:inline-block;}
+.modal-overlay-msg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay-msg.show{display:flex;}
+.modal-msg{background:var(--white);border-radius:14px;width:100%;max-width:500px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.18);}
+.modal-msg-head{padding:16px 18px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.modal-msg-title{font-size:14px;font-weight:600;color:var(--navy);}
+.modal-msg-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.modal-msg-body{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px;}
+.msg-item{border:1px solid var(--border);border-radius:10px;padding:11px 13px;}
+.msg-item.unread{border-left:3px solid #EF9F27;background:#fffbf0;}
+.msg-item.read{opacity:.75;}
+.msg-meta{display:flex;justify-content:space-between;margin-bottom:5px;}
+.msg-author{font-size:10px;font-weight:600;color:var(--muted);}
+.msg-date{font-size:10px;color:var(--muted);}
+.msg-text{font-size:12px;line-height:1.55;color:var(--text);margin-bottom:8px;}
+.msg-footer{display:flex;align-items:center;justify-content:space-between;}
+.msg-check{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);cursor:pointer;}
+.msg-check input{width:13px;height:13px;accent-color:var(--teal);cursor:pointer;}
+.badge-letto{font-size:10px;padding:2px 7px;border-radius:4px;background:#e6f9f0;color:#0F6E56;}
+.badge-nonletto{font-size:10px;padding:2px 7px;border-radius:4px;background:#fff3dc;color:#854F0B;}
+.modal-msg-footer{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0;}
+.msg-empty{text-align:center;padding:30px;font-size:12px;color:var(--muted);font-style:italic;}
+.new-msg-area{border-top:1px solid var(--border);padding:12px 18px;flex-shrink:0;display:none;}
+.new-msg-area.show{display:block;}
+.new-msg-area textarea{width:100%;height:70px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;resize:none;outline:none;}
+.new-msg-area textarea:focus{border-color:var(--navy);}
+.new-msg-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:8px;}
 
 /* SUBBAR */
 .subbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:44px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
@@ -106,6 +137,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .crew-table th{padding:4px 8px;text-align:center;font-size:10px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);background:#f8fafc;white-space:nowrap;overflow:hidden;}
 .crew-table th.col-nome{text-align:left;}
 .crew-table td{padding:3px 8px;border-bottom:1px solid #f1f5f9;vertical-align:middle;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.crew-table td.col-contr{overflow:visible;text-overflow:clip;white-space:nowrap;}
 .crew-table td.col-nome{text-align:left;}
 .crew-table tbody tr:last-child td{border-bottom:none;}
 .crew-table tbody tr:hover td{background:#f8fafc;}
@@ -280,7 +312,7 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v12 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div class="login-version">Posizionamento Navi &mdash; v18 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
     </div>
   </div>
 </div>
@@ -315,6 +347,7 @@ select.mform-control{cursor:pointer;}
     <div class="topbar-right">
       <span class="user-pill" id="posUserLabel"></span>
       <button class="btn-topbar" id="btnAmm" style="display:none" onclick="showScreen('admin')">&#9881; AMM</button>
+      <button class="btn-msg" id="btnMsg" onclick="openModalMsg()"><span class="msg-dot"></span>Messaggi</button>
       <button class="btn-help" onclick="openHelp()" title="Guida">?</button>
       <button class="btn-logout" onclick="doLogout()">Esci</button>
     </div>
@@ -364,8 +397,14 @@ select.mform-control{cursor:pointer;}
         <button class="nav-item active" id="anav-commissari" onclick="showAPage('commissari')">
           <svg viewBox="0 0 16 16"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>Commissari
         </button>
+        <button class="nav-item" id="anav-semiadmin" onclick="showAPage('semiadmin')">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M12 8l2 2-4 4"/></svg>Semi-Admin
+        </button>
         <button class="nav-item" id="anav-budget" onclick="showAPage('budget')">
           <svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 7h6M5 10h4"/></svg>Budget
+        </button>
+        <button class="nav-item" id="anav-account" onclick="showAPage('account')">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M10 10l1.5 1.5L14 9"/></svg>Il mio account
         </button>
       </div>
       <div class="nav-section">
@@ -397,6 +436,45 @@ select.mform-control{cursor:pointer;}
             <thead><tr><th>Nome</th><th>Username</th><th>Password</th><th>Nave</th><th></th></tr></thead>
             <tbody id="tbodyComm"></tbody>
           </table>
+        </div>
+      </div>
+
+      <div class="apage" id="apage-semiadmin">
+        <div class="page-title">Gestione Semi-Amministratori</div>
+        <div class="page-sub">Accesso a tutti i posizionamenti senza pannello AMM. Possono aggiungere, modificare e spostare personale.</div>
+        <div class="table-card">
+          <div class="table-toolbar">
+            <span class="table-toolbar-title" id="countSemiadmin">—</span>
+            <button class="btn-new" onclick="openModalUtente('semiadmin')">+ Nuovo semi-admin</button>
+          </div>
+          <table class="admin-table">
+            <thead><tr><th>Nome</th><th>Username</th><th>Password</th><th></th></tr></thead>
+            <tbody id="tbodySemiadmin"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="apage" id="apage-account">
+        <div class="page-title">Il mio account</div>
+        <div class="page-sub">Modifica le tue credenziali di accesso come amministratore.</div>
+        <div class="table-card" style="max-width:420px;">
+          <div style="padding:20px 22px;">
+            <div class="mform-group" style="margin-bottom:14px;">
+              <label class="mform-label">Nome visualizzato</label>
+              <input class="mform-control" type="text" id="accNome" placeholder="es. Roberto">
+            </div>
+            <div class="mform-group" style="margin-bottom:14px;">
+              <label class="mform-label">Username</label>
+              <input class="mform-control" type="text" id="accUsername" placeholder="username di accesso">
+            </div>
+            <div class="mform-group" style="margin-bottom:14px;">
+              <label class="mform-label">Nuova password</label>
+              <input class="mform-control" type="text" id="accPassword" placeholder="lascia vuoto per non cambiare">
+            </div>
+            <div style="margin-top:18px;">
+              <button class="btn-new" onclick="saveAccount()">Salva modifiche</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -793,13 +871,19 @@ select.mform-control{cursor:pointer;}
       </div>
 
       <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#9776; Statistiche</div>
-        Clicca il bottone <strong>Statistiche</strong> per aprire il pannello laterale con tipo rapporto, nazionalità, genere e scadenze TD nei prossimi 30 giorni. Usa lo switch <em>Dati / Grafici</em> per cambiare vista.
+        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#9993; Messaggi</div>
+        Il bottone <strong>Messaggi</strong> nella barra in alto permette di comunicare con l'ufficio. Quando appare <strong style="color:#BA7517;">arancione con un numero</strong>, hai messaggi non letti. Apri il pannello, leggi i messaggi e spunta <em>Segna come letto</em> per confermare la lettura. L'ufficio vedrà che hai letto il messaggio.<br>
+        <span style="color:var(--navy);font-weight:500;">Admin/Semi-admin:</span> usa il bottone <strong>+ Nuovo messaggio</strong> per scrivere al commissario di una nave specifica.
       </div>
 
       <div style="border-top:1px solid var(--border);padding-top:12px;">
         <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#128196; PDF</div>
-        Clicca il bottone <strong>PDF</strong> per generare il posizionamento del mese selezionato in formato stampabile.
+        Clicca il bottone <strong>PDF</strong> per generare e scaricare il posizionamento del mese selezionato in formato A4 orizzontale. Il file include tutti i reparti con le rispettive tabelle, i contratti TD evidenziati e i prossimi imbarchi confermati. La prima volta potrebbe richiedere qualche secondo per caricare le librerie.
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:12px;">
+        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#9776; Statistiche</div>
+        Clicca il bottone <strong>Statistiche</strong> per aprire il pannello laterale con tipo rapporto, nazionalità, genere e scadenze TD nei prossimi 30 giorni. Usa lo switch <em>Dati / Grafici</em> per cambiare vista.
       </div>
 
       <div style="border-top:1px solid var(--border);padding-top:12px;">
@@ -811,6 +895,35 @@ select.mform-control{cursor:pointer;}
 
     <div class="modal-actions" style="justify-content:center;margin-top:20px;">
       <button class="btn-save" onclick="closeHelp()">Ho capito</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay-msg" id="modalMsg">
+  <div class="modal-msg">
+    <div class="modal-msg-head">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div class="modal-msg-title">&#9993; Messaggi</div>
+          <div class="modal-msg-sub" id="msgSub">—</div>
+        </div>
+        <button class="btn-cancel" onclick="closeModalMsg()" style="font-size:18px;padding:0 6px;border:none;background:none;color:var(--muted);cursor:pointer;">&#10005;</button>
+      </div>
+    </div>
+    <div class="modal-msg-body" id="msgList"></div>
+    <div class="new-msg-area" id="newMsgArea">
+      <div id="newMsgNaveRow" style="display:none;margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:500;color:var(--muted);display:block;margin-bottom:4px;">Destinatario (nave)</label>
+        <select id="newMsgNave" style="width:100%;height:36px;padding:0 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;outline:none;"></select>
+      </div>
+      <textarea id="newMsgText" placeholder="Scrivi un messaggio per il commissario..."></textarea>
+      <div class="new-msg-actions">
+        <button class="btn-cancel" onclick="hideNewMsg()">Annulla</button>
+        <button class="btn-save" onclick="inviaMessaggio()">Invia</button>
+      </div>
+    </div>
+    <div class="modal-msg-footer" id="msgFooter">
+      <button class="btn-cancel" onclick="closeModalMsg()">Chiudi</button>
     </div>
   </div>
 </div>
@@ -849,6 +962,7 @@ async function sbDelete(table, id) {
 // STATE
 // ═══════════════════════════════════════════
 let utente = null;
+let semiadmins=[];
 let navi=[], reparti=[], mansioni=[], qualifiche=[], commissari=[];
 let posizionamento=[], budgetData={};
 let editPosId=null, promuoviId=null, deleteTarget=null, editCommId=null, editLookupType=null, editLookupId=null;
@@ -922,7 +1036,8 @@ async function loadLookups() {
 }
 
 function startApp() {
-  document.getElementById('posUserLabel').textContent = utente.nome + ' — ' + (utente.ruolo==='admin' ? 'Admin' : 'Commissario');
+  const roleLabel = utente.ruolo==='admin' ? 'Admin' : utente.ruolo==='semiadmin' ? 'Semi-Admin' : 'Commissario';
+  document.getElementById('posUserLabel').textContent = utente.nome + ' — ' + roleLabel;
   const now = new Date();
   document.getElementById('meseSelect').value = now.getMonth() + 1;
   document.getElementById('annoSelect').value = now.getFullYear();
@@ -930,6 +1045,8 @@ function startApp() {
 
   if(utente.ruolo === 'admin') {
     document.getElementById('btnAmm').style.display = 'inline-block';
+  }
+  if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') {
     document.getElementById('posNaveLabel').style.display = 'none';
     // Popola selettore nave
     const nSel = document.getElementById('naveSelectPos');
@@ -941,7 +1058,6 @@ function startApp() {
       nSel.appendChild(opt);
     });
     nSel.style.display = 'inline-block';
-    document.getElementById('posNaveLabel').style.display = 'none';
     // Default: prima nave
     if(navi.length > 0) {
       utente.nave_id = navi[0].id;
@@ -1055,6 +1171,7 @@ async function loadPosizionamento() {
     budgetData = {};
     bud.forEach(b => { budgetData[b.nave_id+'_'+b.mese+'_'+b.anno+'_'+b.reparto_id] = b.quantita; });
     renderPosizionamento(mese, anno);
+    loadMessaggi();
   } catch(e) {
     document.getElementById('mainContent').innerHTML='<div class="empty-state">Errore caricamento dati.</div>';
     console.error(e);
@@ -1114,7 +1231,7 @@ function renderPosizionamento(mese, anno) {
   });
   renderStats(bordoCamera,bordoCucina,bC,cC,buC,bCu,cCu,buCu);
 
-  const W=['20%','13%','11%','7%','4%','7%','7%','19%','12%'];
+  const W=['20%','13%','11%','7%','4%','6%','10%','17%','12%'];
   const COLS=['Nome','Qualifica','Mansione','Imbarco','GG','Rapp.','Contratto','Note',''];
   const thRow='<tr>'+W.map((w,i)=>'<th '+(i===0?'class="col-nome" ':'')+'style="width:'+w+'">'+COLS[i]+'</th>').join('')+'</tr>';
 
@@ -1165,7 +1282,7 @@ function renderRow(p,isConf,W) {
     +'<td style="width:'+W[1]+'">'+qual+'</td><td style="width:'+W[2]+'">'+mans+'</td>'
     +'<td style="width:'+W[3]+'">'+dataImb+'</td><td style="width:'+W[4]+'">'+gg+'</td>'
     +'<td style="width:'+W[5]+'">'+rapp+'</td>'
-    +'<td style="width:'+W[6]+'">'+contr+'</td><td style="width:'+W[7]+'">'+note+'</td>'
+    +'<td class="col-contr" style="width:'+W[6]+'">'+contr+'</td><td style="width:'+W[7]+'">'+note+'</td>'
     +'<td style="width:'+W[8]+'">'
     +plusBtn
     +'<button class="icon-btn move" onclick="openModalSposta('+p.id+')" title="Sposta reparto"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h8M6 3l3 3-3 3"/></svg></button>'
@@ -1320,7 +1437,9 @@ async function confirmPromuovi(){
 async function initAdmin(){
   try{
     commissari=await sbGet('pn_utenti?ruolo=eq.commissario&select=*,pn_navi(id,nome)&order=nome');
+    semiadmins=await sbGet('pn_utenti?ruolo=eq.semiadmin&select=*&order=nome');
     renderComm();
+    renderSemiadmin();
     renderLookup('navi');renderLookup('reparti');renderLookup('mansioni');renderLookup('qualifiche');
     // populate navi selects
     const bSel=document.getElementById('budNave');
@@ -1328,6 +1447,10 @@ async function initAdmin(){
     const cSel=document.getElementById('commNave');
     cSel.innerHTML='<option value="">— seleziona —</option>'+navi.map(n=>'<option value="'+n.id+'">'+n.nome+'</option>').join('');
     loadBudgetGrid();
+    // Precompila campi account
+    document.getElementById('accNome').value = utente.nome || '';
+    document.getElementById('accUsername').value = utente.username || '';
+    document.getElementById('accPassword').value = '';
   }catch(e){showToast('Errore caricamento admin','error');}
 }
 
@@ -1336,6 +1459,11 @@ function showAPage(name){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('apage-'+name).classList.add('active');
   document.getElementById('anav-'+name).classList.add('active');
+  if(name==='account'){
+    document.getElementById('accNome').value=utente.nome||'';
+    document.getElementById('accUsername').value=utente.username||'';
+    document.getElementById('accPassword').value='';
+  }
 }
 
 // ─── Commissari ───
@@ -1358,6 +1486,65 @@ function renderComm(){
     }).join('');
 }
 
+// ─── Semi-Admin ───
+function renderSemiadmin(){
+  const tbody=document.getElementById('tbodySemiadmin');
+  document.getElementById('countSemiadmin').textContent=semiadmins.length+' semi-admin';
+  tbody.innerHTML=semiadmins.length===0
+    ?'<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--muted);font-style:italic">Nessun semi-amministratore</td></tr>'
+    :semiadmins.map(u=>{
+      return '<tr>'
+        +'<td><strong>'+u.nome+'</strong></td>'
+        +'<td style="font-family:monospace;font-size:11px;color:var(--muted)">'+u.username+'</td>'
+        +'<td style="font-family:monospace;font-size:11px">'+u.password+'</td>'
+        +'<td>'
+        +'<button class="admin-icon-btn edit" onclick="openModalUtente(\'semiadmin\','+u.id+')" title="Modifica"><svg viewBox="0 0 12 12" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"/></svg></button>'
+        +'<button class="admin-icon-btn del" onclick="openConfirmDel(\'semiadmin\','+u.id+',\''+u.nome+'\')" title="Elimina"><svg viewBox="0 0 12 12" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h8M5 3V2h2v1M4.5 5v4M7.5 5v4M3 3l.5 7h5l.5-7"/></svg></button>'
+        +'</td></tr>';
+    }).join('');
+}
+
+// ─── Account Admin ───
+async function saveAccount(){
+  const nome=document.getElementById('accNome').value.trim();
+  const username=document.getElementById('accUsername').value.trim();
+  const password=document.getElementById('accPassword').value.trim();
+  if(!nome||!username){showToast('Nome e username obbligatori','error');return;}
+  try{
+    const body={nome,username};
+    if(password) body.password=password;
+    await sbPatch('pn_utenti',utente.id,body);
+    utente.nome=nome; utente.username=username;
+    document.getElementById('posUserLabel').textContent=utente.nome+' — Admin';
+    document.getElementById('accPassword').value='';
+    showToast('Account aggiornato','success');
+  }catch(e){showToast('Errore: '+e.message,'error');}
+}
+
+// Modal generico per semiadmin
+let editUtenteType=null, editUtenteId=null;
+function openModalUtente(tipo, id) {
+  editUtenteType=tipo; editUtenteId=id||null;
+  const titles={semiadmin:'Semi-Amministratore'};
+  document.getElementById('modalCommTitle').textContent=(id?'Modifica ':'Nuovo ')+titles[tipo];
+  if(id){
+    const u=semiadmins.find(x=>x.id===id);
+    if(u){
+      document.getElementById('commNome').value=u.nome;
+      document.getElementById('commUsername').value=u.username;
+      document.getElementById('commPassword').value=u.password;
+      document.getElementById('commNave').value='';
+    }
+  } else {
+    document.getElementById('commNome').value='';
+    document.getElementById('commUsername').value='';
+    document.getElementById('commPassword').value='';
+  }
+  // Hide nave for semiadmin
+  document.getElementById('commNave').closest('.mform-group').style.display=tipo==='semiadmin'?'none':'block';
+  document.getElementById('modalComm').classList.add('show');
+}
+
 function openModalComm(id){
   editCommId=id||null;
   document.getElementById('modalCommTitle').textContent=id?'Modifica commissario':'Nuovo commissario';
@@ -1375,7 +1562,11 @@ function openModalComm(id){
   }
   document.getElementById('modalComm').classList.add('show');
 }
-function closeModalComm(){document.getElementById('modalComm').classList.remove('show');}
+function closeModalComm(){
+  document.getElementById('modalComm').classList.remove('show');
+  editUtenteType=null; editUtenteId=null;
+  document.getElementById('commNave').closest('.mform-group').style.display='block';
+}
 
 function autoUsername(){
   if(editCommId)return;
@@ -1384,6 +1575,8 @@ function autoUsername(){
 }
 
 async function saveComm(){
+  // Check if we're saving a semiadmin via editUtenteType
+  if(editUtenteType==='semiadmin') { await saveUtente(); return; }
   const nome=document.getElementById('commNome').value.trim();
   const username=document.getElementById('commUsername').value.trim();
   const password=document.getElementById('commPassword').value.trim();
@@ -1402,6 +1595,29 @@ async function saveComm(){
     closeModalComm();
     commissari=await sbGet('pn_utenti?ruolo=eq.commissario&select=*,pn_navi(id,nome)&order=nome');
     renderComm();
+  }catch(e){showToast('Errore: '+e.message,'error');}
+  finally{btn.disabled=false;btn.textContent='Salva';}
+}
+
+async function saveUtente(){
+  const nome=document.getElementById('commNome').value.trim();
+  const username=document.getElementById('commUsername').value.trim();
+  const password=document.getElementById('commPassword').value.trim();
+  if(!nome||!username||!password){showToast('Compila tutti i campi','error');return;}
+  const btn=document.getElementById('btnSaveComm');
+  btn.disabled=true;btn.textContent='Salvataggio...';
+  try{
+    if(editUtenteId){
+      await sbPatch('pn_utenti',editUtenteId,{nome,username,password});
+      showToast('Aggiornato','success');
+    }else{
+      await sbPost('pn_utenti',{nome,username,password,ruolo:'semiadmin',nave_id:null,attivo:true});
+      showToast('Semi-admin aggiunto','success');
+    }
+    closeModalComm();
+    editUtenteType=null; editUtenteId=null;
+    semiadmins=await sbGet('pn_utenti?ruolo=eq.semiadmin&select=*&order=nome');
+    renderSemiadmin();
   }catch(e){showToast('Errore: '+e.message,'error');}
   finally{btn.disabled=false;btn.textContent='Salva';}
 }
@@ -1634,12 +1850,13 @@ function closeConfirm(){document.getElementById('modalConfirm').classList.remove
 async function confirmDelete(){
   if(!deleteTarget)return;
   const {type,id}=deleteTarget;
-  const tableMap={pos:'pn_posizionamento',commissari:'pn_utenti',navi:'pn_navi',reparti:'pn_reparti',mansioni:'pn_mansioni',qualifiche:'pn_qualifiche'};
+  const tableMap={pos:'pn_posizionamento',commissari:'pn_utenti',semiadmin:'pn_utenti',navi:'pn_navi',reparti:'pn_reparti',mansioni:'pn_mansioni',qualifiche:'pn_qualifiche'};
   try{
     await sbDelete(tableMap[type],id);
     closeConfirm();showToast('Eliminato','success');
     if(type==='pos'){await loadPosizionamento();}
     else if(type==='commissari'){commissari=await sbGet('pn_utenti?ruolo=eq.commissario&select=*,pn_navi(id,nome)&order=nome');renderComm();}
+    else if(type==='semiadmin'){semiadmins=await sbGet('pn_utenti?ruolo=eq.semiadmin&select=*&order=nome');renderSemiadmin();}
     else{await loadLookups();populateSelects();renderLookup(type);}
   }catch(e){showToast('Errore eliminazione','error');}
 }
@@ -1890,9 +2107,369 @@ function renderGrafici() {
   genBar('chartGenCucina', bordoCucina, bordoCucina.length);
 }
 
-function generaPDF() {
-  showToast('PDF in arrivo nella prossima versione!', '');
+// ═══════════════════════════════════════════
+// MESSAGGI
+// ═══════════════════════════════════════════
+let messaggi = [];
+
+async function loadMessaggi() {
+  const mese = parseInt(document.getElementById('meseSelect').value);
+  const anno = parseInt(document.getElementById('annoSelect').value);
+  try {
+    messaggi = await sbGet('pn_messaggi?nave_id=eq.'+utente.nave_id+'&mese=eq.'+mese+'&anno=eq.'+anno+'&order=created_at.desc');
+  } catch(e) { messaggi = []; }
+  aggiornaBottoneMsg();
 }
+
+function aggiornaBottoneMsg() {
+  const btn = document.getElementById('btnMsg');
+  const nonLetti = messaggi.filter(m => !m.letto).length;
+  if(nonLetti > 0) {
+    btn.classList.add('has-unread');
+    btn.innerHTML = '<span class="msg-dot"></span>Messaggi ('+nonLetti+')';
+  } else {
+    btn.classList.remove('has-unread');
+    btn.innerHTML = '<span class="msg-dot"></span>Messaggi';
+  }
+}
+
+function openModalMsg() {
+  renderMsgList();
+  // Footer: admin/semiadmin vedono bottone nuovo messaggio
+  const footer = document.getElementById('msgFooter');
+  const isRW = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
+  footer.innerHTML = '<button class="btn-cancel" onclick="closeModalMsg()">Chiudi</button>'
+    + (isRW ? '<button class="btn-save" onclick="showNewMsg()">+ Nuovo messaggio</button>' : '');
+  document.getElementById('newMsgArea').classList.remove('show');
+  document.getElementById('newMsgText').value = '';
+  document.getElementById('newMsgNaveRow').style.display = 'none';
+  document.getElementById('modalMsg').classList.add('show');
+}
+
+function closeModalMsg() {
+  document.getElementById('modalMsg').classList.remove('show');
+}
+
+function renderMsgList() {
+  const mese = parseInt(document.getElementById('meseSelect').value);
+  const anno = parseInt(document.getElementById('annoSelect').value);
+  const mesiNomi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+  const nonLetti = messaggi.filter(m => !m.letto).length;
+  document.getElementById('msgSub').textContent = mesiNomi[mese]+' '+anno+' · '+messaggi.length+' messaggi'+(nonLetti > 0 ? ', '+nonLetti+' non letti' : '');
+
+  const isRW = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
+  const list = document.getElementById('msgList');
+  if(messaggi.length === 0) {
+    list.innerHTML = '<div class="msg-empty">Nessun messaggio per questo mese.</div>';
+    return;
+  }
+  list.innerHTML = messaggi.map(m => {
+    const data = m.created_at ? new Date(m.created_at) : null;
+    const dataStr = data ? data.getDate().toString().padStart(2,'0')+'/'+(data.getMonth()+1).toString().padStart(2,'0')+'/'+data.getFullYear()+' '+data.getHours().toString().padStart(2,'0')+':'+data.getMinutes().toString().padStart(2,'0') : '—';
+    const cls = m.letto ? 'read' : 'unread';
+    if(isRW) {
+      // Admin/semiadmin: vede stato lettura, no checkbox
+      return '<div class="msg-item '+cls+'" id="msgitem-'+m.id+'">'
+        +'<div class="msg-meta"><span class="msg-author">'+escHtml(m.autore||'Admin')+'</span><span class="msg-date">'+dataStr+'</span></div>'
+        +'<div class="msg-text">'+escHtml(m.testo)+'</div>'
+        +'<div class="msg-footer"><span></span>'
+        +(m.letto ? '<span class="badge-letto">&#10003; Letto dal commissario</span>' : '<span class="badge-nonletto">Non letto</span>')
+        +'</div></div>';
+    } else {
+      // Commissario: checkbox per segnare come letto
+      return '<div class="msg-item '+cls+'" id="msgitem-'+m.id+'">'
+        +'<div class="msg-meta"><span class="msg-author">'+escHtml(m.autore||'Admin')+'</span><span class="msg-date">'+dataStr+'</span></div>'
+        +'<div class="msg-text">'+escHtml(m.testo)+'</div>'
+        +'<div class="msg-footer">'
+        +'<label class="msg-check"><input type="checkbox" '+(m.letto?'checked':'')+' onchange="segnaLetto('+m.id+', this.checked)"> '+(m.letto?'Letto':'Segna come letto')+'</label>'
+        +(m.letto ? '<span class="badge-letto">Letto</span>' : '<span class="badge-nonletto">Non letto</span>')
+        +'</div></div>';
+    }
+  }).join('');
+}
+
+async function segnaLetto(id, letto) {
+  try {
+    await sbPatch('pn_messaggi', id, {letto: letto});
+    const m = messaggi.find(x => x.id === id);
+    if(m) m.letto = letto;
+    renderMsgList();
+    aggiornaBottoneMsg();
+  } catch(e) { showToast('Errore aggiornamento', 'error'); }
+}
+
+function showNewMsg() {
+  const isMultiNave = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
+  const naveRow = document.getElementById('newMsgNaveRow');
+  const naveSel = document.getElementById('newMsgNave');
+  if(isMultiNave) {
+    naveSel.innerHTML = navi.map(n => '<option value="'+n.id+'"'+(n.id===utente.nave_id?' selected':'')+'>'+n.nome+'</option>').join('');
+    naveRow.style.display = 'block';
+  } else {
+    naveRow.style.display = 'none';
+  }
+  document.getElementById('newMsgArea').classList.add('show');
+  document.getElementById('newMsgText').focus();
+}
+
+function hideNewMsg() {
+  document.getElementById('newMsgArea').classList.remove('show');
+  document.getElementById('newMsgText').value = '';
+}
+
+async function inviaMessaggio() {
+  const testo = document.getElementById('newMsgText').value.trim();
+  if(!testo) { showToast('Scrivi un messaggio', 'error'); return; }
+  const mese = parseInt(document.getElementById('meseSelect').value);
+  const anno = parseInt(document.getElementById('annoSelect').value);
+  const isMultiNave = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
+  const naveId = isMultiNave ? parseInt(document.getElementById('newMsgNave').value) : utente.nave_id;
+  if(!naveId) { showToast('Seleziona una nave', 'error'); return; }
+  try {
+    await sbPost('pn_messaggi', {
+      nave_id: naveId,
+      mese: mese,
+      anno: anno,
+      testo: testo,
+      autore: utente.nome,
+      letto: false
+    });
+    messaggi = await sbGet('pn_messaggi?nave_id=eq.'+utente.nave_id+'&mese=eq.'+mese+'&anno=eq.'+anno+'&order=created_at.desc');
+    hideNewMsg();
+    renderMsgList();
+    aggiornaBottoneMsg();
+    showToast('Messaggio inviato', 'success');
+  } catch(e) { showToast('Errore invio: '+e.message, 'error'); }
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function generaPDF() {
+  const mese = parseInt(document.getElementById('meseSelect').value);
+  const anno = parseInt(document.getElementById('annoSelect').value);
+  const mesiNomi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+
+  if(!posizionamento || posizionamento.length === 0) {
+    showToast('Nessun dato da esportare', 'error');
+    return;
+  }
+
+  function doGenera() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+
+    // ── HELPER calcoli statistiche ──
+    const oggi = new Date();
+    function calcEtaPDF(dataNascita) {
+      if(!dataNascita) return null;
+      const nato = new Date(dataNascita);
+      let eta = oggi.getFullYear() - nato.getFullYear();
+      const m = oggi.getMonth() - nato.getMonth();
+      if(m < 0 || (m === 0 && oggi.getDate() < nato.getDate())) eta--;
+      return eta > 0 && eta < 100 ? eta : null;
+    }
+    function mediaGGPDF(lista) {
+      const gg = lista.filter(p => p.data_imbarco && p.stato === 'bordo').map(p => Math.max(0, Math.floor((oggi - new Date(p.data_imbarco)) / 86400000)));
+      return gg.length > 0 ? Math.round(gg.reduce((a,b) => a+b, 0) / gg.length) : 0;
+    }
+    function mediaEtaPDF(lista) {
+      const eta = lista.map(p => { const d = p.pn_dipendenti || p.pn_Dipendenti; return d ? calcEtaPDF(d.data_nascita) : null; }).filter(e => e !== null);
+      return eta.length > 0 ? Math.round(eta.reduce((a,b) => a+b, 0) / eta.length) : 0;
+    }
+
+    // Calcola Camera vs Cucina
+    let bordoCamera = [], bordoCucina = [], buC = 0, buCu = 0, cC = 0, cCu = 0;
+    const byReparto = {};
+    posizionamento.forEach(p => {
+      const rep = p.pn_reparti || p.pn_Reparti;
+      if(!rep) return;
+      if(!byReparto[rep.id]) byReparto[rep.id] = { reparto: rep, bordo: [], conf: [] };
+      if(p.stato === 'bordo') byReparto[rep.id].bordo.push(p);
+      else byReparto[rep.id].conf.push(p);
+    });
+    ORDINE_REPARTI.forEach(nomeR => {
+      const g = Object.values(byReparto).find(x => x.reparto && x.reparto.nome === nomeR);
+      if(!g) return;
+      const key = utente.nave_id + '_' + mese + '_' + anno + '_' + g.reparto.id;
+      const q = budgetData[key] || 0;
+      if(REPARTI_CUCINA.includes(nomeR)) { bordoCucina = bordoCucina.concat(g.bordo); buCu += q; cCu += g.conf.length; }
+      else { bordoCamera = bordoCamera.concat(g.bordo); buC += q; cC += g.conf.length; }
+    });
+    const bC = bordoCamera.length, bCu = bordoCucina.length;
+    const copC = buC > 0 ? Math.round(bC / buC * 100) : 0;
+    const copCu = buCu > 0 ? Math.round(bCu / buCu * 100) : 0;
+    const mgC = mediaGGPDF(bordoCamera), meC = mediaEtaPDF(bordoCamera);
+    const mgCu = mediaGGPDF(bordoCucina), meCu = mediaEtaPDF(bordoCucina);
+
+    // ── FUNZIONE AGGIUNGI HEADER + STATS su ogni pagina ──
+    function addPageHeader() {
+      // Header blu
+      doc.setFillColor(15, 42, 74);
+      doc.rect(0, 0, pageW, 16, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text('POSIZIONAMENTO NAVI', 12, 7);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.text(utente.nave_nome || '—', 12, 12);
+      doc.setFontSize(8);
+      doc.text(mesiNomi[mese] + ' ' + anno, pageW - 12, 7, { align: 'right' });
+      const d = new Date();
+      doc.text('Stampato il ' + d.getDate().toString().padStart(2,'0') + '/' + (d.getMonth()+1).toString().padStart(2,'0') + '/' + d.getFullYear(), pageW - 12, 12, { align: 'right' });
+
+      // Barra statistiche
+      doc.setFillColor(248, 250, 252);
+      doc.rect(0, 16, pageW, 10, 'F');
+      doc.setDrawColor(220, 225, 235);
+      doc.line(0, 26, pageW, 26);
+
+      // Camera
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(15, 42, 74);
+      doc.text('CAMERA', 12, 22);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(80, 80, 80);
+      const statsC = 'Bordo: ' + bC + '   Confermati: ' + cC + '   Budget: ' + buC + '   Copertura: ' + copC + '%   Media GG: ' + mgC + '   Eta media: ' + meC;
+      doc.text(statsC, 35, 22);
+
+      // Divisore verticale
+      doc.setDrawColor(200, 210, 220);
+      doc.line(pageW / 2, 17, pageW / 2, 25);
+
+      // Cucina
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(15, 42, 74);
+      doc.text('CUCINA', pageW / 2 + 6, 22);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(80, 80, 80);
+      const statsCu = 'Bordo: ' + bCu + '   Confermati: ' + cCu + '   Budget: ' + buCu + '   Copertura: ' + copCu + '%   Media GG: ' + mgCu + '   Eta media: ' + meCu;
+      doc.text(statsCu, pageW / 2 + 26, 22);
+    }
+
+    addPageHeader();
+    let startY = 29;
+
+    // ── FUNZIONE BUILD RIGHE ──
+    function buildRows(lista, isConf) {
+      return lista.map(p => {
+        const dip = p.pn_dipendenti || p.pn_Dipendenti;
+        const nome = dip ? dip.cognome_nome : '—';
+        const mat = dip ? '#' + dip.matricola : '';
+        const qual = dip && (dip.pn_qualifiche || dip.pn_Qualifiche) ? (dip.pn_qualifiche || dip.pn_Qualifiche).nome : '—';
+        const mans = (p.pn_mansioni || p.pn_Mansioni) ? (p.pn_mansioni || p.pn_Mansioni).nome : '—';
+        const dataImb = p.data_imbarco ? fmtDate(p.data_imbarco) : '—';
+        const gg = p.data_imbarco && p.stato === 'bordo' ? calcGG(p.data_imbarco) + 'gg' : '—';
+        const rapp = dip && dip.tipo_rapporto ? dip.tipo_rapporto : '—';
+        let contr = 'TI';
+        if(p.tipo_contratto === 'TD' && p.data_scadenza_td) {
+          contr = 'TD ' + fmtDate(p.data_scadenza_td) + '/' + new Date(p.data_scadenza_td).getFullYear().toString().slice(2);
+        }
+        const note = p.note || '';
+        return [nome + '\n' + mat, qual, mans, dataImb, gg, rapp, contr, note, isConf ? 'Confermato' : ''];
+      });
+    }
+
+    // ── REPARTI ──
+    ORDINE_REPARTI.forEach(nomeR => {
+      const g = Object.values(byReparto).find(x => x.reparto && x.reparto.nome === nomeR);
+      if(!g || (g.bordo.length === 0 && g.conf.length === 0)) return;
+      const { reparto, bordo, conf } = g;
+      const key = utente.nave_id + '_' + mese + '_' + anno + '_' + reparto.id;
+      const budget = budgetData[key] || 0;
+
+      // Nuova pagina se necessario
+      if(startY > pageH - 35) {
+        doc.addPage();
+        addPageHeader();
+        startY = 29;
+      }
+
+      // Titolo reparto
+      doc.setFillColor(238, 242, 248);
+      doc.rect(10, startY, pageW - 20, 6, 'F');
+      doc.setTextColor(15, 42, 74);
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'bold');
+      doc.text(nomeR.toUpperCase(), 13, startY + 4);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 100);
+      doc.text('A bordo: ' + bordo.length + '   Budget: ' + budget, pageW - 12, startY + 4, { align: 'right' });
+      startY += 7;
+
+      const allRows = buildRows(bordo, false).concat(buildRows(conf, true));
+      if(allRows.length === 0) return;
+
+      doc.autoTable({
+        startY: startY,
+        margin: { left: 10, right: 10 },
+        tableWidth: 277,
+        head: [['Nome / Matr.', 'Qualifica', 'Mansione', 'Imbarco', 'GG', 'Rapp.', 'Contratto', 'Note', '']],
+        body: allRows,
+        theme: 'grid',
+        styles: { fontSize: 7, cellPadding: 1.5, valign: 'middle', overflow: 'linebreak' },
+        headStyles: { fillColor: [15, 42, 74], textColor: 255, fontSize: 7, fontStyle: 'bold', halign: 'center' },
+        columnStyles: {
+          0: { cellWidth: 48, halign: 'left' },
+          1: { cellWidth: 38, halign: 'left' },
+          2: { cellWidth: 30, halign: 'left' },
+          3: { cellWidth: 16, halign: 'center' },
+          4: { cellWidth: 12, halign: 'center' },
+          5: { cellWidth: 12, halign: 'center' },
+          6: { cellWidth: 22, halign: 'center' },
+          7: { cellWidth: 81, halign: 'left' },
+          8: { cellWidth: 18, halign: 'center' }
+        },
+        didParseCell: function(data) {
+          if(data.section === 'body') {
+            if(data.row.raw[8] === 'Confermato') {
+              data.cell.styles.fillColor = [240, 247, 255];
+              data.cell.styles.textColor = [30, 64, 175];
+            }
+            if(data.column.index === 6 && String(data.cell.raw).startsWith('TD')) {
+              data.cell.styles.textColor = [146, 64, 14];
+              data.cell.styles.fontStyle = 'bold';
+            }
+          }
+        },
+        didDrawPage: function() {
+          // Footer su ogni pagina
+          doc.setFontSize(7);
+          doc.setTextColor(150, 150, 150);
+          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v18', 12, pageH - 5);
+          doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, pageH - 5, { align: 'right' });
+        }
+      });
+
+      startY = doc.lastAutoTable.finalY + 4;
+    });
+
+    const nomefile = 'posizionamento_' + (utente.nave_nome || 'nave').replace(/\s+/g,'_').toLowerCase() + '_' + mesiNomi[mese].toLowerCase() + anno + '.pdf';
+    doc.save(nomefile);
+    showToast('PDF generato!', 'success');
+  }
+
+  if(window.jspdf && window.jspdf.jsPDF) {
+    doGenera();
+  } else {
+    const s1 = document.createElement('script');
+    s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s1.onload = function() {
+      const s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+      s2.onload = doGenera;
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+    showToast('Preparazione PDF...', '');
+  }
+}
+
 
 // Close panel clicking outside
 document.addEventListener('click', function(e) {
