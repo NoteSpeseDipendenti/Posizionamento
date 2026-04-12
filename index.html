@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Posizionamento Navi — v22</title>
+<title>Posizionamento Navi — v23</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -379,7 +379,7 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v22 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div class="login-version">Posizionamento Navi &mdash; v23 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
     </div>
   </div>
 </div>
@@ -1381,6 +1381,7 @@ function renderPosizionamento(mese, anno) {
   reparti.forEach(r=>{byReparto[r.id]={reparto:r,bordo:[],conf:[]};});
   posizionamento.forEach(p=>{
     const rid=p.reparto_id;
+    if(!rid) return; // ignora record senza reparto
     if(!byReparto[rid])byReparto[rid]={reparto:p.pn_reparti,bordo:[],conf:[]};
     if(p.stato==='confermato')byReparto[rid].conf.push(p);
     else byReparto[rid].bordo.push(p);
@@ -2825,7 +2826,7 @@ function generaPDF() {
           // Footer su ogni pagina
           doc.setFontSize(7);
           doc.setTextColor(150, 150, 150);
-          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v22', 12, pageH - 5);
+          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v23', 12, pageH - 5);
           doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, pageH - 5, { align: 'right' });
         }
       });
