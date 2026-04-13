@@ -125,7 +125,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .opzione-rimozione.sel-danger .op-dot{border-color:var(--danger);background:var(--danger);}
 .op-label{font-size:12px;font-weight:600;color:var(--text);}
 .opzione-rimozione.sel-danger .op-label{color:var(--danger);}
-.op-desc{font-size:11px;color:var(--muted);padding-left:22px;line-height:1.4;}
+.btn-rimoz{padding:9px 6px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);color:var(--text);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s;}
+.btn-rimoz:hover{border-color:var(--navy);background:#eef2f8;}
+.btn-rimoz-sel{border-color:var(--navy)!important;background:var(--navy)!important;color:#fff!important;}
+.btn-rimoz-danger{border-color:var(--danger)!important;background:var(--danger)!important;color:#fff!important;}
 .op-extra{padding-left:22px;margin-top:8px;display:none;}
 .opzione-rimozione.sel .op-extra,.opzione-rimozione.sel-danger .op-extra{display:block;}
 .op-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
@@ -834,25 +837,33 @@ select.mform-control{cursor:pointer;}
       <span style="color:var(--muted);font-size:11px;" id="confirmInfo"></span>
     </div>
     <div id="opzioniRimozione">
-      <div class="opzione-rimozione sel" id="op-sbarca" onclick="selOpzione('sbarca')">
-        <div class="op-top"><div class="op-dot"></div><span class="op-label">&#9875; Sbarca</span></div>
-        <div class="op-desc">Il marittimo lascia la nave &mdash; salvato nello storico sbarchi</div>
-        <div class="op-extra">
-          <div class="op-row"><span class="op-lbl">Data sbarco</span><input class="op-inp" type="date" id="dataSbarco"></div>
+
+      <!-- RETTANGOLO 1: 4 bottoni + data -->
+      <div style="border:1.5px solid var(--navy);border-radius:10px;padding:14px 16px;margin-bottom:12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <button id="btn-sbarca" class="btn-rimoz btn-rimoz-sel" onclick="selOpzione('sbarca')">&#9875; Sbarca</button>
+          <button id="btn-trasborda" class="btn-rimoz" onclick="selOpzione('trasborda')">&#8646; Trasborda</button>
+          <button id="btn-malattia" class="btn-rimoz" onclick="selOpzione('malattia')">&#43; Malattia</button>
+          <button id="btn-fine_td" class="btn-rimoz" onclick="selOpzione('fine_td')">&#128203; Fine TD</button>
+        </div>
+        <div style="border-top:0.5px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:11px;color:var(--muted);min-width:72px;" id="dataLabel">Data sbarco</span>
+            <input class="op-inp" type="date" id="dataSbarco" style="flex:1;">
+          </div>
+          <div id="rowNaveDestino" style="display:none;align-items:center;gap:10px;">
+            <span style="font-size:11px;color:var(--muted);min-width:72px;">Nave dest.</span>
+            <select class="op-inp" id="naveDestino" style="flex:1;"><option value="">— seleziona —</option></select>
+          </div>
         </div>
       </div>
-      <div class="opzione-rimozione" id="op-trasborda" onclick="selOpzione('trasborda')">
-        <div class="op-top"><div class="op-dot"></div><span class="op-label">&#8646; Trasborda</span></div>
-        <div class="op-desc">Si sposta su un'altra nave &mdash; salvato nello storico</div>
-        <div class="op-extra">
-          <div class="op-row"><span class="op-lbl">Data</span><input class="op-inp" type="date" id="dataTrasborda"></div>
-          <div class="op-row"><span class="op-lbl">Nave dest.</span><select class="op-inp" id="naveDestino"><option value="">— seleziona —</option></select></div>
-        </div>
-      </div>
+
+      <!-- RETTANGOLO 2: inserimento errato -->
       <div class="opzione-rimozione" id="op-rimosso" onclick="selOpzione('rimosso')">
         <div class="op-top"><div class="op-dot"></div><span class="op-label">&#10005; Inserimento errato</span></div>
         <div class="op-desc">Non era imbarcato, nessuno storico verrà salvato</div>
       </div>
+
     </div>
     <div class="modal-actions" style="justify-content:flex-end;margin-top:16px;">
       <button class="btn-cancel" onclick="closeConfirm()">Annulla</button>
@@ -888,6 +899,8 @@ select.mform-control{cursor:pointer;}
         <option value="">Tutti i tipi</option>
         <option value="sbarca">Sbarco</option>
         <option value="trasborda">Trasbordo</option>
+        <option value="malattia">Malattia</option>
+        <option value="fine_td">Fine TD</option>
         <option value="rimosso">Rimosso</option>
       </select>
       <input type="text" id="storicoSearch" placeholder="&#128269; Nome o matricola..." oninput="renderStorico()">
@@ -1409,7 +1422,7 @@ function esportaExcel() {
     const anno = parseInt(document.getElementById('annoSelect').value);
     const mesiNomi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
 
-    const rows = [['Cognome Nome Matricola']];
+    const rows = [['Cognome Nome Matricola', 'Mansione']];
 
     const byReparto = {};
     reparti.forEach(r => { byReparto[r.id] = { reparto: r, bordo: [], conf: [] }; });
@@ -1432,13 +1445,14 @@ function esportaExcel() {
         const dip = p.pn_dipendenti;
         const cognomeNome = dip ? dip.cognome_nome : '—';
         const matricola = dip ? dip.matricola : '';
-        rows.push([cognomeNome + ' ' + matricola]);
+        const mansione = p.pn_mansioni ? p.pn_mansioni.nome : '—';
+        rows.push([cognomeNome + ' ' + matricola, mansione]);
       });
     });
 
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet(rows);
-    ws['!cols'] = [{wch: 42}];
+    ws['!cols'] = [{wch: 42}, {wch: 28}];
     XLSX.utils.book_append_sheet(wb, ws, 'Posizionamento');
     const wbout = XLSX.write(wb, {bookType:'xlsx', type:'array'});
     const blob = new Blob([wbout], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
@@ -2198,41 +2212,48 @@ let opzioneRimozione = 'sbarca';
 
 function selOpzione(op) {
   opzioneRimozione = op;
-  ['sbarca','trasborda','rimosso'].forEach(o => {
-    const el = document.getElementById('op-'+o);
-    el.classList.remove('sel','sel-danger');
+  // Reset tutti i bottoni
+  ['sbarca','trasborda','malattia','fine_td'].forEach(o => {
+    const b = document.getElementById('btn-'+o);
+    if(b) { b.classList.remove('btn-rimoz-sel','btn-rimoz-danger'); }
   });
+  const opRimosso = document.getElementById('op-rimosso');
+  if(opRimosso) opRimosso.classList.remove('sel','sel-danger');
+
   if(op === 'rimosso') {
-    document.getElementById('op-rimosso').classList.add('sel-danger');
+    if(opRimosso) opRimosso.classList.add('sel-danger');
     document.getElementById('btnConfirmDel').textContent = 'Rimuovi';
-    document.getElementById('btnConfirmDel').className = 'btn-danger';
+    document.getElementById('rowNaveDestino').style.display = 'none';
+    document.getElementById('dataLabel').textContent = 'Data';
   } else {
-    document.getElementById('op-'+op).classList.add('sel');
-    document.getElementById('btnConfirmDel').textContent = op === 'sbarca' ? 'Conferma sbarco' : 'Conferma trasbordo';
-    document.getElementById('btnConfirmDel').className = 'btn-danger';
+    const btn = document.getElementById('btn-'+op);
+    if(btn) btn.classList.add('btn-rimoz-sel');
+    // Mostra/nascondi nave destinazione
+    document.getElementById('rowNaveDestino').style.display = op === 'trasborda' ? 'flex' : 'none';
+    // Aggiorna label data e testo bottone conferma
+    const labels = {sbarca:'Data sbarco', trasborda:'Data', malattia:'Data malattia', fine_td:'Data fine TD'};
+    const confirms = {sbarca:'Conferma sbarco', trasborda:'Conferma trasbordo', malattia:'Conferma malattia', fine_td:'Conferma fine TD'};
+    document.getElementById('dataLabel').textContent = labels[op];
+    document.getElementById('btnConfirmDel').textContent = confirms[op];
   }
 }
 
 function openConfirmDel(type,id,nome) {
   deleteTarget={type,id};
   if(type === 'pos') {
-    // Trova il record posizionamento per mostrare info
     const p = posizionamento.find(x => x.id === id);
     const rep = p && (p.pn_reparti||p.pn_Reparti) ? (p.pn_reparti||p.pn_Reparti).nome : '';
     document.getElementById('confirmNome').textContent = nome;
     document.getElementById('confirmInfo').textContent = rep ? ' · ' + rep : '';
-    // Default date oggi
     const oggi = new Date().toISOString().split('T')[0];
     document.getElementById('dataSbarco').value = oggi;
-    document.getElementById('dataTrasborda').value = oggi;
     // Popola navi destinazione
     const sel = document.getElementById('naveDestino');
     sel.innerHTML = '<option value="">— seleziona —</option>' + navi.filter(n => n.id !== utente.nave_id).map(n => '<option value="'+n.id+'">'+n.nome+'</option>').join('');
-    // Reset opzione
+    document.getElementById('opzioniRimozione').style.display = 'block';
     selOpzione('sbarca');
     document.getElementById('modalConfirm').classList.add('show');
   } else {
-    // Per altri tipi (commissari, lookup) usa il modal semplificato
     opzioneRimozione = 'rimosso';
     document.getElementById('confirmNome').textContent = nome;
     document.getElementById('confirmInfo').textContent = '';
@@ -2254,12 +2275,11 @@ async function confirmDelete() {
   const tableMap = {pos:'pn_posizionamento',commissari:'pn_utenti',semiadmin:'pn_utenti',navi:'pn_navi',reparti:'pn_reparti',mansioni:'pn_mansioni',qualifiche:'pn_qualifiche'};
   try {
     if(type === 'pos' && opzioneRimozione !== 'rimosso') {
-      // Salva nello storico prima di eliminare
       const p = posizionamento.find(x => x.id === id);
       const dip = p ? (p.pn_dipendenti || p.pn_Dipendenti) : null;
       const rep = p ? (p.pn_reparti || p.pn_Reparti) : null;
       const qual = dip ? (dip.pn_qualifiche || dip.pn_Qualifiche) : null;
-      const dataS = opzioneRimozione === 'sbarca' ? document.getElementById('dataSbarco').value : document.getElementById('dataTrasborda').value;
+      const dataS = document.getElementById('dataSbarco').value;
       const naveDestId = opzioneRimozione === 'trasborda' ? parseInt(document.getElementById('naveDestino').value) || null : null;
       if(opzioneRimozione === 'trasborda' && !naveDestId) { showToast('Seleziona la nave di destinazione', 'error'); return; }
       const ggABordo = p && p.data_imbarco && dataS ? Math.max(0, Math.floor((new Date(dataS) - new Date(p.data_imbarco)) / 86400000)) : null;
@@ -2280,7 +2300,8 @@ async function confirmDelete() {
     }
     await sbDelete(tableMap[type], id);
     closeConfirm();
-    showToast(opzioneRimozione === 'sbarca' ? 'Sbarco registrato' : opzioneRimozione === 'trasborda' ? 'Trasbordo registrato' : 'Eliminato', 'success');
+    const toastMsg = {sbarca:'Sbarco registrato', trasborda:'Trasbordo registrato', malattia:'Malattia registrata', fine_td:'Fine TD registrata', rimosso:'Eliminato'};
+    showToast(toastMsg[opzioneRimozione] || 'Eliminato', 'success');
     if(type === 'pos') { await loadPosizionamento(); }
     else if(type === 'commissari') { commissari = await sbGet('pn_utenti?ruolo=eq.commissario&select=*,pn_navi(id,nome)&order=nome'); renderComm(); }
     else if(type === 'semiadmin') { semiadmins = await sbGet('pn_utenti?ruolo=eq.semiadmin&select=*&order=nome'); renderSemiadmin(); }
@@ -2499,8 +2520,8 @@ function renderStorico() {
     return;
   }
   tbody.innerHTML = lista.map(r => {
-    const badgeCls = r.tipo === 'sbarca' ? 'badge-sbarca' : r.tipo === 'trasborda' ? 'badge-trasborda' : 'badge-rimosso';
-    const badgeTxt = r.tipo === 'sbarca' ? 'Sbarco' : r.tipo === 'trasborda' ? 'Trasbordo' : 'Rimosso';
+    const badgeCls = r.tipo === 'sbarca' ? 'badge-sbarca' : r.tipo === 'trasborda' ? 'badge-trasborda' : r.tipo === 'malattia' ? 'badge-sbarca' : r.tipo === 'fine_td' ? 'badge-trasborda' : 'badge-rimosso';
+    const badgeTxt = r.tipo === 'sbarca' ? 'Sbarco' : r.tipo === 'trasborda' ? 'Trasbordo' : r.tipo === 'malattia' ? 'Malattia' : r.tipo === 'fine_td' ? 'Fine TD' : 'Rimosso';
     const dest = r.nave_destinazione_id ? '<span class="nave-dest">&#8594; ' + (naveNomeMap[r.nave_destinazione_id] || '—') + '</span>' : '—';
     const naveSrc = naveNomeMap[r.nave_id] || '—';
     const gg = r.gg_a_bordo !== null && r.gg_a_bordo !== undefined ? r.gg_a_bordo + 'gg' : '—';
