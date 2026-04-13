@@ -455,7 +455,6 @@ select.mform-control{cursor:pointer;}
   </div>
   <div class="subbar">
     <div class="subbar-left">
-      <span class="topbar-badge" id="posNaveLabel" style="display:none;background:#e8eef5;color:var(--navy);font-size:11px;padding:3px 10px;border-radius:6px;">—</span>
       <span class="periodo-label">Mese:</span>
       <select class="mese-select" id="meseSelect" onchange="loadPosizionamento()">
         <option value="1">Gennaio</option><option value="2">Febbraio</option>
@@ -474,9 +473,10 @@ select.mform-control{cursor:pointer;}
     </div>
     <button class="btn-add" onclick="openModalAddPos()">+ aggiungi personale</button>
   </div>
-  <div class="navebar" id="navebar" style="display:none;">
+  <div class="navebar" id="navebar" style="display:flex;">
     <span style="font-size:10px;font-weight:600;color:#9ca3af;letter-spacing:.06em;text-transform:uppercase;margin-right:6px;white-space:nowrap;">Nave:</span>
     <div class="nave-pills" id="navePills"></div>
+    <span id="posNaveLabel" style="display:none;font-size:11px;font-weight:600;color:var(--navy);padding:3px 10px;border-radius:6px;background:#e8eef5;">—</span>
   </div>
   <div class="pos-content">
     <div class="pos-inner" id="mainContent"><div class="loading-bar">Caricamento...</div></div>
@@ -1227,7 +1227,13 @@ const ORDINE_CUCINA_Q = ['Capo Cuoco','Cuoco Equipaggio','Dispensiere Equipaggio
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
-  if(name==='pos') loadPosizionamento();
+  if(name==='pos') {
+    // Riassicura visibilità navebar per AMM/semi-AMM
+    if(utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin')) {
+      document.getElementById('navebar').style.display = 'flex';
+    }
+    loadPosizionamento();
+  }
   if(name==='admin') initAdmin();
 }
 
@@ -1301,10 +1307,10 @@ function startApp() {
   } else {
     // Commissario: mostra badge nave, Excel nascosto
     document.getElementById('btnExcel').style.display = 'none';
+    document.getElementById('navePills').style.display = 'none';
     const badge = document.getElementById('posNaveLabel');
     badge.textContent = utente.nave_nome || '—';
     badge.style.display = 'inline-block';
-    document.getElementById('navePills').style.display = 'none';
   }
   showScreen('pos');
 }
