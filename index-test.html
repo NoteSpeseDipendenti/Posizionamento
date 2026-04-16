@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Posizionamento Navi — v24</title>
+<title>Posizionamento Navi — v25</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -129,6 +129,9 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .btn-rimoz:hover{border-color:var(--navy);background:#eef2f8;}
 .btn-rimoz-sel{border-color:var(--navy)!important;background:var(--navy)!important;color:#fff!important;}
 .btn-rimoz-danger{border-color:var(--danger)!important;background:var(--danger)!important;color:#fff!important;}
+.filtro-pill{padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--white);color:var(--text);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s;}
+.filtro-pill:hover{border-color:var(--navy);}
+.filtro-pill.attivo{border-color:var(--navy);background:var(--navy);color:#fff;}
 .op-extra{padding-left:22px;margin-top:8px;display:none;}
 .opzione-rimozione.sel .op-extra,.opzione-rimozione.sel-danger .op-extra{display:block;}
 .op-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
@@ -412,7 +415,7 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v24 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div class="login-version">Posizionamento Navi &mdash; v25 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
       <div style="text-align:center;margin-top:10px;font-size:10px;color:#c0c4cc;">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Tutti i diritti riservati</div>
     </div>
   </div>
@@ -474,7 +477,10 @@ select.mform-control{cursor:pointer;}
         <span class="stat-block">A bordo: <strong id="s1">—</strong></span>
       </div>
     </div>
-    <button class="btn-add" onclick="openModalAddPos()">+ aggiungi personale</button>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button class="btn-add" id="btnFiltri" onclick="toggleFiltriPanel()" style="background:var(--bg);color:var(--navy);border:1px solid var(--border);">&#9776; Filtri</button>
+      <button class="btn-add" onclick="openModalAddPos()">+ aggiungi personale</button>
+    </div>
   </div>
   <div class="navebar" id="navebar" style="display:flex;">
     <span style="font-size:10px;font-weight:600;color:#9ca3af;letter-spacing:.06em;text-transform:uppercase;margin-right:6px;white-space:nowrap;">Nave:</span>
@@ -482,9 +488,13 @@ select.mform-control{cursor:pointer;}
     <span id="posNaveLabel" style="display:none;font-size:11px;font-weight:600;color:var(--navy);padding:3px 10px;border-radius:6px;background:#e8eef5;">—</span>
   </div>
   <div class="pos-content">
+    <div id="msgAlertBanner" style="display:none;background:#fffbf0;border:1px solid #fef3c7;border-radius:8px;padding:9px 16px;margin:12px 20px 0;display:none;align-items:center;justify-content:space-between;">
+      <span style="font-size:12px;color:#854F0B;">&#9993; Hai <strong id="msgAlertCount">0</strong> messaggi non letti</span>
+      <button onclick="openModalMsg()" style="font-size:11px;padding:3px 12px;border-radius:6px;border:1px solid #fef3c7;background:#EF9F27;color:#fff;cursor:pointer;font-family:inherit;font-weight:500;">Leggi ora</button>
+    </div>
     <div class="pos-inner" id="mainContent"><div class="loading-bar">Caricamento...</div></div>
   </div>
-  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v24 &mdash; Uso interno riservato</div>
+  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v25 &mdash; Uso interno riservato</div>
 </div>
 
 <!-- ADMIN -->
@@ -673,7 +683,7 @@ select.mform-control{cursor:pointer;}
       </div>
     </div>
   </div>
-  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v24 &mdash; Uso interno riservato</div>
+  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v25 &mdash; Uso interno riservato</div>
 </div>
 
 <!-- MODAL POSIZIONAMENTO -->
@@ -878,7 +888,13 @@ select.mform-control{cursor:pointer;}
   <div class="td-head">
     <div class="td-title">
       <span>&#128197; Contratti TD in scadenza</span>
-      <button class="td-close" onclick="closeTDPanel()">&#10005;</button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="generaPDFTD()" title="Esporta PDF riepilogo contratti TD" style="font-size:11px;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.15);color:#fff;border:0.5px solid rgba(255,255,255,.3);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          PDF
+        </button>
+        <button class="td-close" onclick="closeTDPanel()">&#10005;</button>
+      </div>
     </div>
     <div class="td-sub" id="tdSub">—</div>
   </div>
@@ -928,6 +944,108 @@ select.mform-control{cursor:pointer;}
   </div>
   <div class="storico-footer">
     <span class="storico-count" id="storicoCount">—</span>
+  </div>
+</div>
+
+<!-- PANNELLO FILTRI -->
+<div class="storico-overlay" id="filtriOverlay" onclick="closeFiltriPanel()"></div>
+<div class="storico-panel" id="filtriPanel" style="width:320px;">
+  <div class="storico-head">
+    <div class="storico-title">
+      <span>&#9776; Filtri avanzati</span>
+      <button class="storico-close" onclick="closeFiltriPanel()">&#10005;</button>
+    </div>
+  </div>
+  <div class="storico-body" style="padding:14px 18px;overflow-y:auto;">
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Mansione</div>
+      <select id="filtroMansione" class="mese-select" style="width:100%;height:32px;">
+        <option value="">Tutte</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Qualifica</div>
+      <select id="filtroQualifica" class="mese-select" style="width:100%;height:32px;">
+        <option value="">Tutte</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Tipo contratto</div>
+      <div style="display:flex;gap:6px;">
+        <button class="filtro-pill" id="fpTD" onclick="toggleFiltroPill('TD')">TD</button>
+        <button class="filtro-pill" id="fpTI" onclick="toggleFiltroPill('TI')">TI</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Tipo rapporto</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="filtro-pill" id="fpCRL" onclick="toggleFiltroPill('CRL')">CRL</button>
+        <button class="filtro-pill" id="fpTP" onclick="toggleFiltroPill('TP')">TP</button>
+        <button class="filtro-pill" id="fpTPR" onclick="toggleFiltroPill('TPR')">TPR</button>
+        <button class="filtro-pill" id="fpTG" onclick="toggleFiltroPill('TG')">TG</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Nazionalità</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="filtro-pill" id="fpIT" onclick="toggleFiltroPill('IT')">IT</button>
+        <button class="filtro-pill" id="fpUE" onclick="toggleFiltroPill('UE')">UE</button>
+        <button class="filtro-pill" id="fpEXTRA" onclick="toggleFiltroPill('EXTRA')">Extra-UE</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Genere</div>
+      <div style="display:flex;gap:6px;">
+        <button class="filtro-pill" id="fpM" onclick="toggleFiltroPill('M')">M</button>
+        <button class="filtro-pill" id="fpF" onclick="toggleFiltroPill('F')">F</button>
+      </div>
+    </div>
+
+  </div>
+  <div style="padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;">
+    <button class="btn-new" onclick="applicaFiltri()" style="flex:1;">Applica</button>
+    <button class="btn-cancel" onclick="resetFiltri()">Reset</button>
+    <button class="btn-new" onclick="generaPDFFiltri()" style="background:#1D9E75;border-color:#1D9E75;">&#128196; PDF</button>
+  </div>
+</div>
+
+<!-- PANNELLO STORICO DIPENDENTE -->
+<div class="storico-overlay" id="storicoDipOverlay" onclick="closeStoricoDip()"></div>
+<div class="storico-panel" id="storicoDipPanel" style="width:560px;">
+  <div class="storico-head">
+    <div class="storico-title">
+      <div>
+        <span id="storicoDipTitolo">&#128100; Storico dipendente</span>
+        <div id="storicoDipSub" style="font-size:11px;color:var(--muted);margin-top:2px;font-weight:400;"></div>
+      </div>
+      <button class="storico-close" onclick="closeStoricoDip()">&#10005;</button>
+    </div>
+  </div>
+  <div class="storico-body">
+    <table class="storico-table">
+      <thead>
+        <tr>
+          <th>Nave</th>
+          <th>Reparto</th>
+          <th>Imbarco</th>
+          <th>Sbarco</th>
+          <th>GG</th>
+          <th>Tipo</th>
+          <th>Destinazione</th>
+          <th>Operatore</th>
+        </tr>
+      </thead>
+      <tbody id="storicoDipBody"></tbody>
+    </table>
+  </div>
+  <div class="storico-footer">
+    <span class="storico-count" id="storicoDipCount">—</span>
   </div>
 </div>
 
@@ -1047,20 +1165,16 @@ select.mform-control{cursor:pointer;}
 
     <div style="display:flex;flex-direction:column;gap:14px;font-size:12px;color:var(--muted);line-height:1.6;">
 
-      <!-- NOVITÀ v24 -->
+      <!-- NOVITÀ v25 -->
       <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;">
-        <div style="font-weight:600;color:#1e40af;font-size:12px;margin-bottom:8px;">&#127381; Novità v24</div>
+        <div style="font-weight:600;color:#1e40af;font-size:12px;margin-bottom:8px;">&#127381; Novità v25</div>
         <ul id="novitaListComm" style="padding-left:16px;display:flex;flex-direction:column;gap:5px;color:#1e40af;">
-          <li><strong>&#8635; Aggiorna</strong> — ricarica i dati senza uscire dalla nave aperta.</li>
-          <li><strong>&#9899; Bollino TD</strong> — accanto ad ogni TD compare un pallino colorato: bianco = in attesa, rosso = urgente (≤23 giorni), giallo = non prolunga, verde = prolunga. Cliccalo per registrare la comunicazione.</li>
+          <li><strong>&#128100; Storico dipendente</strong> — clicca sul nome di un marittimo per vedere tutto il suo storico imbarchi.</li>
+          <li><strong>&#9993; Alert messaggi</strong> — se hai messaggi non letti, compare un avviso in cima con bottone per aprirli subito.</li>
         </ul>
         <ul id="novitaListAdmin" style="padding-left:16px;display:none;flex-direction:column;gap:5px;color:#1e40af;">
-          <li><strong>&#8635; Aggiorna</strong> — ricarica i dati senza uscire dalla nave aperta.</li>
-          <li><strong>&#128196; PDF ordine</strong> — il PDF rispetta l'ordine esatto del foglio e ogni reparto inizia sempre su nuova pagina.</li>
-          <li><strong>&#127859; Ordine Cucina</strong> — Capo Cuoco, Cuoco Equipaggio, Dispensiere, 1°/2°/3° Cuoco, Garzone, Piccolo, Macellaio, Pasticcere, Panettiere, Cambusiere.</li>
-          <li><strong>&#9899; Bollino TD</strong> — accanto ad ogni TD compare un pallino colorato: bianco = in attesa, rosso = urgente (≤23 giorni), giallo = non prolunga, verde = prolunga. Cliccalo per registrare la comunicazione.</li>
-          <li><strong>&#128203; Selezione navi</strong> — tutte le navi visibili come bottoni diretti nella barra.</li>
-          <li><strong>&#128202; Excel</strong> — esporta il posizionamento in Excel con Cognome Nome e Matricola nell'ordine del foglio.</li>
+          <li><strong>&#128100; Storico dipendente</strong> — clicca sul nome di un marittimo per vedere tutto il suo storico imbarchi su tutte le navi.</li>
+          <li><strong>&#9993; Alert messaggi</strong> — i commissari vedono un avviso in cima se hanno messaggi non letti.</li>
         </ul>
       </div>
 
@@ -1258,6 +1372,7 @@ if(_ld){const _d=new Date();_ld.textContent=_d.getDate().toString().padStart(2,'
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
+
 async function doLogin() {
   const user = document.getElementById('loginUser').value.trim();
   const pass = document.getElementById('loginPass').value.trim();
@@ -1269,20 +1384,17 @@ async function doLogin() {
     const data = await sbGet(`pn_utenti?username=eq.${encodeURIComponent(user)}&password=eq.${encodeURIComponent(pass)}&attivo=eq.true&select=id,nome,username,ruolo,nave_id,attivo,pn_navi(id,nome,compagnia)`);
     if(!data||data.length===0){errEl.classList.add('show');return;}
     const u = data[0];
-    // Admin può avere nave_id NULL — usa prima nave disponibile per visualizzazione
     let naveId = u.nave_id;
     let naveNome = u.pn_navi ? u.pn_navi.nome : '—';
-    // Se commissario ha nave_id ma naveNome è ancora — cerca nelle navi caricate
     if(naveId && naveNome === '—') {
       const naveTmp = navi.find(n => n.id === naveId);
       if(naveTmp) naveNome = naveTmp.nome;
     }
     if(u.ruolo === 'admin' && !naveId) {
-      // Carica le navi per scegliere quella di default
       const naviTmp = await sbGet('pn_navi?order=nome&limit=1');
       if(naviTmp && naviTmp.length > 0) { naveId = naviTmp[0].id; naveNome = naviTmp[0].nome; }
     }
-    utente = {id:u.id,nome:u.nome,username:u.username,ruolo:u.ruolo,nave_id:naveId,nave_nome:naveNome};
+    utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome};
     await loadLookups();
     startApp();
   } catch(e) {
@@ -1480,6 +1592,7 @@ function doLogout() {
   document.getElementById('loginUser').value='';
   document.getElementById('loginPass').value='';
   document.getElementById('btnAmm').style.display='none';
+  document.getElementById('msgAlertBanner').style.display='none';
 }
 
 function populateSelects() {
@@ -1569,7 +1682,15 @@ function renderPosizionamento(mese, anno) {
     if(p.stato==='confermato')byReparto[rid].conf.push(p);
     else byReparto[rid].bordo.push(p);
   });
-  Object.values(byReparto).forEach(g=>{g.bordo=sortPersonale(g.bordo);g.conf=sortPersonale(g.conf);});
+  Object.values(byReparto).forEach(g=>{
+    g.bordo=sortPersonale(g.bordo);
+    g.conf=sortPersonale(g.conf);
+    // Applica filtri avanzati se attivi
+    if(Object.values(filtriAttivi).some(Boolean)) {
+      g.bordo = applicaFiltroPersonale(g.bordo);
+      g.conf  = applicaFiltroPersonale(g.conf);
+    }
+  });
 
   // Collect stats
   let bordoCamera=[], bordoCucina=[];
@@ -1644,7 +1765,7 @@ function renderRow(p,isConf,W) {
   const plusBtn=isConf?'<button class="icon-btn plus" onclick="promuoviABordo('+p.id+')" title="Metti a bordo"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M2 6h8"/></svg></button>':'';
   const rapp = dip && dip.tipo_rapporto ? '<span style="font-size:10px;color:var(--muted)">'+dip.tipo_rapporto+'</span>' : '—';
   return '<tr'+rc+'>'
-    +'<td class="col-nome" style="width:'+W[0]+'"><span class="nome-cell">'+nome+'</span><span class="mat">#'+mat+'</span></td>'
+    +'<td class="col-nome" style="width:'+W[0]+'"><span class="nome-cell" style="cursor:pointer;color:var(--navy);" onclick="openStoricoDip('+p.id+')" title="Storico imbarchi">'+nome+'</span><span class="mat">#'+mat+'</span></td>'
     +'<td style="width:'+W[1]+'">'+qual+'</td><td style="width:'+W[2]+'">'+mans+'</td>'
     +'<td style="width:'+W[3]+'">'+dataImb+'</td><td style="width:'+W[4]+'">'+gg+'</td>'
     +'<td style="width:'+W[5]+'">'+rapp+'</td>'
@@ -2437,13 +2558,15 @@ function renderTDPanel() {
     const rep = (p.pn_reparti || p.pn_Reparti) ? (p.pn_reparti || p.pn_Reparti).nome : '—';
     const cls = p.diff <= 15 ? 'danger' : 'warn';
     const badgeCls = p.diff <= 15 ? 'danger' : 'warn';
-    // Badge stato comunicazione
     const stato = p.td_comunicazione || 'attesa';
     const statoBadge = stato === 'prolunga'
       ? '<span style="font-size:10px;font-weight:500;padding:2px 8px;border-radius:8px;background:#EAF3DE;color:#3B6D11;">Prolunga</span>'
       : stato === 'nonprolunga'
       ? '<span style="font-size:10px;font-weight:500;padding:2px 8px;border-radius:8px;background:#fff5f5;color:#A32D2D;">Non prolunga</span>'
       : '<span style="font-size:10px;font-weight:500;padding:2px 8px;border-radius:8px;background:#fef3c7;color:#854F0B;">In attesa</span>';
+    const notaHtml = p.td_nota
+      ? '<div style="font-size:10px;color:var(--muted);font-style:italic;margin-top:5px;padding-top:5px;border-top:1px solid rgba(0,0,0,.06);">' + escHtml(p.td_nota) + '</div>'
+      : '';
     return '<div class="td-card ' + cls + '">'
       + '<div class="td-nome">' + escHtml(nome) + '</div>'
       + '<div class="td-info">' + escHtml(rep) + ' &middot; scade ' + fmtDate(p.data_scadenza_td) + '/' + new Date(p.data_scadenza_td).getFullYear().toString().slice(2) + '</div>'
@@ -2451,6 +2574,7 @@ function renderTDPanel() {
       + '<span class="td-badge-days ' + badgeCls + '">&#9679; ' + p.diff + ' giorni</span>'
       + statoBadge
       + '</div>'
+      + notaHtml
       + '</div>';
   }).join('');
 }
@@ -2543,6 +2667,370 @@ function renderStorico() {
 }
 
 
+
+// ═══════════════════════════════════════════
+// FILTRI AVANZATI
+// ═══════════════════════════════════════════
+let filtriAttivi = {};
+let posizionamentoFiltrato = null;
+
+function toggleFiltriPanel() {
+  const panel = document.getElementById('filtriPanel');
+  const overlay = document.getElementById('filtriOverlay');
+  if(panel.classList.contains('show')) {
+    closeFiltriPanel();
+  } else {
+    // Popola mansioni e qualifiche
+    const fm = document.getElementById('filtroMansione');
+    fm.innerHTML = '<option value="">Tutte</option>' + mansioni.map(m => '<option value="'+escHtml(m.nome)+'">'+escHtml(m.nome)+'</option>').join('');
+    const fq = document.getElementById('filtroQualifica');
+    fq.innerHTML = '<option value="">Tutte</option>' + qualifiche.map(q => '<option value="'+escHtml(q.nome)+'">'+escHtml(q.nome)+'</option>').join('');
+    // Ripristina stato pills
+    Object.keys(filtriAttivi).forEach(k => {
+      const el = document.getElementById('fp'+k);
+      if(el) el.classList.toggle('attivo', !!filtriAttivi[k]);
+    });
+    overlay.classList.add('show');
+    panel.classList.add('show');
+  }
+}
+
+function closeFiltriPanel() {
+  document.getElementById('filtriPanel').classList.remove('show');
+  document.getElementById('filtriOverlay').classList.remove('show');
+}
+
+function toggleFiltroPill(key) {
+  filtriAttivi[key] = !filtriAttivi[key];
+  const el = document.getElementById('fp'+key);
+  if(el) el.classList.toggle('attivo', !!filtriAttivi[key]);
+}
+
+function applicaFiltri() {
+  const mansione = document.getElementById('filtroMansione').value;
+  const qualifica = document.getElementById('filtroQualifica').value;
+  if(mansione) filtriAttivi['mansione'] = mansione; else delete filtriAttivi['mansione'];
+  if(qualifica) filtriAttivi['qualifica'] = qualifica; else delete filtriAttivi['qualifica'];
+
+  const contAttivi = Object.values(filtriAttivi).filter(Boolean).length;
+  const btn = document.getElementById('btnFiltri');
+  if(contAttivi > 0) {
+    btn.textContent = '⊗ Filtri (' + contAttivi + ')';
+    btn.style.background = '#fff5f5';
+    btn.style.color = '#A32D2D';
+    btn.style.borderColor = '#A32D2D';
+  } else {
+    btn.textContent = '▤ Filtri';
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }
+
+  const mese = parseInt(document.getElementById('meseSelect').value);
+  const anno = parseInt(document.getElementById('annoSelect').value);
+  renderPosizionamento(mese, anno);
+  closeFiltriPanel();
+}
+
+function resetFiltri() {
+  filtriAttivi = {};
+  document.querySelectorAll('.filtro-pill').forEach(p => p.classList.remove('attivo'));
+  document.getElementById('filtroMansione').value = '';
+  document.getElementById('filtroQualifica').value = '';
+  const btn = document.getElementById('btnFiltri');
+  btn.textContent = '▤ Filtri';
+  btn.style.background = '';
+  btn.style.color = '';
+  btn.style.borderColor = '';
+  const mese = parseInt(document.getElementById('meseSelect').value);
+  const anno = parseInt(document.getElementById('annoSelect').value);
+  renderPosizionamento(mese, anno);
+  closeFiltriPanel();
+}
+
+function applicaFiltroPersonale(lista) {
+  return lista.filter(p => {
+    const dip = p.pn_dipendenti;
+    const mans = p.pn_mansioni ? p.pn_mansioni.nome : '';
+    const qual = dip && dip.pn_qualifiche ? dip.pn_qualifiche.nome : '';
+    const rapp = dip ? (dip.tipo_rapporto || '') : '';
+    const naz = dip ? (dip.nazionalita || '') : '';
+    const sesso = dip ? (dip.sesso || '') : '';
+    const contr = p.tipo_contratto || '';
+
+    if(filtriAttivi['mansione'] && mans !== filtriAttivi['mansione']) return false;
+    if(filtriAttivi['qualifica'] && qual !== filtriAttivi['qualifica']) return false;
+    if(filtriAttivi['TD'] && contr !== 'TD') return false;
+    if(filtriAttivi['TI'] && contr !== 'TI') return false;
+    if(filtriAttivi['CRL'] && rapp !== 'CRL') return false;
+    if(filtriAttivi['TP'] && rapp !== 'TP') return false;
+    if(filtriAttivi['TPR'] && rapp !== 'TPR') return false;
+    if(filtriAttivi['TG'] && rapp !== 'TG') return false;
+    if(filtriAttivi['M'] && sesso !== 'M') return false;
+    if(filtriAttivi['F'] && sesso !== 'F') return false;
+    if(filtriAttivi['IT'] && naz !== 'IT') return false;
+    if(filtriAttivi['UE'] && naz !== 'UE') return false;
+    if(filtriAttivi['EXTRA'] && naz !== 'EXTRA') return false;
+    return true;
+  });
+}
+
+// ═══════════════════════════════════════════
+// PDF TD
+// ═══════════════════════════════════════════
+function generaPDFTD() {
+  function doGenera() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const oggi = new Date();
+    const mesiNomi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+    const meseLabel = mesiNomi[parseInt(document.getElementById('meseSelect').value)-1] + ' ' + document.getElementById('annoSelect').value;
+
+    doc.setFillColor(15, 42, 74);
+    doc.rect(0, 0, pageW, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('RIEPILOGO CONTRATTI TD — ' + (utente.nave_nome || ''), 12, 7);
+    doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+    doc.text(meseLabel, 12, 12);
+    doc.text('Stampato il ' + oggi.getDate().toString().padStart(2,'0') + '/' + (oggi.getMonth()+1).toString().padStart(2,'0') + '/' + oggi.getFullYear(), pageW - 12, 12, {align:'right'});
+
+    const scadenze = posizionamento
+      .filter(p => p.tipo_contratto === 'TD' && p.data_scadenza_td)
+      .map(p => { const diff = Math.ceil((new Date(p.data_scadenza_td) - oggi) / 86400000); return {...p, diff}; })
+      .filter(p => p.diff >= 0)
+      .sort((a, b) => a.diff - b.diff);
+
+    const rows = scadenze.map(p => {
+      const dip = p.pn_dipendenti || p.pn_Dipendenti;
+      const nome = dip ? dip.cognome_nome : '—';
+      const rep = (p.pn_reparti || p.pn_Reparti) ? (p.pn_reparti || p.pn_Reparti).nome : '—';
+      const stato = p.td_comunicazione === 'prolunga' ? 'Prolunga' : p.td_comunicazione === 'nonprolunga' ? 'Non prolunga' : 'In attesa';
+      return [nome, rep, fmtDate(p.data_scadenza_td), String(p.diff) + 'gg', stato, p.td_nota || ''];
+    });
+
+    doc.autoTable({
+      startY: 20,
+      margin: { left: 12, right: 12 },
+      head: [['Nome', 'Reparto', 'Scadenza', 'GG', 'Stato', 'Nota']],
+      body: rows,
+      theme: 'grid',
+      styles: { fontSize: 8, cellPadding: 2, valign: 'middle' },
+      headStyles: { fillColor: [15, 42, 74], textColor: 255, fontSize: 8, fontStyle: 'bold' },
+      columnStyles: {
+        0: { cellWidth: 52 }, 1: { cellWidth: 30 }, 2: { cellWidth: 20, halign: 'center' },
+        3: { cellWidth: 14, halign: 'center' }, 4: { cellWidth: 28, halign: 'center' }, 5: { cellWidth: 40 }
+      },
+      didParseCell: function(data) {
+        if(data.section === 'body' && data.column.index === 4) {
+          const v = data.cell.raw;
+          if(v === 'Prolunga') { data.cell.styles.textColor = [59, 109, 17]; data.cell.styles.fontStyle = 'bold'; }
+          else if(v === 'Non prolunga') { data.cell.styles.textColor = [163, 45, 45]; data.cell.styles.fontStyle = 'bold'; }
+          else { data.cell.styles.textColor = [133, 79, 11]; }
+        }
+        if(data.section === 'body' && data.column.index === 2) {
+          const p = scadenze[data.row.index];
+          if(p && p.diff <= 15) data.cell.styles.textColor = [163, 45, 45];
+        }
+      },
+      didDrawPage: function() {
+        doc.setFontSize(7); doc.setTextColor(150,150,150);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v25', 12, doc.internal.pageSize.getHeight() - 5);
+        doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, doc.internal.pageSize.getHeight() - 5, {align:'right'});
+      }
+    });
+
+    doc.save('td_' + (utente.nave_nome||'nave').replace(/\s+/g,'_').toLowerCase() + '.pdf');
+    showToast('PDF TD generato!', 'success');
+  }
+
+  if(window.jspdf && window.jspdf.jsPDF) { doGenera(); }
+  else {
+    showToast('Preparazione PDF...', '');
+    const s1 = document.createElement('script');
+    s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s1.onload = function() {
+      const s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+      s2.onload = doGenera;
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  }
+}
+
+// ═══════════════════════════════════════════
+// PDF FILTRATO
+// ═══════════════════════════════════════════
+function generaPDFFiltri() {
+  function doGenera() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const oggi = new Date();
+    const mesiNomi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+    const mese = parseInt(document.getElementById('meseSelect').value);
+    const anno = parseInt(document.getElementById('annoSelect').value);
+    const meseLabel = mesiNomi[mese-1] + ' ' + anno;
+
+    // Filtri attivi come label
+    const filtriLabel = Object.entries(filtriAttivi).filter(([,v])=>v).map(([k,v])=> typeof v === 'string' ? v : k).join(', ');
+
+    doc.setFillColor(15, 42, 74);
+    doc.rect(0, 0, pageW, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text('POSIZIONAMENTO FILTRATO — ' + (utente.nave_nome || ''), 12, 7);
+    doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+    doc.text(meseLabel + (filtriLabel ? ' · Filtri: ' + filtriLabel : ''), 12, 12);
+    doc.text('Stampato il ' + oggi.getDate().toString().padStart(2,'0') + '/' + (oggi.getMonth()+1).toString().padStart(2,'0') + '/' + oggi.getFullYear(), pageW - 12, 12, {align:'right'});
+
+    // Costruisci righe filtrate
+    const byReparto = {};
+    reparti.forEach(r => { byReparto[r.id] = { reparto: r, bordo: [], conf: [] }; });
+    posizionamento.forEach(p => {
+      const rid = p.reparto_id; if(!rid) return;
+      if(!byReparto[rid]) byReparto[rid] = { reparto: p.pn_reparti, bordo: [], conf: [] };
+      if(p.stato === 'bordo') byReparto[rid].bordo.push(p);
+      else byReparto[rid].conf.push(p);
+    });
+    Object.values(byReparto).forEach(g => {
+      g.bordo = applicaFiltroPersonale(sortPersonale(g.bordo));
+      g.conf  = applicaFiltroPersonale(sortPersonale(g.conf));
+    });
+
+    let startY = 20;
+    ORDINE_REPARTI.forEach(nomeR => {
+      const g = Object.values(byReparto).find(x => x.reparto && x.reparto.nome === nomeR);
+      if(!g || (g.bordo.length === 0 && g.conf.length === 0)) return;
+      const allRows = [...g.bordo, ...g.conf].map(p => {
+        const dip = p.pn_dipendenti;
+        const nome = dip ? dip.cognome_nome : '—';
+        const mat = dip ? '#'+dip.matricola : '';
+        const qual = dip && dip.pn_qualifiche ? dip.pn_qualifiche.nome : '—';
+        const mans = p.pn_mansioni ? p.pn_mansioni.nome : '—';
+        const rapp = dip ? (dip.tipo_rapporto||'') : '';
+        const contr = p.tipo_contratto === 'TD' && p.data_scadenza_td ? 'TD '+fmtDate(p.data_scadenza_td) : 'TI';
+        const dataImb = p.data_imbarco ? fmtDate(p.data_imbarco) : '—';
+        const gg = p.data_imbarco && p.stato === 'bordo' ? calcGG(p.data_imbarco)+'gg' : '—';
+        return [nome+'\n'+mat, qual, mans, dataImb, gg, rapp, contr];
+      });
+      if(allRows.length === 0) return;
+
+      const altStimata = 6 + 6 + allRows.length * 5 + 10;
+      if(startY + altStimata > pageH - 10) { doc.addPage(); startY = 20; }
+
+      doc.setFillColor(238, 242, 248); doc.rect(10, startY, pageW-20, 6, 'F');
+      doc.setTextColor(15,42,74); doc.setFontSize(7.5); doc.setFont('helvetica','bold');
+      doc.text(nomeR.toUpperCase(), 13, startY+4);
+      doc.setFont('helvetica','normal'); doc.setTextColor(100,100,100);
+      doc.text('A bordo: '+g.bordo.length, pageW-12, startY+4, {align:'right'});
+      startY += 7;
+
+      doc.autoTable({
+        startY, margin:{left:10,right:10}, tableWidth:277,
+        head:[['Nome / Matr.','Qualifica','Mansione','Imbarco','GG','Rapp.','Contratto']],
+        body: allRows, theme:'grid', rowPageBreak:'avoid',
+        styles:{fontSize:7,cellPadding:1.5,valign:'middle',overflow:'linebreak',minCellHeight:10},
+        headStyles:{fillColor:[15,42,74],textColor:255,fontSize:7,fontStyle:'bold',halign:'center'},
+        columnStyles:{0:{cellWidth:48},1:{cellWidth:38},2:{cellWidth:35},3:{cellWidth:16,halign:'center'},4:{cellWidth:12,halign:'center'},5:{cellWidth:14,halign:'center'},6:{cellWidth:22,halign:'center'}},
+        didDrawPage: function() {
+          doc.setFontSize(7); doc.setTextColor(150,150,150);
+          doc.text('S.M.A.R.T Solutions — Posizionamento Navi v25', 12, pageH-5);
+          doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
+        }
+      });
+      startY = doc.lastAutoTable.finalY + 4;
+    });
+
+    doc.save('posizionamento_filtrato_'+(utente.nave_nome||'nave').replace(/\s+/g,'_').toLowerCase()+'.pdf');
+    showToast('PDF filtrato generato!', 'success');
+    closeFiltriPanel();
+  }
+
+  if(window.jspdf && window.jspdf.jsPDF) { doGenera(); }
+  else {
+    showToast('Preparazione PDF...', '');
+    const s1 = document.createElement('script');
+    s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s1.onload = function() {
+      const s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+      s2.onload = doGenera;
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  }
+}
+
+// ═══════════════════════════════════════════
+// STORICO SINGOLO DIPENDENTE
+// ═══════════════════════════════════════════
+async function openStoricoDip(posId) {
+  const p = posizionamento.find(x => x.id === posId);
+  if(!p) return;
+  const dip = p.pn_dipendenti;
+  if(!dip) return;
+
+  const nome = dip.cognome_nome;
+  const mat = dip.matricola;
+  const qual = dip.pn_qualifiche ? dip.pn_qualifiche.nome : '—';
+
+  document.getElementById('storicoDipTitolo').textContent = '👤 ' + nome;
+  document.getElementById('storicoDipSub').textContent = '#' + mat + ' · ' + qual;
+  document.getElementById('storicoDipBody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted);">Caricamento...</td></tr>';
+  document.getElementById('storicoDipOverlay').classList.add('show');
+  document.getElementById('storicoDipPanel').classList.add('show');
+
+  try {
+    const data = await sbGet('pn_storico?dipendente_id=eq.' + dip.id + '&order=data_imbarco.desc');
+    renderStoricoDip(data);
+  } catch(e) {
+    document.getElementById('storicoDipBody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted);">Errore caricamento</td></tr>';
+  }
+}
+
+function renderStoricoDip(data) {
+  const naveNomeMap = {};
+  navi.forEach(n => { naveNomeMap[n.id] = n.nome; });
+
+  document.getElementById('storicoDipCount').textContent = data.length + ' movimenti';
+
+  if(data.length === 0) {
+    document.getElementById('storicoDipBody').innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted);font-style:italic;">Nessun movimento trovato nello storico</td></tr>';
+    return;
+  }
+
+  let totGG = 0;
+  document.getElementById('storicoDipBody').innerHTML = data.map(r => {
+    const naveSrc = naveNomeMap[r.nave_id] || '—';
+    const dest = r.nave_destinazione_id ? '<span class="nave-dest">→ '+(naveNomeMap[r.nave_destinazione_id]||'—')+'</span>' : '—';
+    const gg = r.gg_a_bordo !== null && r.gg_a_bordo !== undefined ? r.gg_a_bordo : 0;
+    totGG += gg;
+    const badgeCls = r.tipo==='sbarca'?'badge-sbarca':r.tipo==='trasborda'?'badge-trasborda':r.tipo==='malattia'?'badge-sbarca':r.tipo==='fine_td'?'badge-trasborda':'badge-rimosso';
+    const badgeTxt = r.tipo==='sbarca'?'Sbarco':r.tipo==='trasborda'?'Trasbordo':r.tipo==='malattia'?'Malattia':r.tipo==='fine_td'?'Fine TD':'Rimosso';
+    return '<tr>'
+      +'<td style="font-size:11px;font-weight:500;">'+naveSrc+'</td>'
+      +'<td style="font-size:10px;">'+escHtml(r.reparto||'—')+'</td>'
+      +'<td style="font-size:10px;text-align:center;">'+(r.data_imbarco?fmtDate(r.data_imbarco):'—')+'</td>'
+      +'<td style="font-size:10px;text-align:center;">'+(r.data_sbarco?fmtDate(r.data_sbarco):'—')+'</td>'
+      +'<td style="font-size:10px;text-align:center;font-weight:500;">'+(gg?gg+'gg':'—')+'</td>'
+      +'<td><span class="'+badgeCls+'">'+badgeTxt+'</span></td>'
+      +'<td>'+dest+'</td>'
+      +'<td style="font-size:10px;color:var(--muted);">'+escHtml(r.operatore||'—')+'</td>'
+      +'</tr>';
+  }).join('');
+
+  // Aggiorna footer con totale GG
+  document.getElementById('storicoDipCount').textContent = data.length + ' movimenti · Tot. ' + totGG + ' gg a bordo';
+}
+
+function closeStoricoDip() {
+  document.getElementById('storicoDipPanel').classList.remove('show');
+  document.getElementById('storicoDipOverlay').classList.remove('show');
+}
 
 async function eliminaStorico(id) {
   if(!confirm('Eliminare questo movimento dallo storico?')) return;
@@ -2794,9 +3282,16 @@ function aggiornaBottoneMsg() {
   if(nonLetti > 0) {
     btn.classList.add('has-unread');
     btn.innerHTML = '<span class="msg-dot"></span>Messaggi ('+nonLetti+')';
+    // Mostra banner solo per commissari
+    if(utente && utente.ruolo === 'commissario') {
+      const banner = document.getElementById('msgAlertBanner');
+      document.getElementById('msgAlertCount').textContent = nonLetti;
+      banner.style.display = 'flex';
+    }
   } else {
     btn.classList.remove('has-unread');
     btn.innerHTML = '<span class="msg-dot"></span>Messaggi';
+    document.getElementById('msgAlertBanner').style.display = 'none';
   }
 }
 
@@ -3122,7 +3617,7 @@ function generaPDF() {
           // Footer su ogni pagina
           doc.setFontSize(7);
           doc.setTextColor(150, 150, 150);
-          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v24', 12, pageH - 5);
+          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v25', 12, pageH - 5);
           doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, pageH - 5, { align: 'right' });
         }
       });
