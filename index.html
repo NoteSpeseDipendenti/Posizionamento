@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Posizionamento Navi — v26</title>
+<title>Posizionamento Navi — v27</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -63,9 +63,9 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .topbar-badge{font-size:11px;padding:2px 10px;border-radius:20px;background:rgba(255,255,255,.13);color:rgba(255,255,255,.9);font-weight:500;margin-left:12px;}
 .topbar-right{display:flex;align-items:center;gap:10px;}
 .user-pill{font-size:11px;color:rgba(255,255,255,.9);}
-.btn-topbar{font-size:11px;padding:4px 0;min-width:76px;text-align:center;border-radius:6px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.9);border:.5px solid rgba(255,255,255,.2);cursor:pointer;font-family:inherit;}
+.btn-topbar{font-size:11px;padding:4px 0;min-width:100px;text-align:center;border-radius:6px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.9);border:.5px solid rgba(255,255,255,.2);cursor:pointer;font-family:inherit;}
 .btn-topbar:hover{background:rgba(255,255,255,.18);}
-.btn-orange{font-size:11px;padding:5px 0;min-width:76px;text-align:center;border-radius:6px;background:rgba(186,117,23,.2);color:#FAC775;border:1px solid rgba(250,199,117,.5);cursor:pointer;font-weight:500;font-family:inherit;}
+.btn-orange{font-size:11px;padding:5px 0;min-width:100px;text-align:center;border-radius:6px;background:rgba(186,117,23,.2);color:#FAC775;border:1px solid rgba(250,199,117,.5);cursor:pointer;font-weight:500;font-family:inherit;}
 .btn-orange:hover{background:rgba(186,117,23,.45);}
 .btn-orange.active{background:rgba(186,117,23,.55);border-color:#FAC775;}
 .btn-orange.td-alert{background:rgba(163,45,45,.25);color:#f87171;border-color:rgba(163,45,45,.5);}
@@ -145,7 +145,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .btn-logout{font-size:11px;color:#fff;font-weight:600;background:none;border:none;cursor:pointer;font-family:inherit;}
 .btn-help{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.12);color:rgba(255,255,255,.9);border:.5px solid rgba(255,255,255,.2);cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;}
 .btn-help:hover{background:rgba(255,255,255,.22);}
-.btn-msg{position:relative;font-size:11px;padding:5px 0;min-width:76px;text-align:center;border-radius:6px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:.5px solid rgba(255,255,255,.2);cursor:pointer;font-family:inherit;font-weight:500;}
+.btn-msg{position:relative;font-size:11px;padding:5px 0;min-width:100px;text-align:center;border-radius:6px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:.5px solid rgba(255,255,255,.2);cursor:pointer;font-family:inherit;font-weight:500;}
 .btn-msg:hover{background:rgba(255,255,255,.14);}
 .btn-msg.has-unread{background:rgba(186,117,23,.25);color:#FAC775;border-color:rgba(250,199,117,.6);font-weight:600;}
 .btn-msg .msg-dot{display:none;width:7px;height:7px;border-radius:50%;background:#EF9F27;margin-right:4px;vertical-align:middle;}
@@ -189,10 +189,31 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .stat-ok{color:var(--teal)!important;}
 .stat-warn{color:var(--amber)!important;}
 .stat-div{color:var(--border);margin:0 4px;font-size:16px;}
-.btn-add{font-size:11px;padding:4px 12px;border-radius:6px;background:var(--navy);color:#fff;border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+.btn-add{font-size:11px;padding:4px 12px;border-radius:6px;background:var(--navy);color:#fff;border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;width:100px;text-align:center;}
+
 .btn-add:hover{background:var(--navy2);}
-.btn-filtri{font-size:11px;padding:4px 12px;border-radius:6px;background:#fff;color:var(--navy);border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;}
+.btn-filtri{font-size:11px;padding:4px 12px;border-radius:6px;background:#fff;color:var(--navy);border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;width:100px;text-align:center;}
+
+
 .btn-filtri:hover{background:#eef2f8;}
+
+/* Q&A ACCORDION */
+.qa-acc-item{border:0.5px solid var(--border);border-radius:8px;margin-bottom:5px;overflow:hidden;}
+.qa-acc-q{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;cursor:pointer;background:var(--white);font-size:12px;font-weight:500;color:var(--text);}
+.qa-acc-q:hover{background:#f8fafc;}
+.qa-acc-arr{font-size:9px;color:var(--muted);transition:transform .2s;flex-shrink:0;margin-left:8px;}
+.qa-acc-item.open .qa-acc-arr{transform:rotate(180deg);}
+.qa-acc-a{display:none;padding:8px 12px 10px;font-size:12px;color:var(--muted);line-height:1.6;background:#f8fafc;border-top:0.5px solid var(--border);}
+.qa-acc-item.open .qa-acc-a{display:block;}
+
+/* ESPORTA DROPDOWN */
+.esporta-wrap{position:relative;flex-shrink:0;}
+.esporta-menu{display:none;position:absolute;top:calc(100% + 5px);right:0;background:var(--white);border:1px solid var(--border);border-radius:9px;box-shadow:0 4px 20px rgba(0,0,0,.12);z-index:300;min-width:170px;overflow:hidden;padding:4px;}
+.esporta-menu.show{display:block;}
+.esporta-item{display:block;width:100%;text-align:left;padding:8px 13px;font-size:12px;font-family:inherit;color:var(--text);background:none;border:none;cursor:pointer;border-radius:6px;font-weight:500;transition:background .1s;}
+.esporta-item:hover{background:var(--bg);}
+.esporta-item-admin{color:var(--navy);}
+.esporta-item-admin.disabled{color:var(--muted);opacity:.45;cursor:not-allowed;pointer-events:none;}
 
 /* BOTTONI NAVE */
 .nave-pills{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
@@ -371,6 +392,49 @@ select.mform-control{cursor:pointer;}
 .toast.show{opacity:1;transform:translateY(0);}
 .toast.success{background:var(--teal);}
 .toast.error{background:var(--danger);}
+
+/* DASHBOARD */
+.dash-overlay{position:fixed;inset:0;background:rgba(15,42,74,.55);z-index:160;display:none;align-items:flex-start;justify-content:center;padding-top:46px;}
+.dash-overlay.show{display:flex;}
+.dash-panel{background:var(--bg);width:100%;max-width:100%;height:calc(100vh - 46px);overflow-y:auto;padding:16px 20px 40px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.kpi-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 16px;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.kpi-label{font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;}
+.kpi-val{font-size:26px;font-weight:700;color:var(--navy);line-height:1;}
+.kpi-val.danger{color:var(--danger);}
+.kpi-val.green{color:var(--teal);}
+.navi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.dash-nave-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
+.dash-nave-card:hover{border-color:var(--navy);box-shadow:0 2px 12px rgba(15,42,74,.12);}
+.dash-nave-head{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+.dash-nave-head.moby{background:#0F2A4A;}
+.dash-nave-head.cin{background:#185FA5;}
+.dash-nave-head.gnv{background:#1D6E4E;}
+.dash-nave-head.snav{background:#6B21A8;}
+.dash-nave-nome{font-size:12px;font-weight:600;color:#fff;}
+.dash-nave-comp{font-size:10px;color:rgba(255,255,255,.65);}
+.dash-nave-body{padding:11px 14px;}
+.dash-nave-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;}
+.dash-nave-row .lbl{color:var(--muted);}
+.dash-nave-row .val{font-weight:600;color:var(--text);}
+.dash-bar-track{height:5px;background:#f1f5f9;border-radius:3px;overflow:hidden;margin:6px 0 8px;}
+.dash-bar-fill{height:100%;border-radius:3px;}
+.dash-badges{display:flex;gap:5px;flex-wrap:wrap;}
+.dbadge{font-size:10px;padding:2px 7px;border-radius:6px;font-weight:500;}
+.dbadge-td{background:#fef3c7;color:#854F0B;}
+.dbadge-urg{background:#fff5f5;color:#A32D2D;}
+.dbadge-conf{background:#E1F5EE;color:#0F6E56;}
+.dash-section-title{font-size:12px;font-weight:600;color:var(--navy);margin-bottom:10px;}
+.dash-rep-table{width:100%;border-collapse:collapse;font-size:10px;}
+.dash-rep-table th{padding:6px 6px;text-align:center;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);background:#f8fafc;white-space:nowrap;}
+.dash-rep-table th.col-nave{text-align:left;min-width:130px;padding:6px 12px;}
+.dash-rep-table td{padding:5px 6px;text-align:center;border-bottom:1px solid #f1f5f9;}
+.dash-rep-table td.col-nave{text-align:left;padding:6px 12px;font-weight:600;white-space:nowrap;}
+.dash-rep-table tbody tr:hover td{background:#f8fafc;}
+.dash-cell-ok{background:#E1F5EE;color:#0F6E56;padding:2px 7px;border-radius:5px;font-weight:600;display:inline-block;}
+.dash-cell-no{background:#fff5f5;color:#A32D2D;padding:2px 7px;border-radius:5px;font-weight:600;display:inline-block;}
+.dash-cell-na{background:#f1f5f9;color:#9ca3af;padding:2px 7px;border-radius:5px;font-weight:600;display:inline-block;}
+.dash-loading{text-align:center;padding:50px;font-size:13px;color:var(--muted);}
 .app-footer{flex-shrink:0;background:var(--white);border-top:1px solid var(--border);padding:4px 20px;text-align:center;font-size:10px;color:#c0c4cc;}
 
 /* BOLLINO TD */
@@ -417,8 +481,8 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v26 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
-      <div style="text-align:center;margin-top:10px;font-size:10px;color:#c0c4cc;">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Tutti i diritti riservati</div>
+      <div class="login-version">Posizionamento Navi &mdash; v27 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div style="text-align:center;margin-top:10px;font-size:10px;color:#c0c4cc;">&copy; 2025 S.M.A.R.T Solutions &mdash; Tutti i diritti riservati</div>
     </div>
   </div>
 </div>
@@ -448,7 +512,8 @@ select.mform-control{cursor:pointer;}
       <span class="brand">Posizionamento Navi</span>
       <button class="btn-orange" onclick="toggleStatPanel()" id="btnStatPanel">&#9776; Statistiche</button>
       <button class="btn-orange" onclick="toggleStorico()" id="btnStorico">&#128203; Storico</button>
-      <button class="btn-orange" onclick="toggleTDPanel()" id="btnTD">&#128197; TD</button>
+  <button class="btn-orange" onclick="toggleTDPanel()" id="btnTD">&#128197; TD</button>
+      <button class="btn-orange" id="btnRiepilogo" onclick="toggleDashboard()">&#128202; Riepilogo navi</button>
       <button class="btn-msg" id="btnMsg" onclick="openModalMsg()"><span class="msg-dot"></span>Messaggi</button>
     </div>
     <div class="topbar-right">
@@ -481,7 +546,14 @@ select.mform-control{cursor:pointer;}
       <button class="btn-add" onclick="openModalAddPos()">+ Aggiungi</button>
       <div style="width:1px;height:20px;background:var(--border);margin:0 2px;"></div>
       <button class="btn-filtri" id="btnFiltri" onclick="toggleFiltriPanel()">&#9776; Filtri</button>
-      <button class="btn-filtri" onclick="generaPDF()">&#128196; PDF</button>
+      <div class="esporta-wrap" id="esportaWrap">
+        <button class="btn-filtri" id="btnEsporta" onclick="toggleEsportaMenu(event)">&#128196; Esporta &#9660;</button>
+        <div class="esporta-menu" id="esportaMenu">
+          <button class="esporta-item" onclick="esportaMenuClick('posizionamento')">&#128196; Posizionamento</button>
+          <button class="esporta-item" onclick="esportaMenuClick('td')">&#128203; Situazione TD</button>
+          <button class="esporta-item esporta-item-admin" id="esportaItemRiepilogo" onclick="esportaMenuClick('riepilogo')">&#128202; Riepilogo Navi</button>
+        </div>
+      </div>
       <button class="btn-filtri" id="btnAggiorna" onclick="aggiornaPos()">&#8635; Aggiorna</button>
     </div>
   </div>
@@ -497,7 +569,7 @@ select.mform-control{cursor:pointer;}
     </div>
     <div class="pos-inner" id="mainContent"><div class="loading-bar">Caricamento...</div></div>
   </div>
-  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v26 &mdash; Uso interno riservato</div>
+  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v27 &mdash; Uso interno riservato</div>
 </div>
 
 <!-- ADMIN -->
@@ -686,7 +758,7 @@ select.mform-control{cursor:pointer;}
       </div>
     </div>
   </div>
-  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v26 &mdash; Uso interno riservato</div>
+  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions &mdash; Posizionamento Navi v27 &mdash; Uso interno riservato</div>
 </div>
 
 <!-- MODAL POSIZIONAMENTO -->
@@ -891,13 +963,7 @@ select.mform-control{cursor:pointer;}
   <div class="td-head">
     <div class="td-title">
       <span>&#128197; Contratti TD in scadenza</span>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button onclick="generaPDFTD()" title="Esporta PDF riepilogo contratti TD" style="font-size:11px;padding:4px 10px;border-radius:6px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;font-weight:500;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          PDF
-        </button>
-        <button class="td-close" onclick="closeTDPanel()">&#10005;</button>
-      </div>
+      <button class="td-close" onclick="closeTDPanel()">&#10005;</button>
     </div>
     <div class="td-sub" id="tdSub">—</div>
   </div>
@@ -1163,100 +1229,108 @@ select.mform-control{cursor:pointer;}
 
 <!-- MODAL GUIDA -->
 <div class="modal-overlay" id="modalHelp">
-  <div class="modal" style="max-width:520px;">
-    <div class="modal-title">&#9432; Guida rapida</div>
+  <div class="modal" style="max-width:580px;max-height:88vh;display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0;">
+      <div class="modal-title" style="margin-bottom:0;">&#9432; Guida rapida</div>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v28</span>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-shrink:0;">
+      <button id="helpTabGuida" onclick="switchHelpTab('guida')" style="font-size:12px;padding:5px 14px;border-radius:6px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-family:inherit;font-weight:500;">Guida</button>
+      <button id="helpTabQA" onclick="switchHelpTab('qa')" style="font-size:12px;padding:5px 14px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--navy);cursor:pointer;font-family:inherit;font-weight:500;">&#10067; Domande frequenti</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;">
 
-    <div style="display:flex;flex-direction:column;gap:14px;font-size:12px;color:var(--muted);line-height:1.6;">
-
-      <!-- NOVITÀ v26 -->
-      <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px;">
-        <div style="font-weight:600;color:#1e40af;font-size:12px;margin-bottom:8px;">&#127381; Novità v26</div>
-   <ul id="novitaListComm" style="padding-left:16px;display:flex;flex-direction:column;gap:5px;color:#1e40af;">
-          <li><strong>&#128100; Storico dipendente</strong> — clicca sul nome di un marittimo per vedere tutto il suo storico imbarchi.</li>
-          <li><strong>&#9993; Alert messaggi</strong> — se hai messaggi non letti, compare un avviso in cima con bottone per aprirli subito.</li>
-          <li><strong>&#9776; Filtri avanzati</strong> — filtra il personale per mansione, qualifica, contratto, rapporto, nazionalità e genere. Il bottone diventa rosso quando ci sono filtri attivi.</li>
-          <li><strong>&#128196; PDF contratti TD</strong> — dal pannello TD clicca il bottone PDF per esportare il riepilogo dei contratti in scadenza con stato comunicazione e note.</li>
-        </ul>
-        <ul id="novitaListAdmin" style="padding-left:16px;display:none;flex-direction:column;gap:5px;color:#1e40af;">
-          <li><strong>&#128100; Storico dipendente</strong> — clicca sul nome di un marittimo per vedere tutto il suo storico imbarchi su tutte le navi.</li>
-          <li><strong>&#9993; Alert messaggi</strong> — i commissari vedono un avviso in cima se hanno messaggi non letti.</li>
-          <li><strong>&#9776; Filtri avanzati</strong> — filtra il personale per mansione, qualifica, contratto, rapporto, nazionalità e genere. Il bottone diventa rosso quando ci sono filtri attivi.</li>
-          <li><strong>&#128196; PDF contratti TD</strong> — dal pannello TD clicca il bottone PDF per esportare il riepilogo dei contratti in scadenza con stato comunicazione e note.</li>
-        </ul>
+      <!-- TAB GUIDA -->
+      <div id="helpViewGuida">
+        <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:11px 14px;margin-bottom:12px;">
+          <div style="font-weight:600;color:#1e40af;font-size:12px;margin-bottom:6px;">&#127381; Novità v28</div>
+          <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
+            <li><strong>&#128196; Bottone Esporta</strong> — sostituisce il vecchio PDF con un menu cascade: <em>Posizionamento</em>, <em>Situazione TD</em> e <em>Riepilogo Navi</em> (solo AMM/Semi-AMM) in un unico punto.</li>
+          </ul>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:var(--muted);line-height:1.55;">
+          <div style="background:#f8fafc;border-radius:9px;padding:11px 13px;">
+            <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:7px;">🧭 Navigazione</div>
+            <ul style="padding-left:15px;display:flex;flex-direction:column;gap:4px;">
+              <li>Usa i <strong>pill nave</strong> per passare da una nave all'altra</li>
+              <li>Seleziona <strong>mese e anno</strong> per il periodo da visualizzare</li>
+            </ul>
+          </div>
+          <div style="background:#f8fafc;border-radius:9px;padding:11px 13px;">
+            <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:7px;">👤 Personale</div>
+            <ul style="padding-left:15px;display:flex;flex-direction:column;gap:4px;">
+              <li><strong>+ Aggiungi</strong> — imbarca un nuovo dipendente</li>
+              <li>Click sul <strong>nome</strong> per vedere lo storico imbarchi</li>
+              <li>Icona <strong>matita</strong> per modificare, <strong>freccia</strong> per spostare reparto</li>
+              <li>Icona <strong>cestino</strong> — sbarca, trasborda, malattia, fine TD o inserimento errato</li>
+              <li>Icona <strong>+</strong> verde per confermare un prossimo imbarco</li>
+            </ul>
+          </div>
+          <div style="background:#f8fafc;border-radius:9px;padding:11px 13px;">
+            <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:7px;">📋 Contratti TD</div>
+            <ul style="padding-left:15px;display:flex;flex-direction:column;gap:4px;">
+              <li>Bottone <strong>TD</strong> diventa rosso con scadenze entro 15 giorni</li>
+              <li>Click sul <strong>pallino colorato</strong> per registrare la comunicazione: <span style="color:#854F0B;">in attesa</span> / <span style="color:#3B6D11;">prolunga</span> / <span style="color:#A32D2D;">non prolunga</span></li>
+            </ul>
+          </div>
+          <div style="background:#f8fafc;border-radius:9px;padding:11px 13px;">
+            <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:7px;">📊 Statistiche & Storico</div>
+            <ul style="padding-left:15px;display:flex;flex-direction:column;gap:4px;">
+              <li><strong>Statistiche</strong> — pannello laterale con rapporto, nazionalità, genere</li>
+              <li><strong>Storico</strong> — tutti i movimenti con filtri per nave, tipo e nome</li>
+            </ul>
+          </div>
+          <div style="background:#f8fafc;border-radius:9px;padding:11px 13px;">
+            <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:7px;">📨 Messaggi</div>
+            <ul style="padding-left:15px;display:flex;flex-direction:column;gap:4px;">
+              <li>Bottone <strong>arancione</strong> = messaggi non letti</li>
+              <li>Spunta <em>Segna come letto</em> per confermare la lettura</li>
+            </ul>
+          </div>
+          <div style="background:#f8fafc;border-radius:9px;padding:11px 13px;">
+            <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:7px;">📤 Esporta</div>
+            <ul style="padding-left:15px;display:flex;flex-direction:column;gap:4px;">
+              <li><strong>Esporta &#9660;</strong> — Posizionamento, Situazione TD, Riepilogo Navi</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#43; Aggiungi personale</div>
-        Clicca il bottone <strong>+ aggiungi personale</strong> nella barra in cima. Cerca il dipendente per nome o matricola, seleziona reparto, mansione, data imbarco e tipo contratto.
-      </div>
+      <!-- TAB Q&A -->
+      <div id="helpViewQA" style="display:none;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">Clicca su una domanda per vedere la risposta.</div>
 
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#9998; Modificare un dipendente</div>
-        Clicca l'icona <strong>matita</strong> sulla riga per modificare reparto, mansione, date o note. Non puoi cambiare il dipendente — usa elimina e aggiungi di nuovo.
-      </div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:10px 0 6px;">👤 Personale</div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come aggiungo un dipendente alla nave?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca <strong>+ Aggiungi</strong> nella barra in alto. Cerca il dipendente per nome o matricola, seleziona reparto, mansione, data imbarco e tipo contratto, poi salva.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Perché mi dice "marittimo non disponibile"?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Il marittimo risulta già imbarcato su un'altra unità. Non è possibile aggiungerlo finché non viene rimosso dalla nave corrente tramite sbarco o trasbordamento.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come sposto un dipendente in un altro reparto?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca l'icona <strong>freccia →</strong> sulla riga del dipendente per selezionare il nuovo reparto e mansione senza riaprire tutto il modulo.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come trasferisco un dipendente su un'altra nave?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca l'icona <strong>cestino</strong> e scegli <strong>Trasborda</strong>. Inserisci la data e seleziona la nave di destinazione. Il movimento viene salvato nello storico.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa succede se clicco "Inserimento errato"?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Il dipendente viene rimosso senza lasciare traccia nello storico. Usalo solo se il dipendente non era realmente imbarcato.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come vedo lo storico imbarchi di un dipendente?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca direttamente sul <strong>nome</strong> del dipendente nella tabella. Si apre un pannello con tutto lo storico dei suoi imbarchi e sbarchi.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come confermo un prossimo imbarco?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Nella sezione <em>Prossimi imbarchi confermati</em> clicca l'icona <strong>+</strong> verde sulla riga del dipendente, inserisci la data e conferma.</div></div>
 
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#8594; Spostare reparto</div>
-        Clicca l'icona <strong>freccia</strong> sulla riga per spostare rapidamente un dipendente in un altro reparto senza riaprire tutto il modulo.
-      </div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px;">📋 Contratti TD</div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come registro la comunicazione di un contratto TD?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca il <strong>pallino colorato</strong> accanto alla data TD nella riga del dipendente. Si apre un modal dove puoi scegliere lo stato e aggiungere una nota.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa significano i colori del bollino TD?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a"><strong style="color:#854F0B;">Arancione</strong> — in attesa. <strong style="color:#3B6D11;">Verde</strong> — prolunga. <strong style="color:#A32D2D;">Rosso</strong> — non prolunga.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Perché il bottone TD è diventato rosso?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Ci sono contratti TD in scadenza entro <strong>15 giorni</strong>. Clicca il bottone per vedere la lista con i giorni rimanenti.</div></div>
 
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#43; Prossimo imbarco confermato</div>
-        Quando un dipendente nella sezione <em>Prossimi imbarchi confermati</em> si imbarca, clicca l'icona <strong>+</strong> verde per confermarne l'imbarco e scegliere la data.
-      </div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px;">📤 Esporta</div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come genero il PDF del posizionamento?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca <strong>Esporta &#9660;</strong> e scegli <strong>Posizionamento</strong>. Viene generato un PDF A4 orizzontale con tutti i reparti del mese selezionato.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come esporto la situazione TD in PDF?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca <strong>Esporta &#9660;</strong> e scegli <strong>Situazione TD</strong>. Il PDF include tutti i contratti in scadenza con stato comunicazione e note.</div></div>
 
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#128197; Contratti TD</div>
-        Il bottone <strong>TD</strong> mostra i contratti a tempo determinato in scadenza. Diventa <strong style="color:#A32D2D;">rosso</strong> quando ci sono contratti in scadenza entro 15 giorni. Cliccando si apre un pannello laterale con la lista ordinata per data, con indicazione dei giorni rimanenti per ciascun marittimo.<br><br>
-        Per ogni contratto TD viene mostrato anche lo <strong>stato della comunicazione</strong> a destra dei giorni:
-        <ul style="margin-top:6px;padding-left:18px;display:flex;flex-direction:column;gap:3px;">
-          <li><strong style="color:#854F0B;">In attesa</strong> — nessuna comunicazione ancora registrata</li>
-          <li><strong style="color:#3B6D11;">Prolunga</strong> — il marittimo ha comunicato che prolunga</li>
-          <li><strong style="color:#A32D2D;">Non prolunga</strong> — il marittimo ha comunicato che non prolunga</li>
-        </ul>
-        Per registrare la comunicazione clicca il <strong>pallino colorato</strong> accanto alla data TD nella riga del marittimo.
-      </div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px;">📨 Messaggi</div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa significa il bottone arancione Messaggi?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Il colore arancione indica che hai <strong>messaggi non letti</strong> dall'ufficio. Clicca per aprire il pannello e leggerli.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come segno un messaggio come letto?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Apri il pannello Messaggi e spunta <em>Segna come letto</em>. Viene registrata automaticamente la data e ora della lettura.</div></div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Posso rispondere a un messaggio?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">No, i commissari possono solo leggere i messaggi ricevuti dall'ufficio. Per comunicare contatta direttamente il tuo referente AMM.</div></div>
 
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--danger);font-size:12px;margin-bottom:4px;">&#128465; Rimozione dal posizionamento</div>
-        Clicca l'icona <strong>cestino</strong> sulla riga. Apparirà una finestra con tre opzioni:
-        <ul style="margin-top:6px;padding-left:18px;display:flex;flex-direction:column;gap:4px;">
-          <li><strong style="color:var(--navy);">&#9875; Sbarca</strong> — il marittimo lascia la nave. Inserisci la data di sbarco. Il movimento viene salvato nello storico.</li>
-          <li><strong style="color:#075985;">&#8646; Trasborda</strong> — si sposta su un'altra nave. Inserisci la data e seleziona la nave di destinazione. Salvato nello storico.</li>
-          <li><strong style="color:var(--danger);">&#10005; Inserimento errato</strong> — non era imbarcato. Viene rimosso senza lasciare traccia nello storico.</li>
-        </ul>
-      </div>
-
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#128203; Storico sbarchi</div>
-        Clicca il bottone <strong>Storico</strong> vicino a PDF per aprire il pannello laterale con tutti i movimenti registrati (sbarchi, trasbordi). Puoi filtrare per nave, tipo di movimento e cercare per nome o matricola.<br>
-        <span style="color:var(--navy);font-weight:500;">Admin/Semi-admin:</span> vedono lo storico di tutte le navi. Il commissario vede solo la propria nave.
-      </div>
-
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#9993; Messaggi</div>
-        Il bottone <strong>Messaggi</strong> nella barra in alto permette di comunicare con l'ufficio. Quando appare <strong style="color:#BA7517;">arancione con un numero</strong>, hai messaggi non letti. Apri il pannello, leggi i messaggi e spunta <em>Segna come letto</em> per confermare la lettura — viene registrata automaticamente la data e ora della lettura, visibile sia al commissario che all'ufficio.<br>
-        <span style="color:var(--navy);font-weight:500;">Admin/Semi-admin:</span> usa il bottone <strong>+ Nuovo messaggio</strong> per scrivere al commissario di una nave specifica.
-      </div>
-
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#128196; PDF</div>
-        Clicca il bottone <strong>PDF</strong> per generare e scaricare il posizionamento del mese selezionato in formato A4 orizzontale. Il file include tutti i reparti con le rispettive tabelle, i contratti TD evidenziati e i prossimi imbarchi confermati. La prima volta potrebbe richiedere qualche secondo per caricare le librerie.
-      </div>
-
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:4px;">&#9776; Statistiche</div>
-        Clicca il bottone <strong>Statistiche</strong> per aprire il pannello laterale con tipo rapporto, nazionalità e genere del personale a bordo. Usa lo switch <em>Dati / Grafici</em> per cambiare vista.
-      </div>
-
-      <div style="border-top:1px solid var(--border);padding-top:12px;">
-        <div style="font-weight:600;color:var(--danger);font-size:12px;margin-bottom:4px;">&#9888; Contratti TD in scadenza</div>
-        Per i contratti TD in scadenza usa il bottone <strong>TD</strong> dedicato nella barra in alto. Diventa rosso quando ci sono scadenze entro 15 giorni.
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 6px;">⚙️ Generale</div>
+        <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come cambio il mese visualizzato?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Usa i menu <strong>Mese</strong> e <strong>Anno</strong> nella barra in alto. Il posizionamento si aggiorna automaticamente.</div></div>
+        <div class="qa-acc-item" style="margin-bottom:4px;"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>A cosa serve il bottone Aggiorna?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Ricarica i dati dal database. Utile se un collega ha appena fatto modifiche e vuoi vedere i dati aggiornati.</div></div>
       </div>
 
     </div>
-
-    <div class="modal-actions" style="justify-content:center;margin-top:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid var(--border);flex-shrink:0;">
+      <button onclick="switchHelpTab('qa')" style="font-size:12px;padding:6px 14px;border-radius:7px;border:1px solid var(--border);background:#fff;color:var(--navy);cursor:pointer;font-family:inherit;font-weight:500;">&#10067; Domande frequenti</button>
       <button class="btn-save" onclick="closeHelp()">Ho capito</button>
     </div>
   </div>
@@ -1310,6 +1384,43 @@ select.mform-control{cursor:pointer;}
   </div>
 </div>
 
+<!-- DASHBOARD RIEPILOGO NAVI -->
+<div class="dash-overlay" id="dashOverlay">
+  <div class="dash-panel" id="dashPanel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <span style="font-size:14px;font-weight:600;color:var(--navy);">&#128202; Riepilogo navi</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="closeDashboard()" style="font-size:18px;color:var(--muted);background:none;border:none;cursor:pointer;line-height:1;">&#10005;</button>
+      </div>
+    </div>
+    <!-- KPI -->
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Totale a bordo</div><div class="kpi-val" id="kpiTotBordo">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Budget totale</div><div class="kpi-val" id="kpiBudget">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">TD urgenti (&le;15gg)</div><div class="kpi-val danger" id="kpiTD">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Imbarchi confermati</div><div class="kpi-val green" id="kpiConf">—</div></div>
+    </div>
+    <!-- CARD NAVI -->
+    <div class="dash-section-title">Navi</div>
+    <div class="navi-grid" id="naviGrid">
+      <div class="dash-loading">&#8987; Caricamento...</div>
+    </div>
+    <!-- TABELLA REPARTI -->
+    <div class="dash-section-title">Copertura per reparto</div>
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;">
+      <div style="padding:8px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:flex-end;gap:12px;">
+        <span style="font-size:10px;color:#0F6E56;font-weight:600;">&#9632; verde = ok/eccesso</span>
+        <span style="font-size:10px;color:#A32D2D;font-weight:600;">&#9632; rosso = sotto budget</span>
+        <span style="font-size:10px;color:#9ca3af;font-weight:600;">— = nessun budget</span>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="dash-rep-table" id="dashRepTable">
+          <tbody><tr><td style="padding:30px;text-align:center;color:var(--muted);">Caricamento...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1430,9 +1541,15 @@ function startApp() {
   populateSelects();
 
   if(utente.ruolo === 'admin') {
-    document.getElementById('btnAmm').style.display = 'inline-block';
-  }
-  if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') {
+    document.getElementById('btnAmm').style.display = 'inline-block';}
+if(utente.ruolo==='commissario') {
+  const btn = document.getElementById('btnRiepilogo');
+  btn.disabled = true;
+  btn.style.opacity = '0.4';
+  btn.style.cursor = 'not-allowed';
+}
+
+    if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') {
     document.getElementById('btnExcel').style.display = 'inline-block';
     document.getElementById('posNaveLabel').style.display = 'none';
     buildNavePills();
@@ -2845,7 +2962,7 @@ function generaPDFTD() {
       },
       didDrawPage: function() {
         doc.setFontSize(7); doc.setTextColor(150,150,150);
-        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v26', 12, doc.internal.pageSize.getHeight() - 5);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v27', 12, doc.internal.pageSize.getHeight() - 5);
         doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, doc.internal.pageSize.getHeight() - 5, {align:'right'});
       }
     });
@@ -2947,7 +3064,7 @@ function generaPDFFiltri() {
         columnStyles:{0:{cellWidth:48},1:{cellWidth:38},2:{cellWidth:35},3:{cellWidth:16,halign:'center'},4:{cellWidth:12,halign:'center'},5:{cellWidth:14,halign:'center'},6:{cellWidth:22,halign:'center'}},
         didDrawPage: function() {
           doc.setFontSize(7); doc.setTextColor(150,150,150);
-          doc.text('S.M.A.R.T Solutions — Posizionamento Navi v26', 12, pageH-5);
+          doc.text('S.M.A.R.T Solutions — Posizionamento Navi v27', 12, pageH-5);
           doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
         }
       });
@@ -3100,12 +3217,18 @@ async function confirmSposta() {
 }
 
 function openHelp() {
-  const isComm = utente && utente.ruolo === 'commissario';
-  document.getElementById('novitaListComm').style.display = isComm ? 'flex' : 'none';
-  document.getElementById('novitaListAdmin').style.display = isComm ? 'none' : 'flex';
   document.getElementById('modalHelp').classList.add('show');
 }
 function closeHelp() { document.getElementById('modalHelp').classList.remove('show'); }
+function switchHelpTab(tab) {
+  document.getElementById('helpViewGuida').style.display = tab==='guida'?'block':'none';
+  document.getElementById('helpViewQA').style.display = tab==='qa'?'block':'none';
+  document.getElementById('helpTabGuida').style.background = tab==='guida'?'var(--navy)':'#fff';
+  document.getElementById('helpTabGuida').style.color = tab==='guida'?'#fff':'var(--navy)';
+  document.getElementById('helpTabQA').style.background = tab==='qa'?'var(--navy)':'#fff';
+  document.getElementById('helpTabQA').style.color = tab==='qa'?'#fff':'var(--navy)';
+}
+function toggleHelpQA(el) { el.parentElement.classList.toggle('open'); }
 
 function goBackToPos() {
   showScreen('pos');
@@ -3418,6 +3541,282 @@ async function inviaMessaggio() {
   } catch(e) { showToast('Errore invio: '+e.message, 'error'); }
 }
 
+// ═══════════════════════════════════════════
+// DASHBOARD RIEPILOGO NAVI
+// ═══════════════════════════════════════════
+const ORDINE_REPARTI_DASH = ['Hotel Management','Ristorante','Self/Bistrot','Bar','Cabine','Saletta/Riposteria','Squadra Ecologica','Squadra Ecologica Notturna','Cucina'];
+
+function toggleDashboard() {
+  const overlay = document.getElementById('dashOverlay');
+  const btn = document.getElementById('btnRiepilogo');
+  if(overlay.classList.contains('show')) {
+    closeDashboard();
+  } else {
+    btn.classList.add('active');
+    overlay.classList.add('show');
+    loadDashboard();
+  }
+}
+
+function closeDashboard() {
+  document.getElementById('dashOverlay').classList.remove('show');
+  document.getElementById('btnRiepilogo').classList.remove('active');
+}
+
+async function loadDashboard() {
+  const mese = parseInt(document.getElementById('meseSelect').value);
+  const anno = parseInt(document.getElementById('annoSelect').value);
+  const oggi = new Date();
+  document.getElementById('naviGrid').innerHTML = '<div class="dash-loading">&#8987; Caricamento dati navi...</div>';
+  document.getElementById('kpiTotBordo').textContent = '—';
+  document.getElementById('kpiBudget').textContent = '—';
+  document.getElementById('kpiTD').textContent = '—';
+  document.getElementById('kpiConf').textContent = '—';
+  try {
+    const [allPos, allBudget] = await Promise.all([
+      sbGet('pn_posizionamento?select=id,nave_id,stato,tipo_contratto,data_scadenza_td,reparto_id,pn_reparti(id,nome)'),
+      sbGet('pn_budget?mese=eq.'+mese+'&anno=eq.'+anno)
+    ]);
+    // Budget per nave+reparto
+    const budPerNaveRep = {};
+    const budPerNave = {};
+    allBudget.forEach(b => {
+      const k = b.nave_id+'_'+b.reparto_id;
+      budPerNaveRep[k] = (budPerNaveRep[k]||0) + b.quantita;
+      budPerNave[b.nave_id] = (budPerNave[b.nave_id]||0) + b.quantita;
+    });
+    // Contatori per nave
+    const byNave = {};
+    navi.forEach(n => { byNave[n.id] = {nave:n, bordo:0, conf:0, urgenti:0, tdCount:0, byRep:{}}; });
+    allPos.forEach(p => {
+      if(!byNave[p.nave_id]) return;
+      const d = byNave[p.nave_id];
+      if(p.stato==='bordo') {
+        d.bordo++;
+        const rid = p.reparto_id;
+        if(rid) d.byRep[rid] = (d.byRep[rid]||0) + 1;
+      } else if(p.stato==='confermato') d.conf++;
+      if(p.tipo_contratto==='TD'&&p.data_scadenza_td) {
+        const diff = Math.ceil((new Date(p.data_scadenza_td)-oggi)/86400000);
+        if(diff>=0&&diff<=30) { d.tdCount++; if(diff<=15) d.urgenti++; }
+      }
+    });
+    // KPI globali
+    let totBordo=0,totBudget=0,totTD=0,totConf=0;
+    Object.values(byNave).forEach(d => { totBordo+=d.bordo; totConf+=d.conf; totTD+=d.urgenti; totBudget+=(budPerNave[d.nave.id]||0); });
+    document.getElementById('kpiTotBordo').textContent = totBordo;
+    document.getElementById('kpiBudget').textContent = totBudget;
+    document.getElementById('kpiTD').textContent = totTD;
+    document.getElementById('kpiConf').textContent = totConf;
+    // Card navi
+   
+const ORDINE_NAVI_CARDS = ['Moby Fantasy','Moby Aki','Moby Orli','Moby Legacy','Moby Wonder','Moby Kiss','Vincenzo Florio','Raffaele Rubattino','Moby Tommy'];
+    const ORDINE_NAVI_TABLE = ['Moby Fantasy','Moby Legacy','Moby Aki','Moby Wonder','Moby Orli','Moby Kiss','Vincenzo Florio','Raffaele Rubattino','Moby Tommy'];
+    const sortNavi = (ordine) => {
+      const sorted = ordine.map(nome => navi.find(n=>n.nome.toLowerCase()===nome.toLowerCase())).filter(Boolean);
+      const rest = navi.filter(n => !ordine.map(o=>o.toLowerCase()).includes(n.nome.toLowerCase()));
+      return [...sorted, ...rest];
+    };
+    const naviOrd = sortNavi(ORDINE_NAVI_CARDS);
+    const naviOrdTable = sortNavi(ORDINE_NAVI_TABLE);
+    window._dashByNave = byNave;
+    window._dashBudPerNaveRep = budPerNaveRep;
+    window._dashNaviOrdTable = naviOrdTable;
+    document.getElementById('naviGrid').innerHTML = naviOrd.map(n => {
+      const d = byNave[n.id]||{bordo:0,conf:0,urgenti:0,tdCount:0};
+      const budget = budPerNave[n.id]||0;
+      const pct = budget>0?Math.min(100,Math.round(d.bordo/budget*100)):0;
+      const barColor = pct>=90?'#1D9E75':pct>=70?'#EF9F27':'#A32D2D';
+      const compCls = n.compagnia==='MOBY'?'moby':n.compagnia==='CIN'?'cin':n.compagnia==='GNV'?'gnv':'snav';
+      let badges = '';
+      if(d.tdCount>0) badges += '<span class="dbadge dbadge-td">TD: '+d.tdCount+'</span>';
+      if(d.urgenti>0) badges += '<span class="dbadge dbadge-urg">&#9679; '+d.urgenti+' urgenti</span>';
+      if(d.conf>0) badges += '<span class="dbadge dbadge-conf">Conf: '+d.conf+'</span>';
+      if(!badges) badges = '<span class="dbadge" style="background:#f1f5f9;color:#9ca3af;">Nessun alert</span>';
+      return '<div class="dash-nave-card" onclick="closeDashboard();selectNaveAndGo('+n.id+',\''+escHtml(n.nome)+'\')"><div class="dash-nave-head '+compCls+'"><span class="dash-nave-nome">'+escHtml(n.nome)+'</span><span class="dash-nave-comp">'+n.compagnia+'</span></div><div class="dash-nave-body"><div class="dash-nave-row"><span class="lbl">A bordo</span><span class="val">'+d.bordo+' / '+budget+' budget</span></div><div class="dash-bar-track"><div class="dash-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div><div class="dash-badges">'+badges+'</div></div></div>';
+    }).join('');
+    // Tabella reparti
+    
+renderDashRepTable(naviOrdTable, byNave, budPerNaveRep);
+  } catch(e) {
+    document.getElementById('naviGrid').innerHTML = '<div class="dash-loading">Errore caricamento: '+escHtml(e.message)+'</div>';
+  }
+}
+
+function renderDashRepTable(naviOrd, byNave, budPerNaveRep) {
+  const repartiOrd = ORDINE_REPARTI_DASH.map(nome => reparti.find(r=>r.nome===nome)).filter(Boolean);
+  let html = '<thead><tr><th class="col-nave">Nave</th>';
+  repartiOrd.forEach(r => { html += '<th>'+r.nome.replace('Squadra Ecologica Notturna','Sq.Ecol.N.').replace('Squadra Ecologica','Sq.Ecol.').replace('Self/Bistrot','Self/Bis.').replace('Saletta/Riposteria','Saletta')+'</th>'; });
+  html += '</tr></thead><tbody>';
+  naviOrd.forEach(n => {
+    const d = byNave[n.id]||{byRep:{}};
+    const compColor = n.compagnia==='MOBY'?'#0F2A4A':'#185FA5';
+    html += '<tr><td class="col-nave" style="color:'+compColor+'">'+escHtml(n.nome)+'</td>';
+    repartiOrd.forEach(r => {
+      const bordo = d.byRep[r.id]||0;
+      const budget = budPerNaveRep[n.id+'_'+r.id]||0;
+      if(budget===0&&bordo===0) { html += '<td><span class="dash-cell-na">—</span></td>'; return; }
+      const diff = bordo - budget;
+      const cls = diff>=0?'dash-cell-ok':'dash-cell-no';
+      const txt = diff>0?'+'+diff:String(diff);
+      html += '<td><span class="'+cls+'">'+txt+'</span></td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('dashRepTable').innerHTML = html;
+}
+
+function selectNaveAndGo(naveId, naveNome) {
+  utente.nave_id = naveId;
+  utente.nave_nome = naveNome;
+  document.querySelectorAll('.nave-pill').forEach(b => b.classList.toggle('active', parseInt(b.dataset.id)===naveId));
+  loadPosizionamento();
+}
+
+async function generaPDFDashboard() {
+  if(!window._dashByNave || Object.keys(window._dashByNave).length === 0) {
+    showToast('Caricamento dati riepilogo...', '');
+    await loadDashboard();
+  }
+  function doGenera() {
+    const {jsPDF} = window.jspdf;
+    const doc = new jsPDF({orientation:'landscape', unit:'mm', format:'a4'});
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const oggi = new Date();
+    const mesiNomi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+    const mese = parseInt(document.getElementById('meseSelect').value);
+    const anno = parseInt(document.getElementById('annoSelect').value);
+
+    // Header
+    doc.setFillColor(15,42,74);
+    doc.rect(0,0,pageW,16,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(7); doc.setFont('helvetica','normal');
+    doc.text('S.M.A.R.T SOLUTIONS',12,6);
+    doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('RIEPILOGO FLOTTA — '+mesiNomi[mese-1]+' '+anno,12,13);
+    doc.setFontSize(8); doc.setFont('helvetica','normal');
+    doc.text('Stampato il '+oggi.getDate().toString().padStart(2,'0')+'/'+(oggi.getMonth()+1).toString().padStart(2,'0')+'/'+oggi.getFullYear(), pageW-12, 13, {align:'right'});
+
+    // KPI
+    const kpis = [
+      {label:'Totale a bordo', val:document.getElementById('kpiTotBordo').textContent},
+      {label:'Budget totale', val:document.getElementById('kpiBudget').textContent},
+      {label:'TD urgenti (≤15gg)', val:document.getElementById('kpiTD').textContent},
+      {label:'Imbarchi confermati', val:document.getElementById('kpiConf').textContent}
+    ];
+    const kpiW = (pageW-24)/4;
+    kpis.forEach((k,i) => {
+      const x = 12 + i*kpiW;
+      doc.setFillColor(248,250,252); doc.rect(x,20,kpiW-3,14,'F');
+      doc.setTextColor(107,114,128); doc.setFontSize(7); doc.setFont('helvetica','normal');
+      doc.text(k.label, x+3, 25);
+      doc.setTextColor(15,42,74); doc.setFontSize(14); doc.setFont('helvetica','bold');
+      doc.text(k.val, x+3, 32);
+    });
+
+    // Tabella navi
+   const byNave = window._dashByNave || {};
+    const budPerNaveRep = window._dashBudPerNaveRep || {};
+    const budPerNave = {};
+    navi.forEach(n => {
+      let tot = 0;
+      reparti.forEach(r => { tot += budPerNaveRep[n.id+'_'+r.id]||0; });
+      budPerNave[n.id] = tot;
+    });
+    const ORDINE_NAVI_TABLE_PDF = ['Moby Fantasy','Moby Legacy','Moby Aki','Moby Wonder','Moby Orli','Moby Kiss','Vincenzo Florio','Raffaele Rubattino','Moby Tommy'];
+    const ORDINE_NAVI_CARDS_PDF = ['Moby Fantasy','Moby Legacy','Moby Aki','Moby Wonder','Moby Orli','Moby Kiss','Vincenzo Florio','Raffaele Rubattino','Moby Tommy'];
+    const sortNaviPDF = (ordine) => { const s=ordine.map(nome=>navi.find(n=>n.nome.toLowerCase()===nome.toLowerCase())).filter(Boolean); return [...s,...navi.filter(n=>!ordine.map(o=>o.toLowerCase()).includes(n.nome.toLowerCase()))]; };
+    const naviOrdCards = sortNaviPDF(ORDINE_NAVI_CARDS_PDF);
+    const naviOrd = sortNaviPDF(ORDINE_NAVI_TABLE_PDF);
+    const repartiOrd = ORDINE_REPARTI_DASH.map(nome=>reparti.find(r=>r.nome===nome)).filter(Boolean);
+    const repHeaders = repartiOrd.map(r=>r.nome.replace('Squadra Ecologica Notturna','Sq.E.N.').replace('Squadra Ecologica','Sq.Ecol.').replace('Self/Bistrot','S/Bis.').replace('Saletta/Riposteria','Sal.').replace('Hotel Management','Hotel').replace('Ristorante','Rist.'));
+
+    // Sezione navi nel PDF
+    doc.autoTable({
+      startY: 38,
+      margin: {left:12, right:12},
+      head: [['Nave','Compagnia','A bordo','Budget','Copertura %','TD','Urgenti','Confermati']],
+      body: naviOrdCards.map(n => {
+        const d = byNave[n.id]||{bordo:0,conf:0,urgenti:0,tdCount:0};
+        const budget = budPerNave[n.id]||0;
+        const pct = budget>0?Math.round(d.bordo/budget*100):0;
+        return [n.nome, n.compagnia, d.bordo, budget, budget>0?pct+'%':'—', d.tdCount, d.urgenti, d.conf];
+      }),
+      theme: 'grid',
+      styles: {fontSize:7, cellPadding:2, valign:'middle'},
+      headStyles: {fillColor:[15,42,74], textColor:255, fontSize:7, fontStyle:'bold', halign:'center'},
+      columnStyles: {0:{cellWidth:40,halign:'left'}, 1:{cellWidth:18,halign:'center'}, 2:{cellWidth:18,halign:'center'}, 3:{cellWidth:18,halign:'center'}, 4:{cellWidth:20,halign:'center'}, 5:{cellWidth:12,halign:'center'}, 6:{cellWidth:16,halign:'center'}, 7:{cellWidth:22,halign:'center'}},
+      didParseCell: function(data) {
+        if(data.section==='body') {
+          if(data.column.index===6&&parseInt(data.cell.raw)>0) { data.cell.styles.textColor=[163,45,45]; data.cell.styles.fontStyle='bold'; }
+          if(data.column.index===7&&parseInt(data.cell.raw)>0) { data.cell.styles.textColor=[15,110,86]; data.cell.styles.fontStyle='bold'; }
+        }
+      },
+      didDrawPage: function() {
+        doc.setFontSize(7); doc.setTextColor(150,150,150);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v27', 12, pageH-5);
+        doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
+      }
+    });
+
+    // Titolo tabella reparti
+    let startY = doc.lastAutoTable.finalY + 8;
+    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(15,42,74);
+    doc.text('COPERTURA PER REPARTO', 12, startY);
+    startY += 4;
+
+    const rows = naviOrd.map(n => {
+      const d = byNave[n.id]||{byRep:{}};
+      return [n.nome, ...repartiOrd.map(r => {
+        const bordo = (d.byRep&&d.byRep[r.id])||0;
+        const budget = budPerNaveRep[n.id+'_'+r.id]||0;
+        if(budget===0&&bordo===0) return '—';
+        const diff = bordo-budget;
+        return diff>0?'+'+diff:String(diff);
+      })];
+    });
+
+  doc.autoTable({
+      startY: startY,
+      margin: {left:12, right:12},
+      head: [['Nave', ...repHeaders]],
+      body: rows,
+      theme: 'grid',
+      styles: {fontSize:7, cellPadding:2, valign:'middle'},
+      headStyles: {fillColor:[15,42,74], textColor:255, fontSize:7, fontStyle:'bold', halign:'center'},
+      columnStyles: {0:{cellWidth:35, halign:'left'}},
+      didParseCell: function(data) {
+        if(data.section==='body' && data.column.index>0) {
+          const v = data.cell.raw;
+          if(v==='—') { data.cell.styles.textColor=[156,163,175]; }
+          else if(String(v).startsWith('-')) { data.cell.styles.textColor=[163,45,45]; data.cell.styles.fontStyle='bold'; }
+          else { data.cell.styles.textColor=[15,110,86]; data.cell.styles.fontStyle='bold'; }
+          data.cell.styles.halign='center';
+        }
+      },
+      didDrawPage: function() {
+        doc.setFontSize(7); doc.setTextColor(150,150,150);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v27', 12, pageH-5);
+        doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
+      }
+    });
+
+    doc.save('riepilogo_flotta_'+mesiNomi[mese-1].toLowerCase()+'_'+anno+'.pdf');
+    showToast('PDF panoramica generato!','success');
+  }
+
+  if(window.jspdf&&window.jspdf.jsPDF) { doGenera(); }
+  else {
+    showToast('Preparazione PDF...','');
+    const s1=document.createElement('script');
+    s1.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s1.onload=function(){const s2=document.createElement('script');s2.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';s2.onload=doGenera;document.head.appendChild(s2);};
+    document.head.appendChild(s1);
+  }
+}
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -3626,7 +4025,7 @@ function generaPDF() {
           // Footer su ogni pagina
           doc.setFontSize(7);
           doc.setTextColor(150, 150, 150);
-          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v26', 12, pageH - 5);
+          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v27', 12, pageH - 5);
           doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, pageH - 5, { align: 'right' });
         }
       });
@@ -3656,8 +4055,40 @@ function generaPDF() {
 }
 
 
+// ── ESPORTA DROPDOWN ──
+function toggleEsportaMenu(e) {
+  e.stopPropagation();
+  const menu = document.getElementById('esportaMenu');
+  menu.classList.toggle('show');
+  // Mostra/nascondi voce Riepilogo Navi in base al ruolo
+  const itemRiep = document.getElementById('esportaItemRiepilogo');
+  if(itemRiep) {
+    const isAdminOrSemi = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+    itemRiep.classList.toggle('disabled', !isAdminOrSemi);
+  }
+}
+
+function esportaMenuClick(tipo) {
+  document.getElementById('esportaMenu').classList.remove('show');
+  if(tipo === 'posizionamento') {
+    generaPDF();
+  } else if(tipo === 'td') {
+    generaPDFTD();
+  } else if(tipo === 'riepilogo') {
+    const isAdminOrSemi = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+    if(isAdminOrSemi) generaPDFDashboard();
+  }
+}
+
 // Close panel clicking outside
 document.addEventListener('click', function(e) {
+  // Chiudi menu Esporta
+  const esportaMenu = document.getElementById('esportaMenu');
+  const esportaWrap = document.getElementById('esportaWrap');
+  if(esportaMenu && esportaMenu.classList.contains('show') && esportaWrap && !esportaWrap.contains(e.target)) {
+    esportaMenu.classList.remove('show');
+  }
+  // Chiudi stat panel
   const panel = document.getElementById('statPanel');
   const btn = document.getElementById('btnStatPanel');
   if(panel && panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)) {
