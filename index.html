@@ -2728,12 +2728,9 @@ function aggiornaBottoneTD() {
     btn.classList.remove('td-alert');
     btn.innerHTML = '&#128197; TD';
   }
-  // Alert badge per commissario — TD senza risposta
+  // Alert badge per commissario — TD con pallino rosso (attesa/urgente = nessuna decisione ancora)
   if(utente && utente.ruolo === 'commissario') {
-    const senzaRisposta = posizionamento.filter(p =>
-      p.tipo_contratto === 'TD' && p.data_scadenza_td &&
-      (!p.td_comunicazione || p.td_comunicazione === 'attesa')
-    );
+const senzaRisposta = posizionamento.filter(p => getBollinoClass(p) === 'urgente');
     const badge = document.getElementById('alertTDBadge');
     if(!badge) return;
     if(senzaRisposta.length > 0) {
