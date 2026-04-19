@@ -1,0 +1,21 @@
+name: Snapshot Posizionamento
+
+on:
+  schedule:
+    - cron: '0 22 14 * *'   # 15 del mese alle 23:00 CET
+    - cron: '0 22 27 * *'   # 28 del mese alle 23:00 CET
+    - cron: '0 22 28 * *'   # 29 del mese
+    - cron: '0 22 29 * *'   # 30 del mese
+    - cron: '0 22 30 * *'   # 31 del mese
+  workflow_dispatch:         # trigger manuale
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Chiama Edge Function snapshot
+        run: |
+          curl -X POST "${{ secrets.SUPABASE_URL }}/functions/v1/snapshot-posizionamento" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_KEY }}" \
+            -H "Content-Type: application/json" \
+            --fail
