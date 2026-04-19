@@ -209,19 +209,46 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .qa-acc-a{display:none;padding:8px 12px 10px;font-size:12px;color:var(--muted);line-height:1.6;background:#f8fafc;border-top:0.5px solid var(--border);}
 .qa-acc-item.open .qa-acc-a{display:block;}
 
-/* PANNELLO TD URGENTI AMM */
-.td-urgenti-panel{position:fixed;top:92px;right:16px;width:230px;background:var(--white);border:0.5px solid var(--border);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.10);z-index:140;display:none;}
-.td-urgenti-panel.show{display:block;}
-.td-urgenti-head{background:var(--navy);padding:9px 12px;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:space-between;}
-.td-urgenti-title{font-size:12px;font-weight:600;color:#fff;}
-.td-urgenti-close{font-size:14px;color:rgba(255,255,255,.7);background:none;border:none;cursor:pointer;line-height:1;}
-.td-urgenti-body{padding:8px;}
-.td-urgenti-row{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-radius:6px;margin-bottom:4px;border:0.5px solid var(--border);}
-.td-urgenti-row:last-child{margin-bottom:0;}
-.td-urgenti-nome{font-size:11px;color:var(--text);font-weight:500;}
-.td-urgenti-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;}
-.td-urgenti-badge.red{background:#fecaca;color:#7f1d1d;}
-.td-urgenti-badge.ok{background:#e1f5ee;color:#085041;}
+/* PANNELLO CASCADE AMM (TD urgenti + Presa visione) */
+.cascade-amm-wrap{position:fixed;top:136px;right:16px;width:240px;z-index:140;display:none;flex-direction:column;gap:8px;}
+.cascade-amm-wrap.show{display:flex;}
+.cascade-box{background:var(--white);border:0.5px solid var(--border);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.10);overflow:hidden;}
+.cascade-head{padding:9px 12px;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.cascade-head.urgenti{background:var(--navy);}
+.cascade-head.visione{background:#c05a00;}
+.cascade-head-left{display:flex;align-items:center;gap:6px;}
+.cascade-title{font-size:12px;font-weight:600;color:#fff;}
+.cascade-badge{background:rgba(255,255,255,.25);border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;color:#fff;}
+.cascade-arrow{font-size:10px;color:rgba(255,255,255,.8);transition:transform .2s;}
+.cascade-box.closed .cascade-arrow{transform:rotate(180deg);}
+.cascade-body{padding:8px;display:block;}
+.cascade-box.closed .cascade-body{display:none;}
+.cascade-row{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:6px;margin-bottom:3px;border:0.5px solid var(--border);}
+.cascade-row:last-child{margin-bottom:0;}
+.cascade-nome{font-size:11px;color:var(--text);font-weight:500;}
+.cascade-count{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;}
+.cascade-count.red{background:#fecaca;color:#7f1d1d;}
+.cascade-count.orange{background:#fef3c7;color:#854F0B;}
+.cascade-count.zero{background:#f1f5f9;color:#9ca3af;}
+
+/* PANNELLO STATS SINISTRA */
+.stats-left-wrap{position:fixed;top:136px;left:16px;width:210px;z-index:140;display:none;flex-direction:column;gap:8px;}
+.stats-left-wrap.show{display:flex;}
+.stats-box{background:var(--white);border:0.5px solid var(--border);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.10);overflow:hidden;}
+.stats-box-head{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.stats-box-head.camera{background:var(--navy);}
+.stats-box-head.cucina{background:var(--teal);}
+.stats-box-title{font-size:12px;font-weight:600;color:#fff;}
+.stats-box-arrow{font-size:10px;color:rgba(255,255,255,.8);transition:transform .2s;}
+.stats-box.closed .stats-box-arrow{transform:rotate(180deg);}
+.stats-box-body{padding:8px 10px;display:block;}
+.stats-box.closed .stats-box-body{display:none;}
+.stats-box-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid #f1f5f9;font-size:11px;}
+.stats-box-row:last-child{border-bottom:none;}
+.stats-box-lbl{color:var(--muted);}
+.stats-box-val{font-weight:600;color:var(--text);}
+.stats-box-val.ok{color:var(--teal);}
+.stats-box-val.warn{color:var(--amber);}
 
 /* PANNELLO NOTIFICHE AMM */
 .notif-amm-overlay{position:fixed;top:0;right:0;bottom:0;width:270px;z-index:155;transform:translateX(100%);transition:transform .25s ease;pointer-events:none;}
@@ -1752,6 +1779,8 @@ btn.addEventListener('click', () => {
       btn.classList.add('active');
       utente.nave_id = n.id;
       utente.nave_nome = n.nome;
+      localStorage.setItem('pn_last_nave_id', n.id);
+      localStorage.setItem('pn_last_nave_nome', n.nome);
       loadPosizionamento();
     });
     container.appendChild(btn);
@@ -1764,15 +1793,25 @@ btn.addEventListener('click', () => {
       }).catch(()=>{});
     }
   });
-  document.getElementById('navebar').style.display = 'flex';
-  // Default prima nave
-  if(naviOrd.length > 0) {
-    utente.nave_id = navi[0].id;
-    utente.nave_nome = navi[0].nome;
+ document.getElementById('navebar').style.display = 'flex';
+  // Ripristina ultima nave visitata
+  const lastId = parseInt(localStorage.getItem('pn_last_nave_id'));
+  const lastNome = localStorage.getItem('pn_last_nave_nome');
+  const lastNave = lastId ? naviOrd.find(n => n.id === lastId) : null;
+  if(lastNave) {
+    utente.nave_id = lastNave.id;
+    utente.nave_nome = lastNave.nome;
+    document.querySelectorAll('.nave-pill').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.id) === lastNave.id);
+    });
+} else if(naviOrd.length > 0) {
+    utente.nave_id = naviOrd[0].id;
+    utente.nave_nome = naviOrd[0].nome;
   }
 }
 
 function changeNavePos() {
+
   // Mantenuta per compatibilità — non più usata con le pills
 }
 
@@ -1854,7 +1893,8 @@ function doLogout() {
   document.getElementById('loginPass').value='';
   document.getElementById('btnAmm').style.display='none';
   document.getElementById('msgAlertBanner').style.display='none';
-  document.getElementById('tdUrgentiPanel').classList.remove('show');
+document.getElementById('cascadeAmmWrap').classList.remove('show');
+document.getElementById('statsLeftWrap').classList.remove('show');
   document.getElementById('notifAmmOverlay').classList.remove('show');
 }
 
@@ -2071,23 +2111,10 @@ function renderStats(bordoCamera, bordoCucina, bC, cC, buC, bCu, cCu, buCu) {
   const mgC=mediaGG(bordoCamera), meC=mediaEta(bordoCamera);
   const mgCu=mediaGG(bordoCucina), meCu=mediaEta(bordoCucina);
 
-  document.getElementById('statsBar').innerHTML=
-    '<span class="stat-block"><span class="stat-cat">Camera</span></span>'
-    +'<span class="stat-block">Bordo: <strong>'+bC+'</strong></span>'
-    +'<span class="stat-block">Confermati: <strong class="stat-ok">'+cC+'</strong></span>'
-    +'<span class="stat-block">Budget: <strong>'+buC+'</strong></span>'
-    +'<span class="stat-block">Copertura: <strong class="'+(copC>=90?'stat-ok':'stat-warn')+'">'+(buC>0?copC+'%':'—')+'</strong></span>'
-    +(mgC>0?'<span class="stat-block">Media GG: <strong>'+mgC+'</strong></span>':'')
-    +(meC>0?'<span class="stat-block">Età media: <strong>'+meC+'</strong></span>':'')
-    +'<span class="stat-div">|</span>'
-    +'<span class="stat-block"><span class="stat-cat">Cucina</span></span>'
-    +'<span class="stat-block">Bordo: <strong>'+bCu+'</strong></span>'
-    +'<span class="stat-block">Confermati: <strong class="stat-ok">'+cCu+'</strong></span>'
-    +'<span class="stat-block">Budget: <strong>'+buCu+'</strong></span>'
-    +'<span class="stat-block">Copertura: <strong class="'+(copCu>=90?'stat-ok':'stat-warn')+'">'+(buCu>0?copCu+'%':'—')+'</strong></span>'
-    +(mgCu>0?'<span class="stat-block">Media GG: <strong>'+mgCu+'</strong></span>':'')
-    +(meCu>0?'<span class="stat-block">Età media: <strong>'+meCu+'</strong></span>':'');
+  document.getElementById('statsBar').innerHTML = '';
+  updateStatsLeft(bordoCamera, bordoCucina, bC, cC, buC, bCu, cCu, buCu);
 }
+
 
 // ─── Modal Posizionamento ───
 function openModalAddPos(){
@@ -3082,9 +3109,9 @@ function applicaFiltroPersonale(lista) {
     if(filtriAttivi['TG'] && rapp !== 'TG') return false;
     if(filtriAttivi['M'] && sesso !== 'M') return false;
     if(filtriAttivi['F'] && sesso !== 'F') return false;
-    if(filtriAttivi['IT'] && naz !== 'IT') return false;
-    if(filtriAttivi['UE'] && naz !== 'UE') return false;
-    if(filtriAttivi['EXTRA'] && naz !== 'EXTRA') return false;
+   if(filtriAttivi['IT'] && naz !== 'Italia') return false;
+if(filtriAttivi['UE'] && naz !== 'Com') return false;
+if(filtriAttivi['EXTRA'] && naz !== 'Ex-Com') return false;
     return true;
   });
 }
@@ -3484,17 +3511,16 @@ function updateStatPanel() {
   });
 
   // Nazionalità
-  function countNaz(lista) {
+ function countNaz(lista) {
     let it=0, com=0, excom=0;
     lista.forEach(p => {
       const d = p.pn_dipendenti || p.pn_Dipendenti;
       if(!d) return;
-      const naz = (d.nazionalita||'').toUpperCase();
-      const rap = (d.tipo_rapporto||'').toUpperCase();
-      if(!naz || naz==='ITALIA') it++;
-      else if(naz==='EX-COM' || rap==='EX-COM') excom++;
-      else if(EU_COUNTRIES.includes(naz)) com++;
-      else excom++;
+      const naz = (d.nazionalita||'').trim();
+      if(naz === 'Italia' || !naz) it++;
+      else if(naz === 'Com') com++;
+      else if(naz === 'Ex-Com') excom++;
+      else it++;
     });
     return {it, com, excom};
   }
@@ -3546,11 +3572,12 @@ function renderGrafici() {
   function countNaz(lista) {
     let it=0,com=0,excom=0;
     lista.forEach(p=>{
-      const d=p.pn_Dipendenti; if(!d)return;
-      const naz=(d&&d.nazionalita||'').toUpperCase();
-      if(!naz||naz==='ITALIA')it++;
-      else if(EU_COUNTRIES.includes(naz))com++;
-      else excom++;
+      const d=p.pn_dipendenti||p.pn_Dipendenti; if(!d)return;
+      const naz=(d.nazionalita||'').trim();
+      if(naz==='Italia'||!naz)it++;
+      else if(naz==='Com')com++;
+      else if(naz==='Ex-Com')excom++;
+      else it++;
     });
     return {it,com,excom};
   }
@@ -4304,35 +4331,90 @@ const modifiche = posizionamento.filter(p => p.tipo_contratto === 'TD' && p.comm
   document.getElementById('notifAmmOverlay').classList.add('show');
 }
 
+function toggleCascade(id) {
+  document.getElementById(id).classList.toggle('closed');
+}
+function toggleStatsBox(id) {
+  document.getElementById(id).classList.toggle('closed');
+}
+
+function updateStatsLeft(bordoCamera, bordoCucina, bC, cC, buC, bCu, cCu, buCu) {
+  const oggi = new Date();
+  function mediaGG(lista) {
+    const gg = lista.filter(p=>p.data_imbarco).map(p=>Math.max(0,Math.floor((oggi-new Date(p.data_imbarco))/86400000)));
+    return gg.length>0?Math.round(gg.reduce((a,b)=>a+b,0)/gg.length):0;
+  }
+  function mediaEta(lista) {
+    const eta = lista.map(p=>p.pn_dipendenti?calcEta(p.pn_dipendenti.data_nascita):null).filter(e=>e!==null&&e>0);
+    return eta.length>0?Math.round(eta.reduce((a,b)=>a+b,0)/eta.length):0;
+  }
+  const copC = buC>0?Math.round(bC/buC*100):0;
+  const copCu = buCu>0?Math.round(bCu/buCu*100):0;
+  const mgC = mediaGG(bordoCamera), meC = mediaEta(bordoCamera);
+  const mgCu = mediaGG(bordoCucina), meCu = mediaEta(bordoCucina);
+
+  document.getElementById('slBordoC').textContent = bC;
+  document.getElementById('slConfC').textContent = cC;
+  document.getElementById('slBudgetC').textContent = buC;
+  document.getElementById('slCopC').textContent = buC>0?copC+'%':'—';
+  document.getElementById('slCopC').className = 'stats-box-val '+(copC>=90?'ok':'warn');
+  document.getElementById('slGGC').textContent = mgC||'—';
+  document.getElementById('slEtaC').textContent = meC||'—';
+
+  document.getElementById('slBordoCu').textContent = bCu;
+  document.getElementById('slConfCu').textContent = cCu;
+  document.getElementById('slBudgetCu').textContent = buCu;
+  document.getElementById('slCopCu').textContent = buCu>0?copCu+'%':'—';
+  document.getElementById('slCopCu').className = 'stats-box-val '+(copCu>=90?'ok':'warn');
+  document.getElementById('slGGCu').textContent = mgCu||'—';
+  document.getElementById('slEtaCu').textContent = meCu||'—';
+
+  document.getElementById('statsLeftWrap').classList.add('show');
+}
+
 function buildTDUrgentiPanel() {
   const isAdminOrSemi = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
   if(!isAdminOrSemi) return;
   const ORDINE = ['MOBY FANTASY','MOBY LEGACY','MOBY AKI','MOBY WONDER','MOBY ORLI','MOBY KISS','VINCENZO FLORIO','RAFFAELE RUBATTINO','MOBY TOMMY'];
   const oggi = new Date();
-  // Per ogni nave calcola TD urgenti (≤15gg senza risposta)
-  sbGet('pn_posizionamento?select=nave_id,tipo_contratto,data_scadenza_td,td_comunicazione,pn_navi(nome)')
+  sbGet('pn_posizionamento?select=nave_id,tipo_contratto,data_scadenza_td,td_comunicazione,comm_modifica_at,amm_visione_at,pn_navi(nome)')
     .then(all => {
-      const perNave = {};
+      const urgenti = {}, visione = {};
       all.forEach(p => {
-        if(p.tipo_contratto !== 'TD' || !p.data_scadenza_td) return;
-        const diff = Math.ceil((new Date(p.data_scadenza_td) - oggi) / 86400000);
-        if(diff < 0 || diff > 15) return;
-        if(!perNave[p.nave_id]) perNave[p.nave_id] = {nome: p.pn_navi ? p.pn_navi.nome : '—', count: 0};
-        if(!p.td_comunicazione || p.td_comunicazione === 'attesa') perNave[p.nave_id].count++;
+        if(p.tipo_contratto !== 'TD') return;
+        // Cascade A: TD urgenti (<=15gg senza risposta)
+        if(p.data_scadenza_td) {
+          const diff = Math.ceil((new Date(p.data_scadenza_td) - oggi) / 86400000);
+        if(diff >= 0 && diff <= 23 && (!p.td_comunicazione || p.td_comunicazione === 'attesa')) {
+            if(!urgenti[p.nave_id]) urgenti[p.nave_id] = 0;
+            urgenti[p.nave_id]++;
+          }
+        }
+        // Cascade B: flag ✗ (comm_modifica_at > amm_visione_at o amm_visione_at null)
+        if(p.comm_modifica_at && (!p.amm_visione_at || new Date(p.comm_modifica_at) > new Date(p.amm_visione_at))) {
+          if(!visione[p.nave_id]) visione[p.nave_id] = 0;
+          visione[p.nave_id]++;
+        }
       });
       const naviOrd = [...ORDINE.map(n => navi.find(x => x.nome === n)).filter(Boolean), ...navi.filter(x => !ORDINE.includes(x.nome))];
-      const body = document.getElementById('tdUrgentiBody');
-      const hasAny = Object.values(perNave).some(v => v.count > 0);
-      if(!hasAny) return;
-      body.innerHTML = naviOrd.map(n => {
-        const d = perNave[n.id];
-        const count = d ? d.count : 0;
-        const badge = count > 0
-          ? '<span class="td-urgenti-badge red"><span style="width:6px;height:6px;border-radius:50%;background:#A32D2D;display:inline-block;"></span> '+count+' urgenti</span>'
-          : '<span class="td-urgenti-badge ok">&#10003; Ok</span>';
-        return '<div class="td-urgenti-row"><span class="td-urgenti-nome">'+escHtml(n.nome)+'</span>'+badge+'</div>';
+      const totUrgenti = Object.values(urgenti).reduce((a,b)=>a+b,0);
+      const totVisione = Object.values(visione).reduce((a,b)=>a+b,0);
+      // Cascade A
+      document.getElementById('cascadeBadgeUrgenti').textContent = totUrgenti;
+      document.getElementById('cascadeBodyUrgenti').innerHTML = naviOrd.map(n => {
+        const c = urgenti[n.id] || 0;
+        const cls = c > 0 ? 'red' : 'zero';
+        return '<div class="cascade-row"><span class="cascade-nome">'+escHtml(n.nome)+'</span><span class="cascade-count '+cls+'">'+c+'</span></div>';
       }).join('');
-      document.getElementById('tdUrgentiPanel').classList.add('show');
+      // Cascade B
+      document.getElementById('cascadeBadgeVisione').textContent = totVisione;
+      document.getElementById('cascadeBodyVisione').innerHTML = naviOrd.map(n => {
+        const c = visione[n.id] || 0;
+        const cls = c > 0 ? 'orange' : 'zero';
+        return '<div class="cascade-row"><span class="cascade-nome">'+escHtml(n.nome)+'</span><span class="cascade-count '+cls+'">'+c+'</span></div>';
+      }).join('');
+      // Mostra il wrapper — entrambe aperte (non hanno classe 'closed')
+      document.getElementById('cascadeAmmWrap').classList.add('show');
     }).catch(() => {});
 }
 
@@ -4421,13 +4503,63 @@ document.addEventListener('click', function(e) {
 });
 
 </script>
-<!-- PANNELLO TD URGENTI AMM -->
-<div class="td-urgenti-panel" id="tdUrgentiPanel">
-  <div class="td-urgenti-head">
-    <span class="td-urgenti-title">&#128197; TD urgenti per nave</span>
-    <button class="td-urgenti-close" onclick="document.getElementById('tdUrgentiPanel').classList.remove('show')">&#10005;</button>
+
+<!-- PANNELLO CASCADE AMM -->
+<div class="cascade-amm-wrap" id="cascadeAmmWrap">
+  <!-- Cascade A: TD Urgenti -->
+  <div class="cascade-box" id="cascadeUrgenti">
+    <div class="cascade-head urgenti" onclick="toggleCascade('cascadeUrgenti')">
+      <div class="cascade-head-left">
+        <span class="cascade-title">🔴 TD urgenti per nave</span>
+        <span class="cascade-badge" id="cascadeBadgeUrgenti">0</span>
+      </div>
+      <span class="cascade-arrow">▲</span>
+    </div>
+    <div class="cascade-body" id="cascadeBodyUrgenti"></div>
   </div>
-  <div class="td-urgenti-body" id="tdUrgentiBody"></div>
+  <!-- Cascade B: Presa visione ✗ -->
+  <div class="cascade-box" id="cascadeVisione">
+    <div class="cascade-head visione" onclick="toggleCascade('cascadeVisione')">
+      <div class="cascade-head-left">
+        <span class="cascade-title">✗ Presa visione AMM</span>
+        <span class="cascade-badge" id="cascadeBadgeVisione">0</span>
+      </div>
+      <span class="cascade-arrow">▲</span>
+    </div>
+    <div class="cascade-body" id="cascadeBodyVisione"></div>
+  </div>
+</div>
+
+<!-- PANNELLO STATS SINISTRA -->
+<div class="stats-left-wrap" id="statsLeftWrap">
+  <div class="stats-box" id="statsBoxCamera">
+    <div class="stats-box-head camera" onclick="toggleStatsBox('statsBoxCamera')">
+      <span class="stats-box-title">📷 Camera</span>
+      <span class="stats-box-arrow">▲</span>
+    </div>
+    <div class="stats-box-body">
+      <div class="stats-box-row"><span class="stats-box-lbl">Bordo</span><span class="stats-box-val" id="slBordoC">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Confermati</span><span class="stats-box-val ok" id="slConfC">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Budget</span><span class="stats-box-val" id="slBudgetC">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Copertura</span><span class="stats-box-val" id="slCopC">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Media GG</span><span class="stats-box-val" id="slGGC">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Età media</span><span class="stats-box-val" id="slEtaC">—</span></div>
+    </div>
+  </div>
+  <div class="stats-box" id="statsBoxCucina">
+    <div class="stats-box-head cucina" onclick="toggleStatsBox('statsBoxCucina')">
+      <span class="stats-box-title">🍳 Cucina</span>
+      <span class="stats-box-arrow">▲</span>
+    </div>
+    <div class="stats-box-body">
+      <div class="stats-box-row"><span class="stats-box-lbl">Bordo</span><span class="stats-box-val" id="slBordoCu">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Confermati</span><span class="stats-box-val ok" id="slConfCu">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Budget</span><span class="stats-box-val" id="slBudgetCu">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Copertura</span><span class="stats-box-val" id="slCopCu">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Media GG</span><span class="stats-box-val" id="slGGCu">—</span></div>
+      <div class="stats-box-row"><span class="stats-box-lbl">Età media</span><span class="stats-box-val" id="slEtaCu">—</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- PANNELLO NOTIFICHE AMM -->
