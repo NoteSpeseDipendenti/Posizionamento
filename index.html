@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Posizionamento Navi — v28</title>
+<title>Posizionamento Navi — v29</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -97,7 +97,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 /* Storico panel */
 .storico-overlay{position:fixed;inset:0;background:rgba(15,42,74,.35);z-index:150;display:none;}
 .storico-overlay.show{display:block;}
-.storico-panel{position:fixed;top:0;right:0;bottom:0;width:680px;max-width:95vw;background:var(--white);box-shadow:-4px 0 30px rgba(0,0,0,.18);display:flex;flex-direction:column;z-index:151;transform:translateX(100%);transition:transform .25s ease;}
+.storico-panel{position:fixed;top:0;right:0;bottom:0;width:820px;max-width:95vw;background:var(--white);box-shadow:-4px 0 30px rgba(0,0,0,.18);display:flex;flex-direction:column;z-index:151;transform:translateX(100%);transition:transform .25s ease;}
 .storico-panel.show{transform:translateX(0);}
 .storico-head{padding:16px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .storico-title{font-size:14px;font-weight:600;color:var(--navy);display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
@@ -623,7 +623,7 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v28 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div class="login-version">Posizionamento Navi &mdash; v29 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
       <div style="text-align:center;margin-top:10px;font-size:10px;color:#c0c4cc;">&copy; 2025 S.M.A.R.T Solutions &mdash; Tutti i diritti riservati</div>
     </div>
   </div>
@@ -660,7 +660,7 @@ select.mform-control{cursor:pointer;}
         <div class="esporta-menu" id="esportaMenu">
           <div class="esporta-item" onclick="esportaMenuClick('posizionamento')">&#128196; PDF Posizionamento</div>
           <div class="esporta-item" onclick="esportaMenuClick('td')">&#128197; PDF TD</div>
-          <div class="esporta-item" id="esportaItemRiepilogo" onclick="esportaMenuClick('riepilogo')">&#128202; PDF Riepilogo navi</div>
+          <div class="esporta-item esporta-item-admin" id="esportaItemRiepilogo" onclick="esportaMenuClick('riepilogo')">&#128202; PDF Riepilogo navi</div>
         </div>
       </div>
       <button class="btn-orange" onclick="toggleTDPanel()" id="btnTD">&#128197; TD</button>
@@ -695,7 +695,7 @@ select.mform-control{cursor:pointer;}
     </div>
   <div style="display:flex;gap:6px;align-items:center;">
      <button class="btn-add" onclick="openModalAddPos()">+ Aggiungi</button>
-      <button class="btn-filtri" id="btnSnapshot" onclick="openSnapshot()" style="display:none;">&#128247; Snapshot</button>
+    <button class="btn-filtri" id="btnSnapshot" onclick="openSnapshot()">&#128247; Snapshot</button>
       <button class="btn-filtri" id="btnRiepilogo" onclick="toggleDashboard()">&#128202; Riepilogo navi</button>
       <button class="btn-filtri" id="btnAggiorna" onclick="aggiornaPos()">&#8635; Aggiorna</button>
     </div>
@@ -716,7 +716,7 @@ select.mform-control{cursor:pointer;}
     </div>
     <div class="pos-inner" id="mainContent"><div class="loading-bar">Caricamento...</div></div>
   </div>
-  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v28 &mdash; Uso interno riservato</div>
+  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v29 &mdash; Uso interno riservato</div>
 </div>
 
 <!-- ADMIN -->
@@ -905,7 +905,7 @@ select.mform-control{cursor:pointer;}
       </div>
     </div>
   </div>
-  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions &mdash; Posizionamento Navi v28 &mdash; Uso interno riservato</div>
+  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions &mdash; Posizionamento Navi v29 &mdash; Uso interno riservato</div>
 </div>
 
 <!-- MODAL POSIZIONAMENTO -->
@@ -1073,10 +1073,11 @@ select.mform-control{cursor:pointer;}
       <!-- RETTANGOLO 1: 4 bottoni + data -->
       <div style="border:1.5px solid var(--navy);border-radius:10px;padding:14px 16px;margin-bottom:12px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-          <button id="btn-sbarca" class="btn-rimoz btn-rimoz-sel" onclick="selOpzione('sbarca')">&#9875; Sbarca</button>
+         <button id="btn-sbarca" class="btn-rimoz btn-rimoz-sel" onclick="selOpzione('sbarca')">&#9875; Sbarca</button>
           <button id="btn-trasborda" class="btn-rimoz" onclick="selOpzione('trasborda')">&#8646; Trasborda</button>
           <button id="btn-malattia" class="btn-rimoz" onclick="selOpzione('malattia')">&#43; Malattia</button>
           <button id="btn-fine_td" class="btn-rimoz" onclick="selOpzione('fine_td')">&#128203; Fine TD</button>
+          <button id="btn-sua_richiesta" class="btn-rimoz" onclick="selOpzione('sua_richiesta')" style="grid-column:1/-1;">&#128221; Sua Richiesta</button>
         </div>
         <div style="border-top:0.5px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:8px;">
           <div style="display:flex;align-items:center;gap:10px;">
@@ -1133,9 +1134,11 @@ select.mform-control{cursor:pointer;}
         <option value="trasborda">Trasbordo</option>
         <option value="malattia">Malattia</option>
         <option value="fine_td">Fine TD</option>
-        <option value="rimosso">Rimosso</option>
+   <option value="rimosso">Rimosso</option>
+        <option value="sua_richiesta">Sua Richiesta</option>
       </select>
       <input type="text" id="storicoSearch" placeholder="&#128269; Nome o matricola..." oninput="renderStorico()">
+      <button class="btn-filtri" id="btnStoricoOrdine" onclick="toggleStoricoOrdine()" style="width:auto;padding:4px 10px;font-size:10px;">&#8645; Data</button>
     </div>
   </div>
   <div class="storico-body">
@@ -1379,7 +1382,7 @@ select.mform-control{cursor:pointer;}
   <div class="modal" style="max-width:580px;max-height:88vh;display:flex;flex-direction:column;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0;">
       <div class="modal-title" style="margin-bottom:0;">&#9432; Guida rapida</div>
-      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v28</span>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v29</span>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:12px;flex-shrink:0;">
       <button id="helpTabGuida" onclick="switchHelpTab('guida')" style="font-size:12px;padding:5px 14px;border-radius:6px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-family:inherit;font-weight:500;">Guida</button>
@@ -1389,6 +1392,23 @@ select.mform-control{cursor:pointer;}
 
       <!-- TAB GUIDA -->
       <div id="helpViewGuida">
+        <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:11px 14px;margin-bottom:12px;">
+<div style="font-weight:600;color:#1e40af;font-size:12px;margin-bottom:6px;">&#127381; Novità v29</div>
+          <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
+            <li><strong>Interfaccia</strong>
+              <ul style="padding-left:14px;margin-top:4px;display:flex;flex-direction:column;gap:3px;">
+                <li>Topbar e subbar riorganizzate</li>
+                <li>Pannello statistiche Camera/Cucina a cascade a sinistra</li>
+              </ul>
+            </li>
+            <li><strong>Funzionalità</strong>
+              <ul style="padding-left:14px;margin-top:4px;display:flex;flex-direction:column;gap:3px;">
+                <li>Aggiunta opzione <strong>Sua Richiesta</strong> nella rimozione dipendente</li>
+                <li>Storico allargato con switch ordine Data ↔ A-Z</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
         <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:11px 14px;margin-bottom:12px;">
           <div style="font-weight:600;color:#1e40af;font-size:12px;margin-bottom:6px;">&#127381; Novità v28</div>
           <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
@@ -1466,7 +1486,7 @@ select.mform-control{cursor:pointer;}
           </div>
           <div class="qa-topic-body">
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come aggiungo un dipendente alla nave?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca <strong>+ Aggiungi</strong> nella barra in alto. Cerca per nome o matricola, seleziona reparto, mansione, data imbarco e tipo contratto, poi salva.</div></div>
-            <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Perché mi dice "marittimo non disponibile"?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Il marittimo risulta già imbarcato su un'altra unità. Non è possibile aggiungerlo finché non viene rimosso tramite sbarco o trasbordamento.</div></div>
+            <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Perché mi dice "marittimo non disponibile"?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Il marittimo risulta già imbarcato su un'altra unità. Può essere inserito solo come Prossimo Imbarco Confermato — cambia lo stato nel modal di inserimento.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come sposto un dipendente in un altro reparto?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca l'icona <strong>freccia →</strong> sulla riga per selezionare il nuovo reparto e mansione.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come trasferisco un dipendente su un'altra nave?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca l'icona <strong>cestino</strong> e scegli <strong>Trasborda</strong>. Inserisci la data e seleziona la nave di destinazione.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa succede se clicco "Inserimento errato"?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Il dipendente viene rimosso senza lasciare traccia nello storico. Usalo solo se non era realmente imbarcato.</div></div>
@@ -1758,8 +1778,16 @@ if(utente.ruolo==='commissario') {
   btn.disabled = true;
   btn.style.opacity = '0.4';
   btn.style.cursor = 'not-allowed';
+  const btnSnap = document.getElementById('btnSnapshot');
+  btnSnap.disabled = true;
+  btnSnap.style.opacity = '0.4';
+  btnSnap.style.cursor = 'not-allowed';
 } else {
-  document.getElementById('btnSnapshot').style.display = 'inline-block';
+  const btnSnap = document.getElementById('btnSnapshot');
+  btnSnap.style.display = 'inline-block';
+  btnSnap.disabled = false;
+  btnSnap.style.opacity = '1';
+  btnSnap.style.cursor = 'pointer';
 }
 
     if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') {
@@ -2248,10 +2276,25 @@ async function savePos(){
   if(!mansioneId){showToast('Seleziona una mansione','error');return;}
   if(!dataImb){showToast('Inserisci la data di imbarco','error');return;}
   if(tipoC==='TD'&&!scadTD){showToast('Inserisci la scadenza TD','error');return;}
-  const body={nave_id:utente.nave_id,dipendente_id:parseInt(dipId),reparto_id:parseInt(repartoId),mansione_id:parseInt(mansioneId),data_imbarco:dataImb,tipo_contratto:tipoC,data_scadenza_td:tipoC==='TD'?scadTD:null,stato,note:note||null};
+ const body={nave_id:utente.nave_id,dipendente_id:parseInt(dipId),reparto_id:parseInt(repartoId),mansione_id:parseInt(mansioneId),data_imbarco:dataImb,tipo_contratto:tipoC,data_scadenza_td:tipoC==='TD'?scadTD:null,stato,note:note||null};
   const btn=document.getElementById('btnSavePos');
   btn.disabled=true;btn.textContent='Salvataggio...';
   try{
+    if(!editPosId) {
+      // Controlla se il marittimo è già imbarcato (stato='bordo') su qualsiasi nave
+      const esistente = await sbGet('pn_posizionamento?dipendente_id=eq.'+parseInt(dipId)+'&stato=eq.bordo&select=id,nave_id,pn_navi(nome)');
+      if(esistente && esistente.length > 0) {
+        const naveNome = esistente[0].pn_navi ? esistente[0].pn_navi.nome : 'altra nave';
+        if(stato === 'bordo') {
+          showToast('⚠️ Marittimo già imbarcato su '+naveNome+'. Può essere inserito solo come Prossimo Imbarco Confermato.', 'error');
+          btn.disabled=false; btn.textContent='Salva';
+          // Forza stato a confermato
+          document.getElementById('selStato').value = 'confermato';
+          return;
+        }
+        // Se stato=confermato, procedi senza bloccare
+      }
+    }
     if(editPosId){await sbPatch('pn_posizionamento',editPosId,body);showToast('Posizionamento aggiornato','success');}
     else{await sbPost('pn_posizionamento',body);showToast('Personale aggiunto','success');}
     closeModalPos();
@@ -2694,7 +2737,7 @@ let opzioneRimozione = 'sbarca';
 function selOpzione(op) {
   opzioneRimozione = op;
   // Reset tutti i bottoni
-  ['sbarca','trasborda','malattia','fine_td'].forEach(o => {
+  ['sbarca','trasborda','malattia','fine_td','sua_richiesta'].forEach(o => {
     const b = document.getElementById('btn-'+o);
     if(b) { b.classList.remove('btn-rimoz-sel','btn-rimoz-danger'); }
   });
@@ -2712,8 +2755,8 @@ function selOpzione(op) {
     // Mostra/nascondi nave destinazione
     document.getElementById('rowNaveDestino').style.display = op === 'trasborda' ? 'flex' : 'none';
     // Aggiorna label data e testo bottone conferma
-    const labels = {sbarca:'Data sbarco', trasborda:'Data', malattia:'Data malattia', fine_td:'Data fine TD'};
-    const confirms = {sbarca:'Conferma sbarco', trasborda:'Conferma trasbordo', malattia:'Conferma malattia', fine_td:'Conferma fine TD'};
+   const labels = {sbarca:'Data sbarco', trasborda:'Data', malattia:'Data malattia', fine_td:'Data fine TD', sua_richiesta:'Data'};
+    const confirms = {sbarca:'Conferma sbarco', trasborda:'Conferma trasbordo', malattia:'Conferma malattia', fine_td:'Conferma fine TD', sua_richiesta:'Conferma sua richiesta'};
     document.getElementById('dataLabel').textContent = labels[op];
     document.getElementById('btnConfirmDel').textContent = confirms[op];
   }
@@ -2781,7 +2824,7 @@ async function confirmDelete() {
     }
     await sbDelete(tableMap[type], id);
     closeConfirm();
-    const toastMsg = {sbarca:'Sbarco registrato', trasborda:'Trasbordo registrato', malattia:'Malattia registrata', fine_td:'Fine TD registrata', rimosso:'Eliminato'};
+ const toastMsg = {sbarca:'Sbarco registrato', trasborda:'Trasbordo registrato', malattia:'Malattia registrata', fine_td:'Fine TD registrata', sua_richiesta:'Sua richiesta registrata', rimosso:'Eliminato'};
     showToast(toastMsg[opzioneRimozione] || 'Eliminato', 'success');
     if(type === 'pos') { await loadPosizionamento(); }
     else if(type === 'commissari') { commissari = await sbGet('pn_utenti?ruolo=eq.commissario&select=*,pn_navi(id,nome)&order=nome'); renderComm(); }
@@ -2794,6 +2837,13 @@ async function confirmDelete() {
 // STORICO
 // ═══════════════════════════════════════════
 let storicoData = [];
+let storicoOrdineAlfabetico = false;
+
+function toggleStoricoOrdine() {
+  storicoOrdineAlfabetico = !storicoOrdineAlfabetico;
+  document.getElementById('btnStoricoOrdine').textContent = storicoOrdineAlfabetico ? '🔤 A-Z' : '⇅ Data';
+  renderStorico();
+}
 
 // ═══════════════════════════════════════════
 // PANNELLO TD
@@ -3025,10 +3075,11 @@ function renderStorico() {
   const filtroTipo = document.getElementById('storicoFiltroTipo').value;
   const search = (document.getElementById('storicoSearch').value || '').toLowerCase();
 
-  let lista = storicoData;
+let lista = [...storicoData];
   if(filtroNave) lista = lista.filter(r => String(r.nave_id) === filtroNave);
   if(filtroTipo) lista = lista.filter(r => r.tipo === filtroTipo);
   if(search) lista = lista.filter(r => (r.cognome_nome||'').toLowerCase().includes(search) || (r.matricola||'').toLowerCase().includes(search));
+  if(storicoOrdineAlfabetico) lista.sort((a,b) => (a.cognome_nome||'').localeCompare(b.cognome_nome||'','it'));
 
   const naveNomeMap = {};
   navi.forEach(n => { naveNomeMap[n.id] = n.nome; });
@@ -3044,8 +3095,8 @@ function renderStorico() {
     return;
   }
   tbody.innerHTML = lista.map(r => {
-    const badgeCls = r.tipo === 'sbarca' ? 'badge-sbarca' : r.tipo === 'trasborda' ? 'badge-trasborda' : r.tipo === 'malattia' ? 'badge-sbarca' : r.tipo === 'fine_td' ? 'badge-trasborda' : 'badge-rimosso';
-    const badgeTxt = r.tipo === 'sbarca' ? 'Sbarco' : r.tipo === 'trasborda' ? 'Trasbordo' : r.tipo === 'malattia' ? 'Malattia' : r.tipo === 'fine_td' ? 'Fine TD' : 'Rimosso';
+   const badgeCls = r.tipo === 'sbarca' ? 'badge-sbarca' : r.tipo === 'trasborda' ? 'badge-trasborda' : r.tipo === 'malattia' ? 'badge-sbarca' : r.tipo === 'fine_td' ? 'badge-trasborda' : r.tipo === 'sua_richiesta' ? 'badge-sbarca' : 'badge-rimosso';
+    const badgeTxt = r.tipo === 'sbarca' ? 'Sbarco' : r.tipo === 'trasborda' ? 'Trasbordo' : r.tipo === 'malattia' ? 'Malattia' : r.tipo === 'fine_td' ? 'Fine TD' : r.tipo === 'sua_richiesta' ? 'Sua Richiesta' : 'Rimosso';
     const dest = r.nave_destinazione_id ? '<span class="nave-dest">&#8594; ' + (naveNomeMap[r.nave_destinazione_id] || '—') + '</span>' : '—';
     const naveSrc = naveNomeMap[r.nave_id] || '—';
     const gg = r.gg_a_bordo !== null && r.gg_a_bordo !== undefined ? r.gg_a_bordo + 'gg' : '—';
@@ -3238,7 +3289,7 @@ function generaPDFTD() {
       },
       didDrawPage: function() {
         doc.setFontSize(7); doc.setTextColor(150,150,150);
-        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v28', 12, doc.internal.pageSize.getHeight() - 5);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v29', 12, doc.internal.pageSize.getHeight() - 5);
         doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, doc.internal.pageSize.getHeight() - 5, {align:'right'});
       }
     });
@@ -3340,7 +3391,7 @@ function generaPDFFiltri() {
         columnStyles:{0:{cellWidth:48},1:{cellWidth:38},2:{cellWidth:35},3:{cellWidth:16,halign:'center'},4:{cellWidth:12,halign:'center'},5:{cellWidth:14,halign:'center'},6:{cellWidth:22,halign:'center'}},
         didDrawPage: function() {
           doc.setFontSize(7); doc.setTextColor(150,150,150);
-          doc.text('S.M.A.R.T Solutions — Posizionamento Navi v28', 12, pageH-5);
+          doc.text('S.M.A.R.T Solutions — Posizionamento Navi v29', 12, pageH-5);
           doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
         }
       });
@@ -4035,7 +4086,7 @@ async function generaPDFDashboard() {
       },
       didDrawPage: function() {
         doc.setFontSize(7); doc.setTextColor(150,150,150);
-        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v28', 12, pageH-5);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v29', 12, pageH-5);
         doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
       }
     });
@@ -4077,7 +4128,7 @@ async function generaPDFDashboard() {
       },
       didDrawPage: function() {
         doc.setFontSize(7); doc.setTextColor(150,150,150);
-        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v28', 12, pageH-5);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v29', 12, pageH-5);
         doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
       }
     });
@@ -4106,6 +4157,15 @@ function generaPDF() {
 
   if(!posizionamento || posizionamento.length === 0) {
     showToast('Nessun dato da esportare', 'error');
+    return;
+  }
+
+  // Se commissario e budgetData vuoto, carica prima i budget
+  if(utente && utente.ruolo === 'commissario' && Object.keys(budgetData).length === 0) {
+    sbGet('pn_budget?nave_id=eq.'+utente.nave_id+'&anno=eq.'+anno).then(bud => {
+      bud.forEach(b => { budgetData[b.nave_id+'_'+b.mese+'_'+b.anno+'_'+b.reparto_id] = b.quantita; });
+      generaPDF();
+    }).catch(() => generaPDF());
     return;
   }
 
@@ -4238,8 +4298,8 @@ function generaPDF() {
       const g = Object.values(byReparto).find(x => x.reparto && x.reparto.nome === nomeR);
       if(!g || (g.bordo.length === 0 && g.conf.length === 0)) return;
       const { reparto, bordo, conf } = g;
-      const key = utente.nave_id + '_' + mese + '_' + anno + '_' + reparto.id;
-   r.budget = budgetReparto[repId] || 0;
+     const key = utente.nave_id + '_' + mese + '_' + anno + '_' + reparto.id;
+      const budget = budgetData[key] || 0;
 
       // Stima altezza reparto: header(6) + header tabella(6) + righe(~5 ciascuna) + margine
       const totRighe = bordo.length + conf.length;
@@ -4303,7 +4363,7 @@ function generaPDF() {
           // Footer su ogni pagina
           doc.setFontSize(7);
           doc.setTextColor(150, 150, 150);
-          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v28', 12, pageH - 5);
+          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v29', 12, pageH - 5);
           doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, pageH - 5, { align: 'right' });
         }
       });
@@ -4338,7 +4398,6 @@ function toggleEsportaMenu(e) {
   e.stopPropagation();
   const menu = document.getElementById('esportaMenu');
   menu.classList.toggle('show');
-  // Mostra/nascondi voce Riepilogo Navi in base al ruolo
   const itemRiep = document.getElementById('esportaItemRiepilogo');
   if(itemRiep) {
     const isAdminOrSemi = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
