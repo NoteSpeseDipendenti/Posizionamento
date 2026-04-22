@@ -65,11 +65,14 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .user-pill{font-size:11px;color:rgba(255,255,255,.9);}
 .btn-topbar{font-size:11px;padding:4px 0;min-width:100px;text-align:center;border-radius:6px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.9);border:.5px solid rgba(255,255,255,.2);cursor:pointer;font-family:inherit;}
 .btn-topbar:hover{background:rgba(255,255,255,.18);}
-.btn-orange{font-size:11px;padding:5px 0;min-width:100px;text-align:center;border-radius:6px;background:rgba(186,117,23,.2);color:#FAC775;border:1px solid rgba(250,199,117,.5);cursor:pointer;font-weight:500;font-family:inherit;}
+.btn-orange{font-size:11px;padding:5px 0;width:100px;text-align:center;border-radius:6px;background:rgba(186,117,23,.2);color:#FAC775;border:1px solid rgba(250,199,117,.5);cursor:pointer;font-weight:500;font-family:inherit;}
 .btn-orange:hover{background:rgba(186,117,23,.45);}
 .btn-orange.active{background:rgba(186,117,23,.55);border-color:#FAC775;}
-.btn-orange.td-alert{background:rgba(163,45,45,.25);color:#f87171;border-color:rgba(163,45,45,.5);}
+.btn-orange.td-alert{background:rgba(163,45,45,.25);color:#FAC775;border-color:rgba(163,45,45,.5);}
 .btn-orange.td-alert:hover{background:rgba(163,45,45,.4);}
+
+
+
 /* TD Panel */
 .td-overlay{position:fixed;inset:0;background:rgba(15,42,74,.35);z-index:150;display:none;}
 .td-overlay.show{display:block;}
@@ -195,7 +198,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .btn-add{font-size:11px;padding:4px 12px;border-radius:6px;background:var(--navy);color:#fff;border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;width:100px;text-align:center;}
 
 .btn-add:hover{background:var(--navy2);}
-.btn-filtri{font-size:11px;padding:4px 12px;border-radius:6px;background:#fff;color:var(--navy);border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;width:100px;text-align:center;}
+.btn-filtri{font-size:11px;padding:4px 12px;border-radius:6px;background:#fff;color:var(--navy);border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;width:120px;text-align:center;}
 
 
 .btn-filtri:hover{background:#eef2f8;}
@@ -547,6 +550,56 @@ select.mform-control{cursor:pointer;}
 .bollino-nota{width:100%;height:64px;resize:none;border:1.5px solid var(--border);border-radius:8px;padding:7px 9px;font-size:12px;font-family:inherit;outline:none;margin-bottom:14px;}
 .bollino-nota:focus{border-color:var(--navy);}
 .bollino-actions{display:flex;gap:8px;justify-content:flex-end;}
+/* PANNELLO SNAPSHOT */
+.snap-overlay{position:fixed;inset:0;background:rgba(15,42,74,.35);z-index:150;display:none;}
+.snap-overlay.show{display:block;}
+.snap-panel{position:fixed;top:0;right:0;bottom:0;width:820px;max-width:95vw;background:var(--white);box-shadow:-4px 0 30px rgba(0,0,0,.18);display:flex;flex-direction:column;z-index:151;transform:translateX(100%);transition:transform .25s ease;}
+.snap-panel.show{transform:translateX(0);}
+.snap-head{padding:16px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.snap-title{font-size:14px;font-weight:600;color:var(--navy);}
+.snap-close{font-size:18px;color:var(--muted);cursor:pointer;border:none;background:none;}
+.snap-filters{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.snap-sel{height:30px;border:1px solid var(--border);border-radius:6px;padding:0 8px;font-size:11px;font-family:inherit;color:var(--text);background:var(--white);outline:none;}
+.snap-btn{height:30px;padding:0 14px;border-radius:6px;border:none;background:var(--navy);color:#fff;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;}
+.snap-btn.pdf{background:var(--teal);}
+.snap-list{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;align-items:center;}
+.snap-date-pill{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:#f8fafc;font-size:11px;font-weight:500;color:var(--text);cursor:pointer;}
+.snap-date-pill.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.snap-date-pill:hover{border-color:var(--navy);}
+.snap-body{flex:1;overflow-y:auto;padding:16px 20px;}
+.snap-totali{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.snap-tot-card{background:#f8fafc;border-radius:10px;padding:12px 16px;border:1px solid var(--border);}
+.snap-tot-title{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;}
+.snap-tot-row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:.5px solid var(--border);}
+.snap-tot-row:last-child{border-bottom:none;}
+.snap-tot-lbl{color:var(--muted);}
+.snap-tot-val{font-weight:600;color:var(--text);}
+.snap-tot-val.ok{color:var(--teal);}
+.snap-demo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.snap-demo-card{background:#f8fafc;border-radius:10px;padding:12px 16px;border:1px solid var(--border);}
+.snap-demo-title{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;}
+.snap-demo-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:4px 0;border-bottom:.5px solid var(--border);}
+.snap-demo-row:last-child{border-bottom:none;}
+.snap-demo-lbl{color:var(--muted);display:flex;align-items:center;gap:5px;}
+.snap-demo-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.snap-demo-val{font-weight:700;color:var(--text);font-size:12px;}
+.snap-demo-pct{font-size:10px;color:var(--muted);margin-left:4px;}
+.snap-nave-title{font-size:12px;font-weight:700;color:var(--navy);margin:14px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--navy);}
+.snap-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;}
+.snap-table thead tr.head-group th{padding:4px 6px;font-size:10px;font-weight:700;text-align:center;border-bottom:1px solid var(--border);}
+.snap-table thead tr.head-group th.h-base{background:#eef2f8;color:var(--navy);}
+.snap-table thead tr.head-group th.h-naz{background:#e6f9f0;color:#0F6E56;}
+.snap-table thead tr.head-group th.h-gen{background:#f0f0ff;color:#3730a3;}
+.snap-table thead tr.head-cols th{padding:5px 6px;text-align:center;font-size:10px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);background:#f8fafc;}
+.snap-table thead tr.head-cols th:first-child{text-align:left;}
+.snap-table tbody td{padding:5px 6px;border-bottom:.5px solid #f1f5f9;text-align:center;font-size:11px;}
+.snap-table tbody td:first-child{text-align:left;}
+.snap-table tbody tr:hover td{background:#f8fafc;}
+.snap-table tbody tr.totale-row td{font-weight:700;background:#f8fafc;}
+.snap-badge-ok{font-size:10px;padding:1px 6px;border-radius:4px;background:#e6f9f0;color:#0F6E56;font-weight:600;}
+.snap-badge-warn{font-size:10px;padding:1px 6px;border-radius:4px;background:#fff3dc;color:#854F0B;font-weight:600;}
+.snap-badge-over{font-size:10px;padding:1px 6px;border-radius:4px;background:#e0f2fe;color:#075985;font-weight:600;}
+.snap-empty{text-align:center;padding:40px;font-size:12px;color:var(--muted);font-style:italic;}
 </style>
 </head>
 <body>
@@ -597,13 +650,21 @@ select.mform-control{cursor:pointer;}
 <!-- POSIZIONAMENTO -->
 <div class="screen" id="screenPos">
   <div class="topbar">
-    <div style="display:flex;align-items:center;gap:10px;">
+  <div style="display:flex;align-items:center;gap:5px;">
       <span class="brand">Posizionamento Navi</span>
       <button class="btn-orange" onclick="toggleStatPanel()" id="btnStatPanel">&#9776; Statistiche</button>
       <button class="btn-orange" onclick="toggleStorico()" id="btnStorico">&#128203; Storico</button>
-  <button class="btn-orange" onclick="toggleTDPanel()" id="btnTD">&#128197; TD</button>
-      <button class="btn-orange" id="btnRiepilogo" onclick="toggleDashboard()">&#128202; Riepilogo navi</button>
-      <button class="btn-msg" id="btnMsg" onclick="openModalMsg()"><span class="msg-dot"></span>Messaggi</button>
+      <button class="btn-orange" onclick="toggleFiltriPanel()" id="btnFiltri">&#9636; Filtri</button>
+      <div class="esporta-wrap" id="esportaWrap" style="display:inline-block;position:relative;">
+        <button class="btn-orange" onclick="toggleEsportaMenu(event)">&#128228; Esporta &#9660;</button>
+        <div class="esporta-menu" id="esportaMenu">
+          <div class="esporta-item" onclick="esportaMenuClick('posizionamento')">&#128196; PDF Posizionamento</div>
+          <div class="esporta-item" onclick="esportaMenuClick('td')">&#128197; PDF TD</div>
+          <div class="esporta-item" id="esportaItemRiepilogo" onclick="esportaMenuClick('riepilogo')">&#128202; PDF Riepilogo navi</div>
+        </div>
+      </div>
+      <button class="btn-orange" onclick="toggleTDPanel()" id="btnTD">&#128197; TD</button>
+      <button class="btn-orange" id="btnMsg" onclick="openModalMsg()"><span class="msg-dot"></span>Messaggi</button>
       <span class="alert-td-badge" id="alertTDBadge" onclick="toggleTDPanel()"><span class="alert-td-badge-dot"></span><span id="alertTDText">TD senza risposta — PROVVEDERE</span></span>
     </div>
     <div class="topbar-right">
@@ -632,18 +693,10 @@ select.mform-control{cursor:pointer;}
         <span class="stat-block">A bordo: <strong id="s1">—</strong></span>
       </div>
     </div>
-    <div style="display:flex;gap:6px;align-items:center;">
-      <button class="btn-add" onclick="openModalAddPos()">+ Aggiungi</button>
-      <div style="width:1px;height:20px;background:var(--border);margin:0 2px;"></div>
-      <button class="btn-filtri" id="btnFiltri" onclick="toggleFiltriPanel()">&#9776; Filtri</button>
-      <div class="esporta-wrap" id="esportaWrap">
-        <button class="btn-filtri" id="btnEsporta" onclick="toggleEsportaMenu(event)">&#128196; Esporta &#9660;</button>
-        <div class="esporta-menu" id="esportaMenu">
-          <button class="esporta-item" onclick="esportaMenuClick('posizionamento')">&#128196; Posizionamento</button>
-          <button class="esporta-item" onclick="esportaMenuClick('td')">&#128203; Situazione TD</button>
-          <button class="esporta-item esporta-item-admin" id="esportaItemRiepilogo" onclick="esportaMenuClick('riepilogo')">&#128202; Riepilogo Navi</button>
-        </div>
-      </div>
+  <div style="display:flex;gap:6px;align-items:center;">
+     <button class="btn-add" onclick="openModalAddPos()">+ Aggiungi</button>
+      <button class="btn-filtri" id="btnSnapshot" onclick="openSnapshot()" style="display:none;">&#128247; Snapshot</button>
+      <button class="btn-filtri" id="btnRiepilogo" onclick="toggleDashboard()">&#128202; Riepilogo navi</button>
       <button class="btn-filtri" id="btnAggiorna" onclick="aggiornaPos()">&#8635; Aggiorna</button>
     </div>
   </div>
@@ -1625,6 +1678,10 @@ const ORDINE_CUCINA_Q = ['Capo Cuoco','Cuoco Equipaggio','Dispensiere Equipaggio
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
+  if(name==='admin') {
+    document.getElementById('cascadeAmmWrap').classList.remove('show');
+    document.getElementById('statsLeftWrap').classList.remove('show');
+  }
   if(name==='pos') {
     // Riassicura visibilità navebar per AMM/semi-AMM
     if(utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin')) {
@@ -1701,6 +1758,8 @@ if(utente.ruolo==='commissario') {
   btn.disabled = true;
   btn.style.opacity = '0.4';
   btn.style.cursor = 'not-allowed';
+} else {
+  document.getElementById('btnSnapshot').style.display = 'inline-block';
 }
 
     if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') {
@@ -2088,7 +2147,7 @@ function renderRow(p,isConf,W) {
     +plusBtn
     +'<button class="icon-btn move" onclick="openModalSposta('+p.id+')" title="Sposta reparto"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h8M6 3l3 3-3 3"/></svg></button>'
     +'<button class="icon-btn edit" onclick="openModalEditPos('+p.id+')" title="Modifica"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"/></svg></button>'
-    +'<button class="icon-btn del" onclick="openConfirmDel(\'pos\','+p.id+',\''+nome+'\')" title="Elimina"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h8M5 3V2h2v1M4.5 5v4M7.5 5v4M3 3l.5 7h5l.5-7"/></svg></button>'
+  +'<button class="icon-btn del" onclick="openConfirmDel(\'pos\','+p.id+',`'+nome+'`)" title="Elimina"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h8M5 3V2h2v1M4.5 5v4M7.5 5v4M3 3l.5 7h5l.5-7"/></svg></button>'
     +'</td></tr>';
 }
 
@@ -2748,9 +2807,9 @@ function aggiornaBottoneTD() {
   });
   const btn = document.getElementById('btnTD');
   if(!btn) return;
-  if(entro15.length > 0) {
+if(entro15.length > 0) {
     btn.classList.add('td-alert');
-    btn.innerHTML = '&#128197; TD (' + entro15.length + ')';
+    btn.innerHTML = '&#128197; TD <strong>(' + entro15.length + ')</strong>';
   } else {
     btn.classList.remove('td-alert');
     btn.innerHTML = '&#128197; TD';
@@ -3722,7 +3781,7 @@ function showNewMsg() {
   const naveRow = document.getElementById('newMsgNaveRow');
   const naveSel = document.getElementById('newMsgNave');
   if(isMultiNave) {
-    naveSel.innerHTML = navi.map(n => '<option value="'+n.id+'"'+(n.id===utente.nave_id?' selected':'')+'>'+n.nome+'</option>').join('');
+    naveSel.innerHTML = '<option value="ALL">📢 Tutte le navi</option>' + navi.map(n => '<option value="'+n.id+'">'+n.nome+'</option>').join('');
     naveRow.style.display = 'block';
   } else {
     naveRow.style.display = 'none';
@@ -3742,17 +3801,16 @@ async function inviaMessaggio() {
   const mese = parseInt(document.getElementById('meseSelect').value);
   const anno = parseInt(document.getElementById('annoSelect').value);
   const isMultiNave = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
-  const naveId = isMultiNave ? parseInt(document.getElementById('newMsgNave').value) : utente.nave_id;
-  if(!naveId) { showToast('Seleziona una nave', 'error'); return; }
+const naveVal = isMultiNave ? document.getElementById('newMsgNave').value : String(utente.nave_id);
+  if(!naveVal) { showToast('Seleziona una nave', 'error'); return; }
   try {
-    await sbPost('pn_messaggi', {
-      nave_id: naveId,
-      mese: mese,
-      anno: anno,
-      testo: testo,
-      autore: utente.nome,
-      letto: false
-    });
+    if(naveVal === 'ALL') {
+      for(const n of navi) {
+        await sbPost('pn_messaggi', { nave_id: n.id, mese, anno, testo, autore: utente.nome, letto: false });
+      }
+    } else {
+      await sbPost('pn_messaggi', { nave_id: parseInt(naveVal), mese, anno, testo, autore: utente.nome, letto: false });
+    }
     messaggi = await sbGet('pn_messaggi?nave_id=eq.'+utente.nave_id+'&mese=eq.'+mese+'&anno=eq.'+anno+'&order=created_at.desc');
     hideNewMsg();
     renderMsgList();
@@ -4181,7 +4239,7 @@ function generaPDF() {
       if(!g || (g.bordo.length === 0 && g.conf.length === 0)) return;
       const { reparto, bordo, conf } = g;
       const key = utente.nave_id + '_' + mese + '_' + anno + '_' + reparto.id;
-      const budget = budgetData[key] || 0;
+   r.budget = budgetReparto[repId] || 0;
 
       // Stima altezza reparto: header(6) + header tabella(6) + righe(~5 ciascuna) + margine
       const totRighe = bordo.length + conf.length;
@@ -4417,7 +4475,209 @@ function buildTDUrgentiPanel() {
       document.getElementById('cascadeAmmWrap').classList.add('show');
     }).catch(() => {});
 }
+let snapshotData = [];
+let snapshotSelData = null;
 
+function openSnapshot() {
+  const now = new Date();
+  const snapMese = document.getElementById('snapMese');
+  const snapAnno = document.getElementById('snapAnno');
+  snapMese.value = now.getMonth() + 1;
+  // Popola anni
+  const curAnno = now.getFullYear();
+  snapAnno.innerHTML = [curAnno, curAnno-1, curAnno-2].map(y => '<option value="'+y+'">'+y+'</option>').join('');
+  document.getElementById('snapList').innerHTML = '<span style="font-size:11px;color:var(--muted);">Seleziona mese/anno e clicca Carica</span>';
+  document.getElementById('snapBody').innerHTML = '<div class="snap-empty">Nessuno snapshot caricato.</div>';
+  document.getElementById('snapOverlay').classList.add('show');
+  document.getElementById('snapPanel').classList.add('show');
+}
+
+function closeSnapshot() {
+  document.getElementById('snapOverlay').classList.remove('show');
+  document.getElementById('snapPanel').classList.remove('show');
+}
+
+async function loadSnapshotList() {
+  const mese = document.getElementById('snapMese').value;
+  const anno = document.getElementById('snapAnno').value;
+  const listEl = document.getElementById('snapList');
+  listEl.innerHTML = '<span style="font-size:11px;color:var(--muted);">Caricamento...</span>';
+  try {
+    const data = await sbGet('pn_snapshot?mese=eq.'+mese+'&anno=eq.'+anno+'&order=data_snapshot.asc&select=id,nave_id,nave_nome,mese,anno,data_snapshot,personale,totale_bordo,totale_confermati,budget_reparto');
+    snapshotData = data;
+console.log('budget_reparto primo record:', data[0]?.budget_reparto);
+    if(!data || data.length === 0) {
+      listEl.innerHTML = '<span style="font-size:11px;color:var(--muted);">Nessuno snapshot disponibile per questo periodo.</span>';
+      document.getElementById('snapBody').innerHTML = '<div class="snap-empty">Nessuno snapshot trovato.</div>';
+      return;
+    }
+    // Raggruppa per data_snapshot (giorno)
+    const dateUniche = [...new Set(data.map(r => r.data_snapshot ? r.data_snapshot.split('T')[0] : ''))].filter(Boolean);
+    listEl.innerHTML = '<span style="font-size:10px;color:var(--muted);align-self:center;margin-right:4px;">Snapshot disponibili:</span>'
+      + dateUniche.map(d => {
+          const dt = new Date(d);
+          const label = dt.getDate().toString().padStart(2,'0')+'/'+(dt.getMonth()+1).toString().padStart(2,'0')+'/'+dt.getFullYear();
+          return '<div class="snap-date-pill" onclick="selectSnapshot(\''+d+'\')" data-date="'+d+'">'+label+'</div>';
+        }).join('');
+    // Seleziona automaticamente l'ultimo
+    selectSnapshot(dateUniche[dateUniche.length-1]);
+  } catch(e) { listEl.innerHTML = '<span style="font-size:11px;color:var(--danger);">Errore: '+escHtml(e.message)+'</span>'; }
+}
+
+function selectSnapshot(dateStr) {
+  // Aggiorna pills
+  document.querySelectorAll('.snap-date-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.date === dateStr);
+  });
+  // Filtra righe per quella data
+  const righe = snapshotData.filter(r => r.data_snapshot && r.data_snapshot.startsWith(dateStr));
+  snapshotSelData = righe;
+  renderSnapshotBody(righe);
+}
+
+function renderSnapshotBody(righe) {
+  const body = document.getElementById('snapBody');
+  if(!righe || righe.length === 0) { body.innerHTML = '<div class="snap-empty">Nessun dato.</div>'; return; }
+
+  const ORDINE_NAVI_SNAP = ['Moby Fantasy','Moby Legacy','Moby Aki','Moby Wonder','Moby Orli','Moby Kiss','Vincenzo Florio','Raffaele Rubattino','Moby Tommy'];
+  const naviOrd = [...ORDINE_NAVI_SNAP.map(n => righe.find(r => r.nave_nome && r.nave_nome.toLowerCase()===n.toLowerCase())).filter(Boolean),
+    ...righe.filter(r => !ORDINE_NAVI_SNAP.map(n=>n.toLowerCase()).includes((r.nave_nome||'').toLowerCase()))];
+
+  // Calcola totali flotta
+  let totBordoC=0,totConfC=0,totBudC=0,totBordoCu=0,totConfCu=0,totBudCu=0;
+  let totIT=0,totCOM=0,totEX=0,totU=0,totD=0,totMin=0;
+
+  naviOrd.forEach(r => {
+    const personale = r.personale || [];
+    const repartiInfo = calcolaRepartiSnap(personale, r.nave_id, r.budget_reparto || {});
+    repartiInfo.forEach(rep => {
+      if(REPARTI_CUCINA.includes(rep.nome)){totBordoCu+=rep.bordo;totConfCu+=rep.conf;totBudCu+=rep.budget;}
+      else{totBordoC+=rep.bordo;totConfC+=rep.conf;totBudC+=rep.budget;}
+    });
+    const demo = calcolaDemoSnap(personale);
+    totIT+=demo.it; totCOM+=demo.com; totEX+=demo.ex;
+    totU+=demo.u; totD+=demo.d; totMin+=demo.min;
+  });
+
+  const copC = totBudC>0?Math.round(totBordoC/totBudC*100):0;
+  const copCu = totBudCu>0?Math.round(totBordoCu/totBudCu*100):0;
+  const totAll = totIT+totCOM+totEX;
+  const totGen = totU+totD+totMin;
+
+  let html = '';
+
+  // TOTALI CAMERA/CUCINA
+  html += '<div class="snap-totali">'
+    +'<div class="snap-tot-card"><div class="snap-tot-title">📷 Camera — Totale flotta</div>'
+    +'<div class="snap-tot-row"><span class="snap-tot-lbl">A bordo</span><span class="snap-tot-val">'+totBordoC+'</span></div>'
+    +'<div class="snap-tot-row"><span class="snap-tot-lbl">Confermati</span><span class="snap-tot-val ok">'+totConfC+'</span></div>'
+    +'<div class="snap-tot-row"><span class="snap-tot-lbl">Budget</span><span class="snap-tot-val">'+totBudC+'</span></div>'
+    +'<div class="snap-tot-row"><span class="snap-tot-lbl">Copertura</span><span class="snap-tot-val '+(copC>=90?'ok':'')+'">'+( totBudC>0?copC+'%':'—')+'</span></div>'
+    +'</div>'
+    +'<div class="snap-tot-card"><div class="snap-tot-title">🍳 Cucina — Totale flotta</div>'
+    +'<div class="snap-tot-row"><span class="snap-tot-lbl">A bordo</span><span class="snap-tot-val">'+totBordoCu+'</span></div>'
+    +'<div class="snap-tot-row"><span class="snap-tot-lbl">Confermati</span><span class="snap-tot-val ok">'+totConfCu+'</span></div>'
+    +'<div class="snap-tot-row"><span class="snap-tot-lbl">Budget</span><span class="snap-tot-val">'+totBudCu+'</span></div>'
+    +'<div class="snap-tot-row"><span class="snap-tot-lbl">Copertura</span><span class="snap-tot-val '+(copCu>=90?'ok':'')+'">'+( totBudCu>0?copCu+'%':'—')+'</span></div>'
+    +'</div></div>';
+
+  // NAZIONALITA E GENERE FLOTTA
+  html += '<div class="snap-demo">'
+    +'<div class="snap-demo-card"><div class="snap-demo-title">🌍 Nazionalità — Totale flotta</div>'
+    +'<div class="snap-demo-row"><span class="snap-demo-lbl"><span class="snap-demo-dot" style="background:#0F2A4A;"></span>Italiani</span><span><span class="snap-demo-val">'+totIT+'</span><span class="snap-demo-pct">'+(totAll>0?'('+Math.round(totIT/totAll*100)+'%)':'')+'</span></span></div>'
+    +'<div class="snap-demo-row"><span class="snap-demo-lbl"><span class="snap-demo-dot" style="background:#1D9E75;"></span>Comunitari</span><span><span class="snap-demo-val">'+totCOM+'</span><span class="snap-demo-pct">'+(totAll>0?'('+Math.round(totCOM/totAll*100)+'%)':'')+'</span></span></div>'
+    +'<div class="snap-demo-row"><span class="snap-demo-lbl"><span class="snap-demo-dot" style="background:#BA7517;"></span>Ex-Comunitari</span><span><span class="snap-demo-val">'+totEX+'</span><span class="snap-demo-pct">'+(totAll>0?'('+Math.round(totEX/totAll*100)+'%)':'')+'</span></span></div>'
+    +'<div class="snap-demo-row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;"><span class="snap-demo-lbl" style="font-weight:600;color:var(--text);">Totale</span><span class="snap-demo-val">'+totAll+'</span></div>'
+    +'</div>'
+    +'<div class="snap-demo-card"><div class="snap-demo-title">👥 Genere — Totale flotta</div>'
+    +'<div class="snap-demo-row"><span class="snap-demo-lbl"><span class="snap-demo-dot" style="background:#0F2A4A;"></span>Uomini</span><span><span class="snap-demo-val">'+totU+'</span><span class="snap-demo-pct">'+(totGen>0?'('+Math.round(totU/totGen*100)+'%)':'')+'</span></span></div>'
+    +'<div class="snap-demo-row"><span class="snap-demo-lbl"><span class="snap-demo-dot" style="background:#5DCAA5;"></span>Donne</span><span><span class="snap-demo-val">'+totD+'</span><span class="snap-demo-pct">'+(totGen>0?'('+Math.round(totD/totGen*100)+'%)':'')+'</span></span></div>'
+    +'<div class="snap-demo-row"><span class="snap-demo-lbl"><span class="snap-demo-dot" style="background:#EF9F27;"></span>Minorenni</span><span><span class="snap-demo-val">'+totMin+'</span><span class="snap-demo-pct">'+(totGen>0?'('+Math.round(totMin/totGen*100)+'%)':'')+'</span></span></div>'
+    +'<div class="snap-demo-row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;"><span class="snap-demo-lbl" style="font-weight:600;color:var(--text);">Totale</span><span class="snap-demo-val">'+totGen+'</span></div>'
+    +'</div></div>';
+
+  // TABELLA PER NAVE
+  naviOrd.forEach(r => {
+    const personale = r.personale || [];
+    const repartiInfo = calcolaRepartiSnap(personale, r.nave_id, r.budget_reparto || {});
+    if(repartiInfo.length === 0) return;
+    const demo = calcolaDemoSnap(personale);
+    const totB = repartiInfo.reduce((a,x)=>a+x.bordo,0);
+    const totC = repartiInfo.reduce((a,x)=>a+x.conf,0);
+    const totBud = repartiInfo.reduce((a,x)=>a+x.budget,0);
+    const totCop = totBud>0?Math.round(totB/totBud*100):0;
+    const copBadge = totCop>=100?'snap-badge-over':totCop>=90?'snap-badge-ok':'snap-badge-warn';
+    const totP = demo.it+demo.com+demo.ex;
+
+    html += '<div class="snap-nave-title">🚢 '+escHtml(r.nave_nome||'—')+'</div>';
+    html += '<table class="snap-table"><thead>'
+      +'<tr class="head-group"><th class="h-base" colspan="5">Copertura</th><th class="h-naz" colspan="3">Nazionalità</th><th class="h-gen" colspan="3">Genere</th></tr>'
+      +'<tr class="head-cols"><th>Reparto</th><th>Bordo</th><th>Conf.</th><th>Budget</th><th>Cop.%</th><th>IT</th><th>COM</th><th>Ex-COM</th><th>U</th><th>D</th><th>Min.</th></tr>'
+      +'</thead><tbody>';
+
+    repartiInfo.forEach(rep => {
+      const cop = rep.budget>0?Math.round(rep.bordo/rep.budget*100):0;
+      const badge = cop>=100?'snap-badge-over':cop>=90?'snap-badge-ok':'snap-badge-warn';
+      html += '<tr><td>'+escHtml(rep.nome)+'</td><td>'+rep.bordo+'</td><td>'+rep.conf+'</td><td>'+rep.budget+'</td>'
+        +'<td>'+(rep.budget>0?'<span class="'+badge+'">'+cop+'%</span>':'—')+'</td>'
+        +'<td>'+rep.it+'</td><td>'+rep.com+'</td><td>'+rep.ex+'</td>'
+        +'<td>'+rep.u+'</td><td>'+rep.d+'</td><td>'+rep.min+'</td></tr>';
+    });
+
+    html += '<tr class="totale-row"><td>Totale</td><td>'+totB+'</td><td>'+totC+'</td><td>'+totBud+'</td>'
+      +'<td>'+(totBud>0?'<span class="'+copBadge+'">'+totCop+'%</span>':'—')+'</td>'
+      +'<td>'+demo.it+'</td><td>'+demo.com+'</td><td>'+demo.ex+'</td>'
+      +'<td>'+demo.u+'</td><td>'+demo.d+'</td><td>'+demo.min+'</td></tr>';
+    html += '</tbody></table>';
+  });
+
+  body.innerHTML = html;
+}
+
+function calcolaRepartiSnap(personale, naveId, budgetReparto) {
+  const byRep = {};
+  // Prima passata: costruisci struttura e assegna budget una volta per reparto
+  personale.forEach(p => {
+    const repNome = p.pn_reparti ? p.pn_reparti.nome : null;
+    if(!repNome) return;
+    if(!byRep[repNome]) {
+      const bud = budgetReparto ? (budgetReparto[String(p.reparto_id)] || 0) : 0;
+      byRep[repNome] = {nome:repNome, bordo:0, conf:0, budget:bud, it:0, com:0, ex:0, u:0, d:0, min:0};
+    }
+    const r = byRep[repNome];
+    if(p.stato==='bordo') r.bordo++; else r.conf++;
+    const dip = p.pn_dipendenti;
+    if(dip) {
+      const naz = (dip.nazionalita||'').trim();
+      if(naz==='Italia'||!naz) r.it++; else if(naz==='Com') r.com++; else if(naz==='Ex-Com') r.ex++;
+      const sesso = dip.sesso||'';
+      const eta = dip.data_nascita ? calcEta(dip.data_nascita) : null;
+      if(eta !== null && eta < 18) r.min++;
+      else if(sesso==='M') r.u++; else if(sesso==='F') r.d++;
+    }
+  });
+  return ORDINE_REPARTI.map(n => byRep[n]).filter(Boolean);
+}
+
+function calcolaDemoSnap(personale) {
+  let it=0,com=0,ex=0,u=0,d=0,min=0;
+  personale.forEach(p => {
+    const dip = p.pn_dipendenti;
+    if(!dip) return;
+    const naz = (dip.nazionalita||'').trim();
+    if(naz==='Italia'||!naz) it++; else if(naz==='Com') com++; else if(naz==='Ex-Com') ex++;
+    const sesso = dip.sesso||'';
+    const eta = dip.data_nascita ? calcEta(dip.data_nascita) : null;
+    if(eta !== null && eta < 18) min++;
+    else if(sesso==='M') u++; else if(sesso==='F') d++;
+  });
+  return {it,com,ex,u,d,min};
+}
+
+function generaPDFSnapshot() {
+  if(!snapshotSelData || snapshotSelData.length===0) { showToast('Nessuno snapshot selezionato','error'); return; }
+  showToast('PDF Snapshot — prossimamente','');
+}
 function closeNotifAmm() {
   document.getElementById('notifAmmOverlay').classList.remove('show');
 }
@@ -4572,7 +4832,7 @@ document.addEventListener('click', function(e) {
     </div>
     <div class="notif-amm-body" id="notifAmmBody"></div>
     <div class="notif-amm-footer">
-      <button class="btn-filtri" style="flex:1;" onclick="segnaAllVisto()">✓ Segna tutti come visti</button>
+<button class="btn-filtri" style="flex:1;" onclick="segnaAllVisto()">✓ Presa Visione</button>
       <button class="btn-filtri" onclick="closeNotifAmm()">Chiudi</button>
     </div>
   </div>
@@ -4588,6 +4848,34 @@ document.addEventListener('click', function(e) {
       <button class="btn-cancel" onclick="closeModalVisione()">Chiudi</button>
       <button class="btn-save" id="btnPresoVisione" onclick="saveVisione()">✓ Preso visione</button>
     </div>
+  </div>
+</div>
+<!-- PANNELLO SNAPSHOT -->
+<div class="snap-overlay" id="snapOverlay" onclick="closeSnapshot()"></div>
+<div class="snap-panel" id="snapPanel">
+  <div class="snap-head">
+    <span class="snap-title">📷 Consultazione Snapshot</span>
+    <button class="snap-close" onclick="closeSnapshot()">✕</button>
+  </div>
+  <div class="snap-filters">
+    <select class="snap-sel" id="snapMese">
+      <option value="1">Gennaio</option><option value="2">Febbraio</option>
+      <option value="3">Marzo</option><option value="4">Aprile</option>
+      <option value="5">Maggio</option><option value="6">Giugno</option>
+      <option value="7">Luglio</option><option value="8">Agosto</option>
+      <option value="9">Settembre</option><option value="10">Ottobre</option>
+      <option value="11">Novembre</option><option value="12">Dicembre</option>
+    </select>
+    <select class="snap-sel" id="snapAnno"></select>
+    <button class="snap-btn" onclick="loadSnapshotList()">Carica</button>
+    <div style="flex:1;"></div>
+    <button class="snap-btn pdf" onclick="generaPDFSnapshot()">📄 Esporta PDF</button>
+  </div>
+  <div class="snap-list" id="snapList">
+    <span style="font-size:11px;color:var(--muted);">Seleziona mese/anno e clicca Carica</span>
+  </div>
+  <div class="snap-body" id="snapBody">
+    <div class="snap-empty">Nessuno snapshot caricato.</div>
   </div>
 </div>
 </body>
