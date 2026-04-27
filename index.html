@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Posizionamento Navi — v29</title>
+<title>Posizionamento Navi — v30</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -195,7 +195,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .stat-ok{color:var(--teal)!important;}
 .stat-warn{color:var(--amber)!important;}
 .stat-div{color:var(--border);margin:0 4px;font-size:16px;}
-.btn-add{font-size:11px;padding:4px 12px;border-radius:6px;background:var(--navy);color:#fff;border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;width:100px;text-align:center;}
+.btn-add{font-size:11px;padding:4px 12px;border-radius:6px;background:var(--navy);color:#fff;border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;width:120px;text-align:center;}
 
 .btn-add:hover{background:var(--navy2);}
 .btn-filtri{font-size:11px;padding:4px 12px;border-radius:6px;background:#fff;color:var(--navy);border:1.5px solid var(--navy);cursor:pointer;font-weight:500;font-family:inherit;white-space:nowrap;flex-shrink:0;width:120px;text-align:center;}
@@ -235,7 +235,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .cascade-count.zero{background:#f1f5f9;color:#9ca3af;}
 
 /* PANNELLO STATS SINISTRA */
-.stats-left-wrap{position:fixed;top:136px;left:16px;width:210px;z-index:140;display:none;flex-direction:column;gap:8px;}
+.stats-left-wrap{position:fixed;top:136px;left:16px;width:170px;z-index:140;display:none;flex-direction:column;gap:8px;}
 .stats-left-wrap.show{display:flex;}
 .stats-box{background:var(--white);border:0.5px solid var(--border);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.10);overflow:hidden;}
 .stats-box-head{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
@@ -245,6 +245,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .stats-box-arrow{font-size:10px;color:rgba(255,255,255,.8);transition:transform .2s;}
 .stats-box.closed .stats-box-arrow{transform:rotate(180deg);}
 .stats-box-body{padding:8px 10px;display:block;}
+#appuntiBox .stats-box-body{padding:8px;}
+#appuntiText{width:100%;min-height:80px;}
 .stats-box.closed .stats-box-body{display:none;}
 .stats-box-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid #f1f5f9;font-size:11px;}
 .stats-box-row:last-child{border-bottom:none;}
@@ -275,6 +277,18 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .notif-amm-close{position:absolute;top:12px;right:12px;background:none;border:none;color:rgba(255,255,255,.8);font-size:16px;cursor:pointer;line-height:1;}
 
 /* Q&A TOPIC CASCADE */
+.nov-item{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;}
+.nov-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none;transition:background .14s;}
+.nov-head:hover{background:var(--bg);}
+.nov-item.open .nov-head{background:var(--navy);}
+.nov-title{font-size:12px;font-weight:600;}
+.nov-item.open .nov-title{color:#fff;}
+.nov-arrow{font-size:9px;color:var(--muted);transition:transform .2s;}
+.nov-item.open .nov-arrow{transform:rotate(180deg);color:rgba(255,255,255,.7);}
+.nov-body{display:none;padding:12px 14px;border-top:1px solid var(--border);}
+.nov-item.open .nov-body{display:block;}
+.nov-blue{border-color:#bfdbfe;}.nov-blue .nov-head{background:#f0f7ff;}.nov-blue.open .nov-head{background:#1e40af;}.nov-blue .nov-title{color:#1e40af;}.nov-blue .nov-body{background:#f0f7ff;}
+.nov-green{border-color:#bbf7d0;}.nov-green .nov-head{background:#f0fdf4;}.nov-green.open .nov-head{background:#166534;}.nov-green .nov-title{color:#166534;}.nov-green .nov-body{background:#f0fdf4;}
 .qa-topic-item{border:0.5px solid var(--border);border-radius:8px;margin-bottom:7px;overflow:hidden;}
 .qa-topic-head{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;cursor:pointer;background:var(--white);user-select:none;}
 .qa-topic-head:hover{background:var(--bg);}
@@ -623,7 +637,7 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v29 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div class="login-version">Posizionamento Navi &mdash; v30 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
       <div style="text-align:center;margin-top:10px;font-size:10px;color:#c0c4cc;">&copy; 2025 S.M.A.R.T Solutions &mdash; Tutti i diritti riservati</div>
     </div>
   </div>
@@ -664,12 +678,13 @@ select.mform-control{cursor:pointer;}
         </div>
       </div>
       <button class="btn-orange" onclick="toggleTDPanel()" id="btnTD">&#128197; TD</button>
-      <button class="btn-orange" id="btnMsg" onclick="openModalMsg()"><span class="msg-dot"></span>Messaggi</button>
-      <span class="alert-td-badge" id="alertTDBadge" onclick="toggleTDPanel()"><span class="alert-td-badge-dot"></span><span id="alertTDText">TD senza risposta — PROVVEDERE</span></span>
+    <button class="btn-orange" id="btnMsg" onclick="openModalMsg()"><span class="msg-dot"></span>Messaggi</button>
+      <button class="btn-orange" id="btnAppunti" onclick="toggleAppuntiPanel()">📝 Appunti</button>
     </div>
     <div class="topbar-right">
       <span class="user-pill" id="posUserLabel"></span>
       <button class="btn-orange" id="btnExcel" onclick="esportaExcel()" style="display:none" title="Esporta Excel">&#128202; Excel</button>
+     <button class="btn-topbar" id="btnProg" style="display:none" onclick="showScreen('prog')">&#128197; Prog.</button>
       <button class="btn-topbar" id="btnAmm" style="display:none" onclick="showScreen('admin')">&#9881; AMM</button>
       <button class="btn-help" onclick="openHelp()" title="Guida">?</button>
       <button class="btn-logout" onclick="doLogout()">Esci</button>
@@ -694,6 +709,7 @@ select.mform-control{cursor:pointer;}
       </div>
     </div>
   <div style="display:flex;gap:6px;align-items:center;">
+   <span class="alert-td-badge" id="alertTDBadge" onclick="toggleTDPanel()"><span class="alert-td-badge-dot"></span><span id="alertTDText">TD senza risposta — PROVVEDERE</span></span>
      <button class="btn-add" onclick="openModalAddPos()">+ Aggiungi</button>
     <button class="btn-filtri" id="btnSnapshot" onclick="openSnapshot()">&#128247; Snapshot</button>
       <button class="btn-filtri" id="btnRiepilogo" onclick="toggleDashboard()">&#128202; Riepilogo navi</button>
@@ -716,7 +732,44 @@ select.mform-control{cursor:pointer;}
     </div>
     <div class="pos-inner" id="mainContent"><div class="loading-bar">Caricamento...</div></div>
   </div>
-  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v29 &mdash; Uso interno riservato</div>
+  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v30 &mdash; Uso interno riservato</div>
+</div>
+
+<!-- PROGRAMMAZIONE -->
+<div class="screen" id="screenProg">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:5px;">
+      <span class="brand">Programmazione Turni</span>
+    </div>
+    <div class="topbar-right">
+      <span class="user-pill" id="progUserLabel"></span>
+      <button class="btn-topbar" onclick="showScreen('pos')">&#8592; Posizionamento</button>
+      <button class="btn-logout" onclick="doLogout()">Esci</button>
+    </div>
+  </div>
+  <!-- SUBBAR: navi multi-select + anno -->
+  <div class="subbar" style="gap:0;padding:0;">
+    <div style="font-size:10px;color:var(--muted);padding:0 8px 0 14px;white-space:nowrap;display:flex;align-items:center;flex-shrink:0;">Navi:</div>
+    <div style="display:flex;overflow-x:auto;flex:1;" id="progNavePills"></div>
+    <div style="display:flex;align-items:center;gap:8px;padding:0 14px;border-left:1px solid var(--border);flex-shrink:0;">
+      <select class="mese-select" id="progAnno" onchange="loadProg()">
+        <option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
+      </select>
+      <button class="btn-filtri" onclick="loadProg()">&#8635; Aggiorna</button>
+    </div>
+  </div>
+  <!-- BODY: cascade mansioni + contenuto -->
+  <div style="display:flex;flex:1;overflow:hidden;height:calc(100vh - 88px);">
+    <!-- CASCADE SINISTRO MANSIONI -->
+    <div style="width:190px;flex-shrink:0;background:#fff;border-right:1px solid var(--border);overflow-y:auto;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:12px 14px 8px;">Mansioni</div>
+      <div id="progMansioniList"></div>
+    </div>
+    <!-- CONTENUTO PRINCIPALE -->
+    <div style="flex:1;overflow-y:auto;padding:16px 20px;" id="progContent">
+      <div style="color:var(--muted);font-size:12px;padding:40px;text-align:center;">Seleziona una mansione</div>
+    </div>
+  </div>
 </div>
 
 <!-- ADMIN -->
@@ -746,6 +799,15 @@ select.mform-control{cursor:pointer;}
         </button>
         <button class="nav-item" id="anav-account" onclick="showAPage('account')">
           <svg viewBox="0 0 16 16"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M10 10l1.5 1.5L14 9"/></svg>Il mio account
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Programmazione</div>
+        <button class="nav-item" id="anav-progcategorie" onclick="showAPage('progcategorie')">
+          <svg viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M5 5h6M5 8h6M5 11h3"/></svg>Categorie prog.
+        </button>
+        <button class="nav-item" id="anav-progdipendenti" onclick="showAPage('progdipendenti')">
+          <svg viewBox="0 0 16 16"><circle cx="6" cy="5" r="3"/><path d="M1 14c0-2.8 2.2-5 5-5"/><circle cx="12" cy="11" r="3"/><path d="M10.5 11h3M12 9.5v3"/></svg>Dipendenti prog.
         </button>
       </div>
       <div class="nav-section">
@@ -903,9 +965,39 @@ select.mform-control{cursor:pointer;}
           </table>
         </div>
       </div>
+      <div class="apage" id="apage-progcategorie">
+        <div class="page-title">Categorie Programmazione</div>
+        <div class="page-sub">Mansioni soggette a programmazione turni. ✏️ rinomina &nbsp;·&nbsp; 🗑 elimina</div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;width:300px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--border);background:var(--bg);">
+            <span style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;" id="countProgCat">—</span>
+            <button class="btn-new" onclick="openModalProgCat()">＋ Nuova</button>
+          </div>
+          <div id="tbodyProgCat"></div>
+        </div>
+      </div>
+      <div class="apage" id="apage-progdipendenti">
+        <div class="page-title">Dipendenti Programmazione</div>
+        <div class="page-sub">Associa i dipendenti alle categorie per renderli disponibili nella programmazione turni.</div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;max-width:660px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);background:var(--bg);">
+            <span class="filter-label">Categoria</span>
+            <select class="filter-select" id="progDipFilter" onchange="loadProgDipendenti()">
+              <option value="">Tutte</option>
+            </select>
+            <div style="flex:1;"></div>
+            <button class="btn-new" onclick="openModalProgDip()">＋ Aggiungi dipendente</button>
+          </div>
+          <table class="admin-table">
+           <thead><tr><th>Nominativo</th><th>Matricola</th><th>Qualifica</th><th>Categoria</th><th style="width:50px;"></th></tr></thead>
+            <tbody id="tbodyProgDip"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions &mdash; Posizionamento Navi v29 &mdash; Uso interno riservato</div>
+  <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions &mdash; Posizionamento Navi v30 &mdash; Uso interno riservato</div>
+</div>
 </div>
 
 <!-- MODAL POSIZIONAMENTO -->
@@ -1382,7 +1474,7 @@ select.mform-control{cursor:pointer;}
   <div class="modal" style="max-width:580px;max-height:88vh;display:flex;flex-direction:column;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0;">
       <div class="modal-title" style="margin-bottom:0;">&#9432; Guida rapida</div>
-      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v29</span>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v30</span>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:12px;flex-shrink:0;">
       <button id="helpTabGuida" onclick="switchHelpTab('guida')" style="font-size:12px;padding:5px 14px;border-radius:6px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-family:inherit;font-weight:500;">Guida</button>
@@ -1391,33 +1483,70 @@ select.mform-control{cursor:pointer;}
     <div style="flex:1;overflow-y:auto;">
 
       <!-- TAB GUIDA -->
-      <div id="helpViewGuida">
-        <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:11px 14px;margin-bottom:12px;">
-<div style="font-weight:600;color:#1e40af;font-size:12px;margin-bottom:6px;">&#127381; Novità v29</div>
-          <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
-            <li><strong>Interfaccia</strong>
-              <ul style="padding-left:14px;margin-top:4px;display:flex;flex-direction:column;gap:3px;">
-                <li>Topbar e subbar riorganizzate</li>
-                <li>Pannello statistiche Camera/Cucina a cascade a sinistra</li>
-              </ul>
-            </li>
-            <li><strong>Funzionalità</strong>
-              <ul style="padding-left:14px;margin-top:4px;display:flex;flex-direction:column;gap:3px;">
-                <li>Aggiunta opzione <strong>Sua Richiesta</strong> nella rimozione dipendente</li>
-                <li>Storico allargato con switch ordine Data ↔ A-Z</li>
-              </ul>
-            </li>
-          </ul>
+<div id="helpViewGuida">
+        <!-- v30 -->
+        <div class="nov-item nov-blue open">
+          <div class="nov-head" onclick="this.closest('.nov-item').classList.toggle('open')">
+            <span class="nov-title">&#127381; Novità v30</span>
+            <span class="nov-arrow">&#9660;</span>
+          </div>
+          <div class="nov-body">
+            <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
+              <li><strong>&#128221; Bottone Appunti</strong> — in topbar, vicino a Messaggi. Apre un pannello popup con Nome e Nota per ogni nave. Ordinamento A&#8594;Z ed esportazione PDF.</li>
+            </ul>
+          </div>
         </div>
-        <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:11px 14px;margin-bottom:12px;">
-          <div style="font-weight:600;color:#1e40af;font-size:12px;margin-bottom:6px;">&#127381; Novità v28</div>
-          <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
-           <li><strong>&#128196; Bottone Esporta</strong> — sostituisce il vecchio PDF con un menu cascade: <em>Posizionamento</em>, <em>Situazione TD</em> e <em>Riepilogo Navi</em> (solo AMM/Semi-AMM) in un unico punto.</li>
-            <li><strong>&#10003;/&#10007; Flag pallino TD</strong> — vicino alla data TD compare un <strong style="color:#A32D2D;">✗ rosso</strong> se l'ufficio non ha ancora letto la tua comunicazione, un <strong style="color:#27500A;">✓ verde</strong> quando l'hanno presa in visione.</li>
-           <li><strong>&#128203; Nota TD</strong> — la nota nel bollino TD ha un massimo di 71 caratteri.</li>
-            <li><strong>&#9993; Lettura messaggi obbligatoria</strong> — all'apertura dell'app, se ci sono messaggi non letti, appare una finestra che blocca l'accesso finché non si preme "Leggi ora".</li>
-       <li><strong>&#9888; Alert TD senza risposta</strong> — nella barra in alto appare un badge arancione fisso con il numero di contratti TD ancora senza comunicazione. Sparisce solo quando tutti i TD hanno una risposta.</li>
-          </ul>
+        <!-- v30 -->
+        <div class="nov-item nov-blue">
+          <div class="nov-head" onclick="this.closest('.nov-item').classList.toggle('open')">
+            <span class="nov-title">&#127381; Novità v29</span>
+            <span class="nov-arrow">&#9660;</span>
+          </div>
+          <div class="nov-body">
+            <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
+              <li><strong>Interfaccia</strong>
+                <ul style="padding-left:14px;margin-top:4px;display:flex;flex-direction:column;gap:3px;">
+                  <li>Topbar e subbar riorganizzate</li>
+                  <li>Pannello statistiche Camera/Cucina a cascade a sinistra</li>
+                </ul>
+              </li>
+              <li><strong>Funzionalità</strong>
+                <ul style="padding-left:14px;margin-top:4px;display:flex;flex-direction:column;gap:3px;">
+                  <li>Aggiunta opzione <strong>Sua Richiesta</strong> nella rimozione dipendente</li>
+                  <li>Storico allargato con switch ordine Data &#8596; A-Z</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- v28 -->
+        <div class="nov-item nov-blue">
+          <div class="nov-head" onclick="this.closest('.nov-item').classList.toggle('open')">
+            <span class="nov-title">&#127381; Novità v28</span>
+            <span class="nov-arrow">&#9660;</span>
+          </div>
+          <div class="nov-body">
+            <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
+              <li><strong>&#128196; Bottone Esporta</strong> — sostituisce il vecchio PDF con un menu cascade: <em>Posizionamento</em>, <em>Situazione TD</em> e <em>Riepilogo Navi</em> (solo AMM/Semi-AMM) in un unico punto.</li>
+              <li><strong>&#10003;/&#10007; Flag pallino TD</strong> — vicino alla data TD compare un <strong style="color:#A32D2D;">&#10007; rosso</strong> se l'ufficio non ha ancora letto la tua comunicazione, un <strong style="color:#27500A;">&#10003; verde</strong> quando l'hanno presa in visione.</li>
+              <li><strong>&#128203; Nota TD</strong> — la nota nel bollino TD ha un massimo di 71 caratteri.</li>
+              <li><strong>&#9993; Lettura messaggi obbligatoria</strong> — all'apertura dell'app, se ci sono messaggi non letti, appare una finestra che blocca l'accesso finché non si preme "Leggi ora".</li>
+              <li><strong>&#9888; Alert TD senza risposta</strong> — nella barra in alto appare un badge arancione fisso con il numero di contratti TD ancora senza comunicazione.</li>
+            </ul>
+          </div>
+        </div>
+        <!-- Prossimamente -->
+        <div class="nov-item nov-green">
+          <div class="nov-head" onclick="this.closest('.nov-item').classList.toggle('open')">
+            <span class="nov-title">&#128336; Prossimamente</span>
+            <span class="nov-arrow">&#9660;</span>
+          </div>
+          <div class="nov-body">
+            <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#166534;font-size:12px;">
+              <li><strong>&#128197; Data disponibilità TD</strong> — nel bollino TD il commissario potrà inserire la data di prossima disponibilità del marittimo.</li>
+              <li><strong>&#128260; Rotazione capi servizio</strong> — gestione della rotazione per i marittimi con programma assegnato.</li>
+            </ul>
+          </div>
         </div>
         <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:11px 14px;margin-bottom:14px;">
           <div style="font-weight:600;color:#166534;font-size:12px;margin-bottom:6px;">&#128336; Prossimamente</div>
@@ -1691,25 +1820,684 @@ const ORDINE_REPARTI = ['Hotel Management','Ristorante','Self/Bistrot','Bar','Ca
 const REPARTI_CUCINA = ['Cucina'];
 const ORDINE_CAMERA = ['Capo Commissario','1.Commissario','2.Commissario','3.Commissario','Assistente Commissario','Assistente D\u2019Ufficio','1.Cameriere','Cameriere','Garzone Di Camera','Piccolo Di Camera'];
 const ORDINE_CUCINA_Q = ['Capo Cuoco','Cuoco Equipaggio','Dispensiere Equipaggio','1.Cuoco','2.Cuoco','3.Cuoco','Garzone Di Cucina','Piccolo Di Cucina','Macellaio','Pasticcere','Panettiere','Cambusiere'];
+const ORDINE_MANSIONI_CAMERA = ['Commissario','Assistente','Ufficiali','1° Cameriere','Ristorante','Saletta','Self Service','Bar Notturno','Cabine Letti','Cabine Bagni','Cabine Aspirapolvere','Notturno Ufficio','Ripostiere','Squadra Ecologica','Bar Sport'];
+const ORDINE_MANSIONI_CUCINA = ['Capo Cuoco','Cucina Calda','Cucina Fredda','Cucina Pagliaccia','Cuoco Equipaggio','Cambusiere','Panettiere','Bar Sport'];
 
 // ═══════════════════════════════════════════
 // SCREEN NAV
 // ═══════════════════════════════════════════
+// ═══════════════════════════════════════════
+// PROGRAMMAZIONE TURNI
+// ═══════════════════════════════════════════
+let progNaveAttive = [];
+let progMansione = null;
+let progAnnoVal = 2026;
+
+function naviSorted() {
+  const _ORD = [3,4,2,1,5,10,9,8,6];
+  return [...navi].sort((a,b)=>{const ia=_ORD.indexOf(a.id),ib=_ORD.indexOf(b.id);return(ia===-1?99:ia)-(ib===-1?99:ib);});
+}
+
+async function initProg() {
+  document.getElementById('progUserLabel').textContent = utente.nome || utente.username;
+  progAnnoVal = parseInt(document.getElementById('progAnno').value);
+  const pills = document.getElementById('progNavePills');
+  pills.innerHTML = naviSorted().map(n => `
+    <span class="prog-nave-pill ${progNaveAttive.includes(n.id)?'active':''}"
+      onclick="toggleProgNave(${n.id})" data-id="${n.id}"
+      style="font-size:11px;font-weight:500;padding:10px 14px;cursor:pointer;
+      border-bottom:2px solid ${progNaveAttive.includes(n.id)?'var(--navy)':'transparent'};
+      color:${progNaveAttive.includes(n.id)?'var(--navy)':'var(--muted)'};
+      white-space:nowrap;transition:all .14s;display:inline-block;">
+      ${escHtml(n.nome)}
+    </span>`).join('');
+  // Mansioni cascade
+  await loadProgMansioni();
+}
+
+function toggleProgNave(id) {
+  if(progNaveAttive.includes(id)) progNaveAttive = progNaveAttive.filter(x=>x!==id);
+  else progNaveAttive.push(id);
+  initProg();
+  if(progMansione) loadProgPeriodi();
+}
+
+async function loadProgMansioni() {
+  const cats = await sbGet('pn_prog_categorie?order=ordine');
+  const list = document.getElementById('progMansioniList');
+  if(!cats||cats.length===0) { list.innerHTML='<div style="padding:14px;font-size:12px;color:var(--muted);">Nessuna categoria</div>'; return; }
+  // Per ogni categoria carica stato copertura
+  const periodi = await sbGet('pn_programmazione?select=categoria,data_imbarco,data_sbarco,nave_id');
+  list.innerHTML = cats.map(c => {
+    const gap = hasGap(periodi||[], c.nome, progNaveAttive, progAnnoVal);
+    const active = progMansione === c.nome;
+    return `<div onclick="selProgMansione('${escHtml(c.nome)}')"
+      style="padding:9px 14px;font-size:12px;cursor:pointer;border-left:3px solid ${active?'var(--navy)':'transparent'};
+      background:${active?'#eef2f7':'transparent'};font-weight:${active?'600':'400'};
+      color:${active?'var(--navy)':'var(--text)'};display:flex;align-items:center;justify-content:space-between;transition:all .13s;">
+      <span>${escHtml(c.nome)}</span>
+      <span style="font-size:9px;padding:1px 6px;border-radius:8px;font-weight:500;
+        background:${gap?'#fdecea':periodi&&periodi.filter(p=>p.categoria===c.nome).length>0?'#d4f0e4':'#f0ede8'};
+        color:${gap?'var(--red)':periodi&&periodi.filter(p=>p.categoria===c.nome).length>0?'#0f7a52':'var(--muted)'};">
+        ${gap?'!':periodi&&periodi.filter(p=>p.categoria===c.nome&&(progNaveAttive.length===0||progNaveAttive.includes(p.nave_id))).length>0?'✓':'—'}
+      </span>
+    </div>`;
+  }).join('');
+}
+
+function hasGap(periodi, cat, naveIds, anno) {
+  const list = periodi.filter(p => p.categoria===cat && (naveIds.length===0||naveIds.includes(p.nave_id)));
+  if(list.length===0) return false;
+  const sorted = [...list].sort((a,b)=>new Date(a.data_imbarco)-new Date(b.data_imbarco));
+  for(let i=0;i<sorted.length-1;i++) {
+    const fine = new Date(sorted[i].data_sbarco);
+    const inizio = new Date(sorted[i+1].data_imbarco);
+    if(inizio > fine) return true;
+  }
+  return false;
+}
+
+async function selProgMansione(nome) {
+  progMansione = nome;
+  await loadProgMansioni();
+  await loadProgPeriodi();
+}
+
+let progAddOpen = false;
+let progVista = 'lista'; // 'lista' | 'gantt'
+async function loadProgPeriodi() {
+  const anno = parseInt(document.getElementById('progAnno').value);
+  progAnnoVal = anno;
+  const naveFilter = progNaveAttive.length>0 ? '&nave_id=in.('+progNaveAttive.join(',')+')' : '';
+  const data = await sbGet(`pn_programmazione?categoria=eq.${encodeURIComponent(progMansione)}&data_imbarco=gte.${anno-1}-06-01&data_sbarco=lte.${anno+1}-06-30${naveFilter}&select=*,pn_dipendenti(id,cognome_nome,matricola),pn_navi(nome)&order=data_imbarco`);
+  const periodi = data||[];
+  const content = document.getElementById('progContent');
+  const oggi = new Date();
+
+  // Raggruppa per nave
+  const naveMap = {};
+  periodi.forEach(p => {
+    const nId = p.nave_id;
+    if(!naveMap[nId]) naveMap[nId] = {nome: p.pn_navi?p.pn_navi.nome:'—', periodi:[]};
+    naveMap[nId].periodi.push(p);
+  });
+
+  // Calcola gaps per nave selezionata
+  function getGaps(ps) {
+    const gaps = [];
+    const sorted = [...ps].sort((a,b)=>new Date(a.data_imbarco)-new Date(b.data_imbarco));
+    for(let i=0;i<sorted.length-1;i++) {
+      const fine = new Date(sorted[i].data_sbarco);
+      const inizio = new Date(sorted[i+1].data_imbarco);
+      const diff = Math.round((inizio-fine)/86400000);
+      if(diff>0) gaps.push({da: sorted[i].data_sbarco, a: sorted[i+1].data_imbarco, gg: diff, afterId: sorted[i].id});
+    }
+    return gaps;
+  }
+
+  function fmtD(d) { if(!d)return'—'; const x=new Date(d); return x.getDate().toString().padStart(2,'0')+'/'+(x.getMonth()+1).toString().padStart(2,'0')+'/'+x.getFullYear(); }
+  function statoP(p) {
+    const i=new Date(p.data_imbarco), s=new Date(p.data_sbarco);
+    if(oggi<i) return {cls:'futuro',lbl:'Programmato'};
+    if(oggi>s) return {cls:'passato',lbl:'Terminato'};
+    return {cls:'attivo',lbl:'● In corso'};
+  }
+
+  const rowStyle = {
+    passato: 'background:#fafaf8;',
+    attivo: 'background:#f0faf6;',
+    futuro: 'background:#f4f7fc;'
+  };
+  const pillStyle = {
+    passato: 'background:#ebebeb;color:#888;',
+    attivo: 'background:#d4f0e4;color:#0f7a52;',
+    futuro: 'background:#dde8f5;color:#1a4a8a;'
+  };
+
+// Riepilogo copertura per nave
+  const naviAttiveList = progNaveAttive.length>0 ? naviSorted().filter(n=>progNaveAttive.includes(n.id)) : naviSorted();
+  const totGiorni = anno%4===0?366:365;
+  let coverHtml = '<div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;">';
+  naviAttiveList.forEach(nav => {
+    const ps = periodi.filter(p=>p.nave_id===nav.id);
+    const coperti = ps.reduce((s,p)=>s+(p.giorni||0),0);
+    const gaps = getGaps(ps);
+    const totGap = gaps.reduce((s,g)=>s+g.gg,0);
+    const attuale = ps.find(p=>{ const i=new Date(p.data_imbarco),s2=new Date(p.data_sbarco); return oggi>=i&&oggi<=s2; });
+    const nomeAtt = attuale&&attuale.pn_dipendenti?attuale.pn_dipendenti.cognome_nome:'—';
+    const sbArco = attuale?fmtD(attuale.data_sbarco):'—';
+    const hasGapFlag = gaps.length>0;
+    coverHtml += `<div style="background:#fff;border:1px solid ${hasGapFlag?'#f5c6c2':'var(--border)'};border-radius:7px;padding:10px 14px;min-width:150px;${hasGapFlag?'background:#fff8f8;':''}">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">${escHtml(nav.nome)}</div>
+      <div style="font-size:14px;font-weight:600;color:${hasGapFlag?'var(--red)':'var(--navy)'};font-family:var(--mono);">${coperti} gg</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px;">${hasGapFlag?'⚠ Gap: '+totGap+' gg':'✓ Coperto'}</div>
+      ${attuale?`<div style="font-size:10px;color:var(--navy);margin-top:4px;font-weight:500;">${escHtml(nomeAtt)}</div><div style="font-size:10px;color:var(--muted);">Sbarco: ${sbArco}</div>`:''}
+    </div>`;
+  });
+  coverHtml += '</div>';
+
+  let html = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="font-size:16px;font-weight:600;color:var(--navy);">${escHtml(progMansione)}</div>
+      <div style="font-size:12px;color:var(--muted);">${progNaveAttive.length>0?progNaveAttive.map(id=>{const n=navi.find(x=>x.id===id);return n?n.nome:'';}).filter(Boolean).join(' + '):'Tutte le navi'}</div>
+      <div style="margin-left:auto;display:flex;gap:8px;">
+        <button style="font-family:var(--font);font-size:11px;padding:5px 13px;border-radius:6px;border:1.5px solid var(--navy);background:${progVista==='lista'?'var(--navy)':'transparent'};color:${progVista==='lista'?'#fff':'var(--navy)'};cursor:pointer;" onclick="setProgVista('lista')">&#8801; Lista</button>
+        <button style="font-family:var(--font);font-size:11px;padding:5px 13px;border-radius:6px;border:1.5px solid var(--navy);background:${progVista==='gantt'?'var(--navy)':'transparent'};color:${progVista==='gantt'?'#fff':'var(--navy)'};cursor:pointer;" onclick="setProgVista('gantt')">&#9646;&#9646; Gantt</button>
+        <button class="btn-filtri" onclick="toggleProgAdd()" id="btnProgAdd">＋ Aggiungi periodo</button>
+      </div>
+    </div>
+    ${coverHtml}`;
+
+  // Form aggiunta
+  html += `<div id="progAddForm" style="display:none;background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:16px;">
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--navy);margin-bottom:12px;">Nuovo periodo — ${escHtml(progMansione)}</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+      <div style="display:flex;flex-direction:column;gap:3px;flex:1;min-width:180px;">
+        <label style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Dipendente</label>
+        <input class="mform-control" type="text" id="progDipSearch" placeholder="Cerca cognome..." oninput="searchProgDipAdd()" autocomplete="off" style="font-size:12px;">
+        <div id="progDipDrop" style="border:1px solid var(--border);border-radius:5px;max-height:140px;overflow-y:auto;display:none;background:#fff;position:relative;z-index:50;"></div>
+        <input type="hidden" id="progDipId">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <label style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Nave</label>
+        <select class="mform-control" id="progNaveAdd" style="font-size:12px;min-width:130px;">
+          <option value="">— seleziona —</option>
+          ${navi.map(n=>`<option value="${n.id}" ${progNaveAttive.length===1&&progNaveAttive[0]===n.id?'selected':''}>${escHtml(n.nome)}</option>`).join('')}
+        </select>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <label style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Imbarco</label>
+        <input class="mform-control" type="date" id="progDtImb" oninput="calcProgGG()" style="font-size:12px;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <label style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Sbarco</label>
+        <input class="mform-control" type="date" id="progDtSb" oninput="calcProgGG()" style="font-size:12px;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <label style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Giorni</label>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--navy);padding:6px 12px;background:#eef2f7;border-radius:5px;min-width:60px;text-align:center;" id="progGG">—</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;">
+        <label style="font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">&nbsp;</label>
+        <button class="btn-new" style="height:32px;" onclick="saveProgPeriodo()">Salva</button>
+      </div>
+    </div>
+  </div>`;
+
+ // Periodi per nave
+  if(periodi.length===0) {
+    html += `<div style="color:var(--muted);font-size:12px;padding:24px;text-align:center;background:#fff;border:1px solid var(--border);border-radius:8px;">Nessun periodo programmato</div>`;
+  } else if(progVista==='gantt') {
+    html += renderGantt(periodi, anno, oggi, fmtD, getGaps);
+} else {
+    // Vista lista — una tabella per nave
+    const naviLista = naviSorted().filter(n => periodi.some(p=>p.nave_id===n.id));
+    naviLista.forEach(nav => {
+      const ps = periodi.filter(p=>p.nave_id===nav.id).sort((a,b)=>new Date(a.data_imbarco)-new Date(b.data_imbarco));
+      const gaps = getGaps(ps);
+      const hasGap = gaps.length>0;
+      html += `<div style="margin-bottom:18px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;">
+          <span style="font-size:13px;font-weight:600;color:var(--navy);">${escHtml(nav.nome)}</span>
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;background:${hasGap?'#fdecea':'#d4f0e4'};color:${hasGap?'var(--red)':'#0f7a52'};">${hasGap?'⚠ Gap '+gaps.reduce((s,g)=>s+g.gg,0)+' gg':'✓ Coperto'}</span>
+        </div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;max-width:620px;">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="background:var(--bg);border-bottom:1px solid var(--border);">
+                <th style="padding:7px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);white-space:nowrap;">Imbarco</th>
+                <th style="padding:7px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);white-space:nowrap;">Sbarco</th>
+                <th style="padding:7px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">GG</th>
+                <th style="padding:7px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Nominativo</th>
+                <th style="padding:7px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Stato</th>
+                <th style="padding:7px 6px;width:60px;"></th>
+              </tr>
+            </thead>
+            <tbody>`;
+      ps.forEach(p => {
+        const st = statoP(p);
+        const nome = p.pn_dipendenti ? p.pn_dipendenti.cognome_nome : '—';
+        const gg = p.giorni || (Math.round((new Date(p.data_sbarco)-new Date(p.data_imbarco))/86400000)+1);
+        html += `<tr style="border-bottom:1px solid #f0ede8;${rowStyle[st.cls]}">
+          <td style="padding:7px 12px;font-family:var(--mono);font-size:11px;white-space:nowrap;">${fmtD(p.data_imbarco)}</td>
+          <td style="padding:7px 12px;font-family:var(--mono);font-size:11px;white-space:nowrap;">${fmtD(p.data_sbarco)}</td>
+          <td style="padding:7px 12px;font-family:var(--mono);font-weight:600;color:var(--navy);">${gg}</td>
+          <td style="padding:7px 12px;font-weight:500;cursor:pointer;text-decoration:underline dotted;" onclick="openProgDrawer(${p.dipendente_id},'${escHtml(nome)}')">${escHtml(nome)}</td>
+          <td style="padding:7px 12px;"><span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;${pillStyle[st.cls]}">${st.lbl}</span></td>
+          <td style="padding:7px 6px;">
+            <button style="background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;padding:3px 5px;font-size:11px;color:var(--muted);" onclick="openEditProgPeriodo(${p.id},'${p.data_imbarco}','${p.data_sbarco}',${p.dipendente_id},'${escHtml(nome)}',${nav.id})" title="Modifica">✏️</button>
+            <button style="background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;padding:3px 5px;font-size:11px;color:var(--muted);" onclick="deleteProgPeriodo(${p.id})" title="Elimina">🗑</button>
+          </td>
+        </tr>`;
+        const gap = gaps.find(g=>g.afterId===p.id);
+        if(gap) html += `<tr style="background:#fff5f5;">
+          <td colspan="6" style="padding:7px 12px;font-size:11px;color:var(--red);font-style:italic;">
+            ⚠ Periodo non coperto: ${fmtD(gap.da)} → ${fmtD(gap.a)} (${gap.gg} gg)
+            <button onclick="precompilaProg('${gap.da}','${gap.a}')" style="margin-left:8px;font-size:10px;padding:2px 8px;border-radius:4px;background:var(--red);color:#fff;border:none;cursor:pointer;">＋ Assegna</button>
+          </td>
+        </tr>`;
+      });
+      html += `</tbody></table></div></div>`;
+    });
+  }
+
+  // Drawer storico dipendente
+  html += `<div id="progDrawer" style="position:fixed;top:0;right:0;width:360px;height:100%;background:#fff;border-left:1px solid var(--border);box-shadow:-8px 0 32px rgba(0,0,0,.12);z-index:300;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s ease;">
+    <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <div style="font-size:14px;font-weight:600;color:var(--navy);flex:1;" id="progDrawerTitle">—</div>
+      <button style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);" onclick="closeProgDrawer()">✕</button>
+    </div>
+    <div style="padding:16px;overflow-y:auto;flex:1;" id="progDrawerBody">
+      <div style="font-size:12px;color:var(--muted);">Caricamento...</div>
+    </div>
+  </div>`;
+
+  content.innerHTML = html;
+  progAddOpen = false;
+}
+
+function setProgVista(v) {
+  progVista = v;
+  loadProgPeriodi();
+}
+
+function renderGantt(periodi, anno, oggi, fmtD, getGaps) {
+  const _ORDINE = ['MOBY FANTASY','MOBY LEGACY','MOBY AKI','MOBY WONDER','MOBY ORLI','MOBY KISS','VINCENZO FLORIO','RAFFAELE RUBATTINO','MOBY TOMMY'];
+  const naviAttive = progNaveAttive.length>0 ? naviSorted().filter(n=>progNaveAttive.includes(n.id)) : naviSorted();
+  const naviOrd = naviAttive;
+  const inizio = new Date(anno+'-01-01');
+  const fine = new Date(anno+'-12-31');
+  const totMs = fine-inizio;
+  function pct(d){ return Math.max(0,Math.min(100,((new Date(d)-inizio)/totMs)*100)); }
+  const oggiPct = pct(oggi);
+  const mesi = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  const mesiHtml = mesi.map((m,i)=>{
+    const isCur = oggi.getFullYear()===anno && oggi.getMonth()===i;
+    return `<div style="flex:1;text-align:center;font-size:10px;color:${isCur?'var(--navy)':'var(--muted)'};font-weight:${isCur?'600':'400'};padding:6px 2px;border-right:1px solid #f0ede8;">${m}${isCur?' ←':''}</div>`;
+  }).join('');
+
+  let html = `<div style="background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <div style="display:flex;border-bottom:1px solid var(--border);background:var(--bg);">
+      <div style="width:150px;flex-shrink:0;padding:6px 14px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-right:1px solid var(--border);">Nave</div>
+      <div style="flex:1;display:flex;">${mesiHtml}</div>
+    </div>`;
+
+  naviOrd.forEach(nav => {
+    const ps = periodi.filter(p=>p.nave_id===nav.id).sort((a,b)=>new Date(a.data_imbarco)-new Date(b.data_imbarco));
+    const gaps = getGaps(ps);
+    const hasGap = gaps.length>0;
+    let barre = '';
+    ps.forEach(p => {
+      const left = pct(p.data_imbarco);
+      const right = pct(p.data_sbarco);
+      const width = Math.max(0.5, right-left);
+      const i=new Date(p.data_imbarco), s=new Date(p.data_sbarco);
+      let cls, bg;
+      if(oggi<i){ cls='futuro'; bg='linear-gradient(90deg,#2563a8,#3b82c4)'; }
+      else if(oggi>s){ cls='passato'; bg='#d8d8d8'; }
+      else { cls='attivo'; bg='linear-gradient(90deg,#1d8f72,#25b090)'; }
+      const nome = p.pn_dipendenti?p.pn_dipendenti.cognome_nome:'—';
+      const tooltip = `${escHtml(nome)} | ${fmtD(p.data_imbarco)} → ${fmtD(p.data_sbarco)} | ${p.giorni||'?'} gg`;
+      barre += `<div title="${tooltip}" onclick="openProgDrawer(${p.dipendente_id},'${escHtml(nome)}')"
+        style="position:absolute;left:${left}%;width:${width}%;height:28px;border-radius:5px;
+        background:${bg};display:flex;align-items:center;padding:0 6px;
+        font-size:10px;font-weight:500;color:${cls==='passato'?'#666':'#fff'};
+        white-space:nowrap;overflow:hidden;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.1);
+        transition:opacity .14s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+        ${width>8?escHtml(nome.split(' ')[0]):''}
+      </div>`;
+    });
+    // Gap lines
+    gaps.forEach(g => {
+      const left = pct(g.da);
+      const right = pct(g.a);
+      const width = Math.max(0.3, right-left);
+      barre += `<div style="position:absolute;left:${left}%;width:${width}%;height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">
+        <div style="font-size:9px;color:var(--red);font-weight:600;margin-bottom:2px;">⚠${g.gg}gg</div>
+        <div style="height:3px;width:100%;background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 5px,transparent 5px,transparent 10px);border-radius:2px;"></div>
+      </div>
+      <div style="position:absolute;left:${left+width/2}%;transform:translateX(-50%);bottom:4px;">
+        <button onclick="precompilaProg('${g.da}','${g.a}')" style="font-family:var(--font);font-size:9px;padding:1px 6px;border-radius:4px;background:var(--red);color:#fff;border:none;cursor:pointer;">+Assegna</button>
+      </div>`;
+    });
+    // Linea oggi
+    if(oggiPct>=0&&oggiPct<=100) barre += `<div style="position:absolute;left:${oggiPct}%;width:2px;top:4px;bottom:4px;background:var(--red);opacity:.6;border-radius:1px;z-index:5;"></div>`;
+
+    html += `<div style="display:flex;border-bottom:1px solid #f0ede8;min-height:52px;align-items:center;">
+      <div style="width:150px;flex-shrink:0;padding:8px 14px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:2px;">
+        <span style="font-size:12px;font-weight:600;color:var(--navy);">${escHtml(nav.nome)}</span>
+        <span style="font-size:10px;color:${hasGap?'var(--red)':'var(--teal)'};">${hasGap?'⚠ Gap':'✓ Coperto'}</span>
+      </div>
+      <div style="flex:1;position:relative;height:52px;display:flex;align-items:center;">${barre}</div>
+    </div>`;
+  });
+
+  html += `</div>
+  <div style="display:flex;gap:14px;margin-top:10px;align-items:center;">
+    <span style="font-size:10px;color:var(--muted);">Legenda:</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);"><span style="width:18px;height:9px;border-radius:3px;background:#d8d8d8;display:inline-block;"></span>Terminato</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);"><span style="width:18px;height:9px;border-radius:3px;background:linear-gradient(90deg,#1d8f72,#25b090);display:inline-block;"></span>In corso</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);"><span style="width:18px;height:9px;border-radius:3px;background:linear-gradient(90deg,#2563a8,#3b82c4);display:inline-block;"></span>Programmato</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);"><span style="width:18px;height:9px;background:repeating-linear-gradient(90deg,var(--red) 0,var(--red) 4px,transparent 4px,transparent 8px);display:inline-block;border-radius:3px;"></span>Gap</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);"><span style="width:2px;height:14px;background:var(--red);opacity:.6;display:inline-block;border-radius:1px;"></span>Oggi</span>
+  </div>`;
+  return html;
+}
+
+function openEditProgPeriodo(id, imb, sb, dipId, dipNome, naveId) {
+  progAddOpen = true;
+  document.getElementById('progAddForm').style.display = 'block';
+  document.getElementById('progDtImb').value = imb;
+  document.getElementById('progDtSb').value = sb;
+  document.getElementById('progDipSearch').value = dipNome;
+  document.getElementById('progDipId').value = dipId;
+  document.getElementById('progNaveAdd').value = naveId;
+  calcProgGG();
+  // Cambia il bottone Salva in Aggiorna
+  const btn = document.querySelector('#progAddForm button.btn-new');
+  if(btn) { btn.textContent = 'Aggiorna'; btn.onclick = async ()=>{ await deleteProgPeriodo(id, true); await saveProgPeriodo(); }; }
+  document.getElementById('progDipSearch').focus();
+}
+
+function toggleProgAdd() {
+  progAddOpen = !progAddOpen;
+  document.getElementById('progAddForm').style.display = progAddOpen?'block':'none';
+}
+
+function calcProgGG() {
+  const a=document.getElementById('progDtImb').value, b=document.getElementById('progDtSb').value;
+  if(a&&b){const d=Math.round((new Date(b)-new Date(a))/86400000)+1;document.getElementById('progGG').textContent=d>0?d:'—';}
+  else document.getElementById('progGG').textContent='—';
+}
+
+async function searchProgDipAdd() {
+  const v = document.getElementById('progDipSearch').value.trim();
+  if(v.length<2){document.getElementById('progDipDrop').style.display='none';return;}
+  // Cerca solo tra i dipendenti abilitati per questa categoria
+  const cats = await sbGet('pn_prog_categorie?nome=eq.'+encodeURIComponent(progMansione)+'&select=id');
+  const catId = cats&&cats[0]?cats[0].id:null;
+  const q = catId
+    ? `pn_prog_dipendenti?categoria_id=eq.${catId}&select=pn_dipendenti(id,cognome_nome,matricola)&pn_dipendenti=cognome_nome.ilike.*${v}*`
+    : `pn_dipendenti?cognome_nome=ilike.*${v}*&select=id,cognome_nome,matricola&limit=10`;
+  const raw = await sbGet(catId
+    ? `pn_prog_dipendenti?categoria_id=eq.${catId}&select=pn_dipendenti(id,cognome_nome,matricola)`
+    : `pn_dipendenti?cognome_nome=ilike.*${encodeURIComponent(v)}*&select=id,cognome_nome,matricola&limit=10`);
+  const dips = catId
+    ? (raw||[]).map(r=>r.pn_dipendenti).filter(d=>d&&d.cognome_nome.toLowerCase().includes(v.toLowerCase()))
+    : (raw||[]);
+  const drop = document.getElementById('progDipDrop');
+  drop.innerHTML = dips.map(d=>`<div style="padding:7px 10px;cursor:pointer;font-size:12px;" onmousedown="selProgDipAdd(${d.id},'${escHtml(d.cognome_nome)}')">${escHtml(d.cognome_nome)} <span style="color:var(--muted);font-size:10px;">· ${d.matricola}</span></div>`).join('');
+  drop.style.display = dips.length?'block':'none';
+}
+
+function selProgDipAdd(id, nome) {
+  document.getElementById('progDipSearch').value = nome;
+  document.getElementById('progDipId').value = id;
+  document.getElementById('progDipDrop').style.display = 'none';
+}
+
+function precompilaProg(da, a) {
+  progAddOpen = true;
+  document.getElementById('progAddForm').style.display = 'block';
+  document.getElementById('progDtImb').value = da;
+  document.getElementById('progDtSb').value = a;
+  calcProgGG();
+  document.getElementById('progDipSearch').focus();
+}
+
+async function saveProgPeriodo() {
+  const dipId = parseInt(document.getElementById('progDipId').value);
+  const naveId = parseInt(document.getElementById('progNaveAdd').value);
+  const imb = document.getElementById('progDtImb').value;
+  const sb = document.getElementById('progDtSb').value;
+  if(!dipId||!naveId||!imb||!sb){showToast('Compila tutti i campi','error');return;}
+  if(new Date(sb)<new Date(imb)){showToast('La data di sbarco deve essere uguale o successiva all\'imbarco','error');return;}
+  const giorni = Math.round((new Date(sb)-new Date(imb))/86400000)+1;
+  try {
+    await sbPost('pn_programmazione',{dipendente_id:dipId,nave_id:naveId,categoria:progMansione,data_imbarco:imb,data_sbarco:sb,giorni});
+    showToast('Periodo salvato','success');
+    loadProgPeriodi();
+  } catch(e){showToast('Errore: '+e.message,'error');}
+}
+
+async function deleteProgPeriodo(id, silent=false) {
+  if(!silent && !confirm('Eliminare questo periodo?')) return;
+  await sbDelete('pn_programmazione',id);
+  if(!silent){ showToast('Eliminato',''); loadProgPeriodi(); }
+}
+
+async function openProgDrawer(dipId, nome) {
+  document.getElementById('progDrawer').style.transform = 'translateX(0)';
+  document.getElementById('progDrawerTitle').textContent = nome;
+  const data = await sbGet(`pn_programmazione?dipendente_id=eq.${dipId}&select=*,pn_navi(nome)&order=data_imbarco`);
+  const periodi = data||[];
+  function fmtD(d){if(!d)return'—';const x=new Date(d);return x.getDate().toString().padStart(2,'0')+'/'+(x.getMonth()+1).toString().padStart(2,'0')+'/'+x.getFullYear();}
+  // Raggruppa per anno
+  const anni = {};
+  periodi.forEach(p=>{
+    const a=new Date(p.data_imbarco).getFullYear();
+    if(!anni[a]) anni[a]=[];
+    anni[a].push(p);
+  });
+  let html = `<div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Storico completo imbarcazioni</div>`;
+  Object.keys(anni).sort((a,b)=>b-a).forEach(a=>{
+    const tot = anni[a].reduce((s,p)=>s+(p.giorni||0),0);
+    html += `<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);background:var(--bg);padding:5px 8px;margin-bottom:4px;">${a} — ${tot} gg totali</div>`;
+    anni[a].forEach(p=>{
+      html += `<div style="display:flex;gap:8px;padding:6px 8px;border-bottom:1px solid #f0ede8;font-size:12px;">
+        <span style="flex:1;">${p.pn_navi?escHtml(p.pn_navi.nome):'—'}</span>
+        <span style="font-family:var(--mono);font-size:11px;">${fmtD(p.data_imbarco)}</span>
+        <span style="font-family:var(--mono);font-size:11px;">→ ${fmtD(p.data_sbarco)}</span>
+        <span style="font-family:var(--mono);font-weight:600;color:var(--navy);">${p.giorni||'—'}</span>
+      </div>`;
+    });
+  });
+  document.getElementById('progDrawerBody').innerHTML = html;
+}
+
+function closeProgDrawer() {
+  const d = document.getElementById('progDrawer');
+  if(d) d.style.transform = 'translateX(100%)';
+}
+
+async function loadProg() {
+  progAnnoVal = parseInt(document.getElementById('progAnno').value);
+  await loadProgMansioni();
+  if(progMansione) loadProgPeriodi();
+}
+
+// ── APPUNTI PER NAVE ─────────────────────────────────────────────
+let _appuntiRowId = 0;
+function addAppuntiRow(nome, nota, readonly) {
+  const rid = ++_appuntiRowId;
+  const tr = document.createElement('tr');
+  tr.style.borderBottom = '1px solid #f0ede8';
+  tr.dataset.rid = rid;
+  tr.innerHTML = `
+ <td style="padding:3px 4px;width:45%;position:relative;">
+      <input type="text" id="apNome${rid}" value="${escHtml(nome||'')}" placeholder="Nome..." ${readonly?'disabled':''}
+        style="width:100%;border:none;background:transparent;font-family:var(--font);font-size:11px;color:var(--text);outline:none;padding:2px 4px;"
+        oninput="searchAppuntiNome(${rid})" autocomplete="off">
+<div id="apDrop${rid}" style="position:fixed;background:#fff;border:1px solid var(--border);border-radius:5px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:9999;max-height:130px;overflow-y:auto;display:none;width:180px;"></div>
+    </td>
+    <td style="padding:3px 4px;">
+      <input type="text" value="${escHtml(nota||'')}" placeholder="Nota..." ${readonly?'disabled':''}
+        style="width:100%;border:none;background:transparent;font-family:var(--font);font-size:11px;color:var(--text);outline:none;padding:2px 4px;">
+    </td>
+    <td style="padding:3px 4px;text-align:center;">${readonly?'':'<button onclick="this.closest(\'tr\').remove()" style="background:none;border:none;cursor:pointer;color:#ccc;font-size:11px;">✕</button>'}</td>`;
+  document.getElementById('appuntiBody').appendChild(tr);
+}
+
+async function searchAppuntiNome(rid) {
+  const inp = document.getElementById('apNome'+rid);
+  const drop = document.getElementById('apDrop'+rid);
+  if(!inp||!drop) return;
+  const v = inp.value.trim();
+  if(v.length < 2) { drop.style.display='none'; return; }
+  const data = await sbGet(`pn_dipendenti?cognome_nome=ilike.*${encodeURIComponent(v)}*&select=id,cognome_nome&limit=8`);
+  if(!data||!data.length) { drop.style.display='none'; return; }
+  drop.innerHTML = data.map(d =>
+    `<div style="padding:5px 8px;font-size:11px;cursor:pointer;" onmousedown="selAppuntiNome(${rid},'${escHtml(d.cognome_nome)}')" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''">${escHtml(d.cognome_nome)}</div>`
+  ).join('');
+  const rect = inp.getBoundingClientRect();
+  drop.style.top = (rect.bottom+2)+'px';
+  drop.style.left = rect.left+'px';
+  drop.style.width = rect.width+'px';
+  drop.style.display = 'block';
+}
+
+function selAppuntiNome(rid, nome) {
+  const inp = document.getElementById('apNome'+rid);
+  const drop = document.getElementById('apDrop'+rid);
+  if(inp) inp.value = nome;
+  if(drop) drop.style.display = 'none';
+}
+
+function sortAppuntiAZ() {
+  const body = document.getElementById('appuntiBody');
+  const rows = [...body.querySelectorAll('tr')];
+  rows.sort((a,b) => {
+    const na = a.querySelector('input') ? a.querySelector('input').value : '';
+    const nb = b.querySelector('input') ? b.querySelector('input').value : '';
+    return na.localeCompare(nb, 'it');
+  });
+  rows.forEach(r => body.appendChild(r));
+}
+
+function stampaAppuntiPDF() {
+  function doStampa() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+    const pw = doc.internal.pageSize.getWidth();
+    const navy=[15,42,74];
+    const nave = document.getElementById('appuntiPanelNave')?.textContent||'—';
+    const meta = document.getElementById('appuntiMeta')?.textContent||'';
+    // Header
+    doc.setFillColor(...navy);
+    doc.rect(0,0,pw,16,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(255,255,255);
+    doc.text('Appunti — '+nave, 12, 10);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8);
+    doc.text(meta, pw-12, 10, {align:'right'});
+    // Tabella
+    let y = 24;
+    doc.setFillColor(240,244,250);
+    doc.rect(12,y,186,6,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...navy);
+    doc.text('NOME', 14, y+4);
+    doc.text('NOTA', 90, y+4);
+    y += 6;
+    const rows = [...document.querySelectorAll('#appuntiBody tr')];
+    rows.forEach((tr,i) => {
+      const inputs = tr.querySelectorAll('input');
+      const nome = inputs[0]?inputs[0].value:'';
+      const nota = inputs[1]?inputs[1].value:'';
+      if(!nome&&!nota) return;
+      if(y > 270) { doc.addPage(); y=14; }
+      if(i%2===0){ doc.setFillColor(248,250,252); doc.rect(12,y,186,6,'F'); }
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(30,30,30);
+      doc.text(nome, 14, y+4);
+      doc.text(nota, 90, y+4);
+      y += 6;
+    });
+    // Footer
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(150,150,150);
+    doc.text('Posizionamento Navi — Appunti '+nave, 12, 290);
+    doc.save('appunti_'+nave.replace(/\s+/g,'_')+'.pdf');
+    showToast('PDF esportato','success');
+  }
+  if(window.jspdf&&window.jspdf.jsPDF){ doStampa(); }
+  else {
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s.onload=doStampa; document.head.appendChild(s);
+  }
+}
+
+document.addEventListener('click', e => {
+  document.querySelectorAll('[id^="apDrop"]').forEach(d => {
+    if(!e.target.closest('[id^="apNome"]')) d.style.display='none';
+  });
+});
+function toggleAppuntiPanel() {
+  const panel = document.getElementById('appuntiPanelPop');
+  const overlay = document.getElementById('appuntiOverlay');
+  const isOpen = panel.style.display === 'flex';
+  panel.style.display = isOpen ? 'none' : 'flex';
+  overlay.style.display = isOpen ? 'none' : 'block';
+  if(!isOpen) loadAppunti(utente.nave_id);
+}
+
+async function loadAppunti(naveId) {
+  if(!naveId) naveId = utente ? utente.nave_id : null;
+  if(!naveId) return;
+  const nave = navi.find(n=>n.id===naveId);
+  const panelNave = document.getElementById('appuntiPanelNave');
+  if(panelNave && nave) panelNave.textContent = nave.nome;
+  const isAmm = utente && (utente.ruolo==='admin'||utente.ruolo==='semiadmin');
+  const meta = document.getElementById('appuntiMeta');
+  const body = document.getElementById('appuntiBody');
+  const btn = document.getElementById('btnSalvaAppunti');
+  const addBtn = document.querySelector('[onclick="addAppuntiRow()"]');
+  if(!body) return;
+if(btn) btn.style.display = isAmm ? 'inline-block' : 'none';
+  if(addBtn) addBtn.style.display = isAmm ? 'inline-block' : 'none';
+  // PDF e A→Z sempre visibili
+  document.querySelectorAll('#appuntiPanelPop [onclick="stampaAppuntiPDF()"], #appuntiPanelPop [onclick="sortAppuntiAZ()"]').forEach(b=>b.style.display='inline-block');
+  try {
+    const data = await sbGet(`pn_appunti_nave?nave_id=eq.${naveId}&select=*`);
+    const rec = data && data[0];
+    body.innerHTML = '';
+    if(rec && rec.testo) {
+      try {
+        const righe = JSON.parse(rec.testo);
+        righe.forEach(r => addAppuntiRow(r.nome, r.nota, !isAmm));
+      } catch(e) {
+        // fallback testo libero
+        addAppuntiRow('', rec.testo, !isAmm);
+      }
+    }
+    if(rec && rec.updated_at) {
+      const d = new Date(rec.updated_at);
+      meta.textContent = (rec.autore||'—') + ' — ' + d.toLocaleDateString('it-IT') + ' ' + d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+    } else { meta.textContent = 'Nessuna nota'; }
+  } catch(e) { body.innerHTML=''; meta.textContent=''; }
+}
+async function salvaAppunti() {
+  const naveId = utente.nave_id;
+  if(!naveId) return;
+  const rows = [...document.querySelectorAll('#appuntiBody tr')].map(tr => {
+    const inputs = tr.querySelectorAll('input');
+    return {nome: inputs[0]?inputs[0].value:'', nota: inputs[1]?inputs[1].value:''};
+  }).filter(r => r.nome||r.nota);
+  const testo = JSON.stringify(rows);
+  const saved = document.getElementById('appuntiSaved');
+  try {
+    const existing = await sbGet(`pn_appunti_nave?nave_id=eq.${naveId}&select=id`);
+    const payload = {nave_id:naveId, testo, autore:utente.nome||utente.username, updated_at:new Date().toISOString()};
+    if(existing && existing[0]) { await sbPatch('pn_appunti_nave', existing[0].id, payload); }
+    else { await sbPost('pn_appunti_nave', payload); }
+    saved.textContent = 'Salvato ✓';
+    setTimeout(()=>{ saved.textContent=''; }, 3000);
+    loadAppunti(naveId);
+  } catch(e){ showToast('Errore salvataggio appunti','error'); }
+}
+
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
-  if(name==='admin') {
+  if(name==='admin' || name==='prog') {
     document.getElementById('cascadeAmmWrap').classList.remove('show');
     document.getElementById('statsLeftWrap').classList.remove('show');
   }
   if(name==='pos') {
-    // Riassicura visibilità navebar per AMM/semi-AMM
     if(utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin')) {
       document.getElementById('navebar').style.display = 'flex';
     }
     loadPosizionamento();
   }
   if(name==='admin') initAdmin();
+  if(name==='prog') initProg();
 }
 
 // ═══════════════════════════════════════════
@@ -1772,7 +2560,8 @@ function startApp() {
   populateSelects();
 
   if(utente.ruolo === 'admin') {
-    document.getElementById('btnAmm').style.display = 'inline-block';}
+document.getElementById('btnAmm').style.display = 'inline-block';
+    document.getElementById('btnProg').style.display = 'inline-block';}
 if(utente.ruolo==='commissario') {
   const btn = document.getElementById('btnRiepilogo');
   btn.disabled = true;
@@ -1802,7 +2591,18 @@ if(utente.ruolo==='commissario') {
     badge.textContent = utente.nave_nome || '—';
     badge.style.display = 'inline-block';
   }
-  showScreen('pos');
+  if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') {
+    document.getElementById('sceltaWelcome').textContent = 'Benvenuto, ' + (utente.nome || utente.username);
+    const m = document.getElementById('modalSceltaModulo');
+    m.style.display = 'flex';
+  } else {
+    showScreen('pos');
+  }
+}
+
+function sceltaModulo(m) {
+  document.getElementById('modalSceltaModulo').style.display = 'none';
+  showScreen(m);
 }
 
 function renderNaveSelection() {
@@ -1847,8 +2647,10 @@ function selectNaveAdmin(naveId, naveNome) {
   document.getElementById('meseSelect').value = now.getMonth()+1;
   document.getElementById('annoSelect').value = now.getFullYear();
   populateSelects();
+document.getElementById('btnAppunti').style.display = 'inline-block';
   showScreen('pos');
   loadPosizionamento();
+  loadAppunti(naveId);
 }
 
 function buildNavePills() {
@@ -1868,7 +2670,8 @@ btn.addEventListener('click', () => {
       utente.nave_nome = n.nome;
       localStorage.setItem('pn_last_nave_id', n.id);
       localStorage.setItem('pn_last_nave_nome', n.nome);
-      loadPosizionamento();
+loadPosizionamento();
+      loadAppunti(n.id);
     });
     container.appendChild(btn);
     // Controlla messaggi non letti per questa nave (solo AMM/Semi-AMM)
@@ -1921,32 +2724,50 @@ function esportaExcel() {
     const anno = parseInt(document.getElementById('annoSelect').value);
     const mesiNomi = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
 
-    const rows = [['Cognome Nome Matricola', 'Mansione']];
+// Slot fissi per reparto nell'ordine: Hotel Mgmt, Ristorante, Self/Bistrot, Bar, Cabine, Saletta/Riposteria, Squadra Ecologica, Squadra Ecologica Notturna, Cucina
+    const SLOT_REPARTI = [
+      {nome:'Hotel Management',       slot:11},
+      {nome:'Ristorante',             slot:3},
+      {nome:'Self/Bistrot',           slot:8},
+      {nome:'Bar',                    slot:15},
+      {nome:'Cabine',                 slot:25},
+      {nome:'Saletta/Riposteria',     slot:2},
+      {nome:'Squadra Ecologica',      slot:8},
+      {nome:'Squadra Ecologica Notturna', slot:1},
+      {nome:'Cucina',                 slot:24},
+    ];
 
     const byReparto = {};
-    reparti.forEach(r => { byReparto[r.id] = { reparto: r, bordo: [], conf: [] }; });
+    reparti.forEach(r => { byReparto[r.nome] = { reparto: r, bordo: [], conf: [] }; });
     posizionamento.forEach(p => {
-      const rid = p.reparto_id;
-      if(!rid) return;
-      if(!byReparto[rid]) byReparto[rid] = { reparto: p.pn_reparti, bordo: [], conf: [] };
-      if(p.stato === 'bordo') byReparto[rid].bordo.push(p);
-      else byReparto[rid].conf.push(p);
+      const nomeR = p.pn_reparti ? p.pn_reparti.nome : null;
+      if(!nomeR) return;
+      if(!byReparto[nomeR]) byReparto[nomeR] = { reparto: p.pn_reparti, bordo: [], conf: [] };
+      if(p.stato === 'bordo') byReparto[nomeR].bordo.push(p);
+      else byReparto[nomeR].conf.push(p);
     });
     Object.values(byReparto).forEach(g => {
       g.bordo = sortPersonale(g.bordo);
       g.conf  = sortPersonale(g.conf);
     });
 
-    ORDINE_REPARTI.forEach(nomeR => {
-      const g = Object.values(byReparto).find(x => x.reparto && x.reparto.nome === nomeR);
-      if(!g || (g.bordo.length === 0 && g.conf.length === 0)) return;
-      g.bordo.forEach(p => {
-        const dip = p.pn_dipendenti;
-        const cognomeNome = dip ? dip.cognome_nome : '—';
-        const matricola = dip ? dip.matricola : '';
-        const mansione = p.pn_mansioni ? p.pn_mansioni.nome : '—';
-        rows.push([cognomeNome + ' ' + matricola, mansione]);
-      });
+    const rows = [['Cognome Nome Matricola', 'Mansione']];
+    SLOT_REPARTI.forEach(({nome: nomeR, slot}) => {
+      const g = byReparto[nomeR];
+      const persone = g ? [...g.bordo] : [];
+      // Riempi fino allo slot con righe vuote se necessario
+      for(let i = 0; i < slot; i++) {
+        const p = persone[i];
+        if(p) {
+          const dip = p.pn_dipendenti;
+          const cognomeNome = dip ? dip.cognome_nome : '—';
+          const matricola = dip ? dip.matricola : '';
+          const mansione = p.pn_mansioni ? p.pn_mansioni.nome : '—';
+          rows.push([cognomeNome + ' ' + matricola, mansione]);
+        } else {
+          rows.push(['', '']);
+        }
+      }
     });
 
     const wb = XLSX.utils.book_new();
@@ -1978,7 +2799,8 @@ function doLogout() {
   document.getElementById('screenLogin').classList.add('active');
   document.getElementById('loginUser').value='';
   document.getElementById('loginPass').value='';
-  document.getElementById('btnAmm').style.display='none';
+document.getElementById('btnAmm').style.display='none';
+  document.getElementById('btnProg').style.display='none';
   document.getElementById('msgAlertBanner').style.display='none';
 document.getElementById('cascadeAmmWrap').classList.remove('show');
 document.getElementById('statsLeftWrap').classList.remove('show');
@@ -2026,14 +2848,20 @@ function getOrdine(nomeReparto, nomeQualifica, nomeMansione) {
     const mLow = (nomeMansione||'').toLowerCase();
     const qLow = (nomeQualifica||'').toLowerCase();
     // Prova mansione
-    let idx = ORDINE_CUCINA_Q.findIndex(v => v.toLowerCase() === mLow);
+  let idx = ORDINE_CUCINA_Q.findIndex(v => v.toLowerCase() === mLow);
     if(idx >= 0) return idx;
     // Prova qualifica
     idx = ORDINE_CUCINA_Q.findIndex(v => v.toLowerCase() === qLow);
+    if(idx >= 0) return idx;
+    // fallback mansione cucina per snapshot
+    idx = ORDINE_MANSIONI_CUCINA.findIndex(v => v.toLowerCase() === mLow);
     return idx >= 0 ? idx : 999;
   }
-  const ord = ORDINE_CAMERA;
-  const idx = ord.findIndex(q => q.toLowerCase() === (nomeQualifica||'').toLowerCase());
+const ord = ORDINE_CAMERA;
+  let idx = ord.findIndex(q => q.toLowerCase() === (nomeQualifica||'').toLowerCase());
+  if(idx >= 0) return idx;
+  // fallback mansione per snapshot
+  idx = ORDINE_MANSIONI_CAMERA.findIndex(q => q.toLowerCase() === (nomeMansione||'').toLowerCase());
   return idx >= 0 ? idx : 999;
 }
 
@@ -2335,7 +3163,7 @@ async function initAdmin(){
     const bSel=document.getElementById('budNave');
     bSel.innerHTML=navi.map(n=>'<option value="'+n.id+'">'+n.nome+'</option>').join('');
     const cSel=document.getElementById('commNave');
-    cSel.innerHTML='<option value="">— seleziona —</option>'+navi.map(n=>'<option value="'+n.id+'">'+n.nome+'</option>').join('');
+    cSel.innerHTML='<option value="">— seleziona —</option><option value="0">A terra</option>'+navi.map(n=>'<option value="'+n.id+'">'+n.nome+'</option>').join('');
     loadBudgetGrid();
     // Precompila campi account
     document.getElementById('accNome').value = utente.nome || '';
@@ -2354,6 +3182,8 @@ function showAPage(name){
     document.getElementById('accUsername').value=utente.username||'';
     document.getElementById('accPassword').value='';
   }
+  if(name==='progcategorie') loadProgCategorie();
+  if(name==='progdipendenti'){ loadProgCategorie(); loadProgDipendenti(); }
 }
 
 // ─── Commissari ───
@@ -2363,7 +3193,7 @@ function renderComm(){
   tbody.innerHTML=commissari.length===0
     ?'<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--muted);font-style:italic">Nessun commissario</td></tr>'
     :commissari.map(c=>{
-      const nave=c.pn_navi?c.pn_navi.nome:'—';
+      const nave=c.pn_navi?c.pn_navi.nome:'A terra';
       return '<tr>'
         +'<td><strong>'+c.nome+'</strong></td>'
         +'<td style="font-family:monospace;font-size:11px;color:var(--muted)">'+c.username+'</td>'
@@ -2444,7 +3274,7 @@ function openModalComm(id){
     document.getElementById('commNome').value=c.nome;
     document.getElementById('commUsername').value=c.username;
     document.getElementById('commPassword').value=c.password;
-    document.getElementById('commNave').value=c.nave_id||'';
+    document.getElementById('commNave').value=c.nave_id!=null?c.nave_id:'0';
   }else{
     document.getElementById('commNome').value='';
     document.getElementById('commUsername').value='';
@@ -2471,8 +3301,9 @@ async function saveComm(){
   const nome=document.getElementById('commNome').value.trim();
   const username=document.getElementById('commUsername').value.trim();
   const password=document.getElementById('commPassword').value.trim();
-  const nave_id=parseInt(document.getElementById('commNave').value)||null;
-  if(!nome||!username||!password||!nave_id){showToast('Compila tutti i campi','error');return;}
+  const nave_id_raw = document.getElementById('commNave').value;
+  const nave_id = nave_id_raw === '0' ? null : (parseInt(nave_id_raw)||null);
+  if(!nome||!username||!password||(nave_id_raw==='')){showToast('Compila tutti i campi','error');return;}
   const btn=document.getElementById('btnSaveComm');
   btn.disabled=true;btn.textContent='Salvataggio...';
   try{
@@ -2725,7 +3556,7 @@ async function saveLookup(){
     renderLookup(editLookupType);
     if(editLookupType==='navi'){
       document.getElementById('budNave').innerHTML=navi.map(n=>'<option value="'+n.id+'">'+n.nome+'</option>').join('');
-      document.getElementById('commNave').innerHTML='<option value="">— seleziona —</option>'+navi.map(n=>'<option value="'+n.id+'">'+n.nome+'</option>').join('');
+      document.getElementById('commNave').innerHTML='<option value="">— seleziona —</option><option value="0">A terra</option>'+navi.map(n=>'<option value="'+n.id+'">'+n.nome+'</option>').join('');
     }
   }catch(e){showToast('Errore: '+e.message,'error');}
   finally{btn.disabled=false;btn.textContent='Salva';}
@@ -2831,6 +3662,151 @@ async function confirmDelete() {
     else if(type === 'semiadmin') { semiadmins = await sbGet('pn_utenti?ruolo=eq.semiadmin&select=*&order=nome'); renderSemiadmin(); }
     else { await loadLookups(); populateSelects(); renderLookup(type); }
   } catch(e) { showToast('Errore: ' + e.message, 'error'); }
+}
+
+
+// ── PROGRAMMAZIONE: CATEGORIE ─────────────────────────────────────
+async function loadProgCategorie() {
+  const data = await sbGet('pn_prog_categorie?order=ordine');
+  document.getElementById('countProgCat').textContent = (data||[]).length + ' categorie';
+  const tbody = document.getElementById('tbodyProgCat');
+tbody.innerHTML = (data||[]).map(c => `
+    <div style="display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid #f0ede8;" data-id="${c.id}">
+      <span style="flex:1;font-size:12px;font-weight:500;color:var(--text);">${escHtml(c.nome)}</span>
+      <span style="font-size:10px;color:var(--muted);font-family:var(--mono);margin-right:10px;" id="catCount-${c.id}">—</span>
+      <div style="display:flex;gap:4px;">
+        <button style="background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;padding:3px 6px;font-size:11px;color:var(--muted);" title="Modifica" onclick="openModalProgCat(${c.id},'${escHtml(c.nome)}')">✏️</button>
+        <button style="background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;padding:3px 6px;font-size:11px;color:var(--muted);" title="Elimina" onclick="deleteProgCat(${c.id})">🗑</button>
+      </div>
+    </div>`).join('') || '<div style="padding:16px 14px;font-size:12px;color:var(--muted);">Nessuna categoria</div>';
+  // Carica conteggio dipendenti per categoria
+  sbGet('pn_prog_dipendenti?select=categoria_id').then(dips => {
+    (data||[]).forEach(c => {
+      const el = document.getElementById('catCount-'+c.id);
+      if(el) el.textContent = (dips||[]).filter(d=>d.categoria_id===c.id).length;
+    });
+  });
+  const sel = document.getElementById('progDipFilter');
+  if(sel) {
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Tutte</option>' + (data||[]).map(c=>`<option value="${c.id}">${escHtml(c.nome)}</option>`).join('');
+    sel.value = cur;
+  }
+}
+function openModalProgCat(id, nome) {
+  const existing = document.getElementById('modalProgCat');
+  if(existing) existing.remove();
+  const m = document.createElement('div');
+  m.id = 'modalProgCat';
+  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  m.innerHTML=`<div style="background:#fff;border-radius:10px;padding:28px;min-width:320px;max-width:400px;width:90%;">
+    <div style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:16px;">${id?'Modifica categoria':'Nuova categoria'}</div>
+    <div class="mform-group" style="margin-bottom:16px;">
+      <label class="mform-label">Nome</label>
+      <input class="mform-control" type="text" id="pcNome" value="${escHtml(nome||'')}" placeholder="es. Commissario">
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn-cancel" onclick="document.getElementById('modalProgCat').remove()">Annulla</button>
+      <button class="btn-new" onclick="saveProgCat(${id||0})">Salva</button>
+    </div>
+  </div>`;
+  document.body.appendChild(m);
+  setTimeout(()=>document.getElementById('pcNome').focus(),100);
+}
+async function saveProgCat(id) {
+  const n = document.getElementById('pcNome').value.trim();
+  if(!n){showToast('Inserisci un nome','error');return;}
+  try {
+    if(id) {
+      await sbPatch('pn_prog_categorie', id, {nome: n});
+      showToast('Categoria aggiornata','success');
+    } else {
+      const maxOrd = [...document.querySelectorAll('#tbodyProgCat tr')].length;
+      await sbPost('pn_prog_categorie', {nome: n, ordine: maxOrd+1});
+      showToast('Categoria aggiunta','success');
+    }
+    document.getElementById('modalProgCat').remove();
+    loadProgCategorie();
+  } catch(e){ showToast('Errore: '+e.message,'error'); }
+}
+async function deleteProgCat(id) {
+  if(!confirm('Eliminare questa categoria?')) return;
+  await sbDelete('pn_prog_categorie', id);
+  loadProgCategorie(); showToast('Categoria eliminata','');
+}
+// ── PROGRAMMAZIONE: DIPENDENTI ────────────────────────────────────
+let progDipendentiAll = [];
+async function loadProgDipendenti() {
+  const catId = document.getElementById('progDipFilter').value;
+const q = catId
+    ? `pn_prog_dipendenti?categoria_id=eq.${catId}&select=id,categoria_id,pn_dipendenti(id,cognome_nome,matricola,pn_qualifiche(nome)),pn_prog_categorie(nome)&order=pn_dipendenti(cognome_nome)`
+    : `pn_prog_dipendenti?select=id,categoria_id,pn_dipendenti(id,cognome_nome,matricola,pn_qualifiche(nome)),pn_prog_categorie(nome)&order=pn_dipendenti(cognome_nome)`;
+  const data = await sbGet(q);
+  progDipendentiAll = data||[];
+  const tbody = document.getElementById('tbodyProgDip');
+tbody.innerHTML = progDipendentiAll.map(d => `
+    <tr>
+      <td>${escHtml(d.pn_dipendenti?d.pn_dipendenti.cognome_nome:'—')}</td>
+      <td style="font-family:var(--mono);font-size:11px;">${escHtml(d.pn_dipendenti?d.pn_dipendenti.matricola:'—')}</td>
+      <td>${escHtml(d.pn_dipendenti&&d.pn_dipendenti.pn_qualifiche?d.pn_dipendenti.pn_qualifiche.nome:'—')}</td>
+      <td>${escHtml(d.pn_prog_categorie?d.pn_prog_categorie.nome:'—')}</td>
+      <td><button class="btn-del-sm" title="Rimuovi" onclick="deleteProgDip(${d.id})">🗑</button></td>
+    </tr>`).join('')|| '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:16px;">Nessun dipendente associato</td></tr>';
+}
+async function openModalProgDip() {
+  const cats = await sbGet('pn_prog_categorie?order=ordine');
+  if(!cats||cats.length===0){showToast('Aggiungi prima le categorie','error');return;}
+  const existing = document.getElementById('modalProgDip');
+  if(existing) existing.remove();
+  const m = document.createElement('div');
+  m.id = 'modalProgDip';
+  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+  m.innerHTML=`<div style="background:#fff;border-radius:10px;padding:28px;min-width:360px;max-width:440px;width:90%;">
+    <div style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:16px;">Aggiungi dipendente alla programmazione</div>
+    <div class="mform-group" style="margin-bottom:12px;">
+      <label class="mform-label">Categoria</label>
+      <select class="mform-control" id="pdCat">${cats.map(c=>`<option value="${c.id}">${escHtml(c.nome)}</option>`).join('')}</select>
+    </div>
+    <div class="mform-group" style="margin-bottom:12px;">
+      <label class="mform-label">Dipendente</label>
+      <input class="mform-control" type="text" id="pdSearch" placeholder="Cerca cognome..." oninput="searchProgDip()" autocomplete="off">
+      <div id="pdDrop" style="border:1px solid var(--border);border-radius:5px;max-height:150px;overflow-y:auto;display:none;margin-top:4px;"></div>
+      <input type="hidden" id="pdDipId">
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+      <button class="btn-cancel" onclick="document.getElementById('modalProgDip').remove()">Annulla</button>
+      <button class="btn-new" onclick="saveProgDip()">Salva</button>
+    </div>
+  </div>`;
+  document.body.appendChild(m);
+}
+async function searchProgDip() {
+  const v = document.getElementById('pdSearch').value.trim();
+  if(v.length<2){document.getElementById('pdDrop').style.display='none';return;}
+  const data = await sbGet(`pn_dipendenti?or=(cognome_nome.ilike.*${v}*,matricola.ilike.*${v}*)&attivo=eq.true&select=id,cognome_nome,matricola&limit=10`);
+  const drop = document.getElementById('pdDrop');
+  drop.innerHTML=(data||[]).map(d=>`<div style="padding:7px 10px;cursor:pointer;font-size:12px;" onmousedown="selProgDip(${d.id},'${escHtml(d.cognome_nome)}')">${escHtml(d.cognome_nome)} <span style="color:var(--muted);font-size:10px;">· ${d.matricola}</span></div>`).join('');
+  drop.style.display=data&&data.length?'block':'none';
+}
+function selProgDip(id, nome){
+  document.getElementById('pdSearch').value=nome;
+  document.getElementById('pdDipId').value=id;
+  document.getElementById('pdDrop').style.display='none';
+}
+async function saveProgDip(){
+  const catId=document.getElementById('pdCat').value;
+  const dipId=document.getElementById('pdDipId').value;
+  if(!catId||!dipId){showToast('Seleziona categoria e dipendente','error');return;}
+  try {
+    await sbPost('pn_prog_dipendenti',{categoria_id:parseInt(catId),dipendente_id:parseInt(dipId)});
+    document.getElementById('modalProgDip').remove();
+    loadProgDipendenti(); showToast('Dipendente aggiunto','success');
+  } catch(e){ showToast('Errore: '+e.message,'error'); }
+}
+async function deleteProgDip(id){
+  if(!confirm('Rimuovere questo dipendente dalla programmazione?')) return;
+  await sbDelete('pn_prog_dipendenti',id);
+  loadProgDipendenti(); showToast('Rimosso','');
 }
 
 // ═══════════════════════════════════════════
@@ -3289,7 +4265,7 @@ function generaPDFTD() {
       },
       didDrawPage: function() {
         doc.setFontSize(7); doc.setTextColor(150,150,150);
-        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v29', 12, doc.internal.pageSize.getHeight() - 5);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v30', 12, doc.internal.pageSize.getHeight() - 5);
         doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, doc.internal.pageSize.getHeight() - 5, {align:'right'});
       }
     });
@@ -3391,7 +4367,7 @@ function generaPDFFiltri() {
         columnStyles:{0:{cellWidth:48},1:{cellWidth:38},2:{cellWidth:35},3:{cellWidth:16,halign:'center'},4:{cellWidth:12,halign:'center'},5:{cellWidth:14,halign:'center'},6:{cellWidth:22,halign:'center'}},
         didDrawPage: function() {
           doc.setFontSize(7); doc.setTextColor(150,150,150);
-          doc.text('S.M.A.R.T Solutions — Posizionamento Navi v29', 12, pageH-5);
+          doc.text('S.M.A.R.T Solutions — Posizionamento Navi v30', 12, pageH-5);
           doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
         }
       });
@@ -4086,7 +5062,7 @@ async function generaPDFDashboard() {
       },
       didDrawPage: function() {
         doc.setFontSize(7); doc.setTextColor(150,150,150);
-        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v29', 12, pageH-5);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v30', 12, pageH-5);
         doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
       }
     });
@@ -4128,7 +5104,7 @@ async function generaPDFDashboard() {
       },
       didDrawPage: function() {
         doc.setFontSize(7); doc.setTextColor(150,150,150);
-        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v29', 12, pageH-5);
+        doc.text('S.M.A.R.T Solutions — Posizionamento Navi v30', 12, pageH-5);
         doc.text('Pagina '+doc.internal.getCurrentPageInfo().pageNumber, pageW-12, pageH-5, {align:'right'});
       }
     });
@@ -4363,7 +5339,7 @@ function generaPDF() {
           // Footer su ogni pagina
           doc.setFontSize(7);
           doc.setTextColor(150, 150, 150);
-          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v29', 12, pageH - 5);
+          doc.text('S.M.A.R.T Solutions \u2014 Posizionamento Navi v30', 12, pageH - 5);
           doc.text('Pagina ' + doc.internal.getCurrentPageInfo().pageNumber, pageW - 12, pageH - 5, { align: 'right' });
         }
       });
@@ -4518,18 +5494,22 @@ function buildTDUrgentiPanel() {
       const totVisione = Object.values(visione).reduce((a,b)=>a+b,0);
       // Cascade A
       document.getElementById('cascadeBadgeUrgenti').textContent = totUrgenti;
-      document.getElementById('cascadeBodyUrgenti').innerHTML = naviOrd.map(n => {
-        const c = urgenti[n.id] || 0;
-        const cls = c > 0 ? 'red' : 'zero';
-        return '<div class="cascade-row"><span class="cascade-nome">'+escHtml(n.nome)+'</span><span class="cascade-count '+cls+'">'+c+'</span></div>';
-      }).join('');
+      const rowsUrgenti = naviOrd.filter(n => (urgenti[n.id]||0) > 0).map(n => {
+        const c = urgenti[n.id];
+        return '<div class="cascade-row"><span class="cascade-nome">'+escHtml(n.nome)+'</span><span class="cascade-count red">'+c+'</span></div>';
+      });
+      document.getElementById('cascadeBodyUrgenti').innerHTML = rowsUrgenti.length
+        ? rowsUrgenti.join('')
+        : '<div style="font-size:11px;color:var(--muted);padding:8px 10px;font-style:italic;">Nessuna nave con TD urgenti</div>';
       // Cascade B
       document.getElementById('cascadeBadgeVisione').textContent = totVisione;
-      document.getElementById('cascadeBodyVisione').innerHTML = naviOrd.map(n => {
-        const c = visione[n.id] || 0;
-        const cls = c > 0 ? 'orange' : 'zero';
-        return '<div class="cascade-row"><span class="cascade-nome">'+escHtml(n.nome)+'</span><span class="cascade-count '+cls+'">'+c+'</span></div>';
-      }).join('');
+      const rowsVisione = naviOrd.filter(n => (visione[n.id]||0) > 0).map(n => {
+        const c = visione[n.id];
+        return '<div class="cascade-row"><span class="cascade-nome">'+escHtml(n.nome)+'</span><span class="cascade-count orange">'+c+'</span></div>';
+      });
+      document.getElementById('cascadeBodyVisione').innerHTML = rowsVisione.length
+        ? rowsVisione.join('')
+        : '<div style="font-size:11px;color:var(--muted);padding:8px 10px;font-style:italic;">Nessuna nave con flag ✗</div>';
       // Mostra il wrapper — entrambe aperte (non hanno classe 'closed')
       document.getElementById('cascadeAmmWrap').classList.add('show');
     }).catch(() => {});
@@ -4590,7 +5570,8 @@ function selectSnapshot(dateStr) {
   });
   // Filtra righe per quella data
   const righe = snapshotData.filter(r => r.data_snapshot && r.data_snapshot.startsWith(dateStr));
-  snapshotSelData = righe;
+snapshotSelData = righe;
+
   renderSnapshotBody(righe);
 }
 
@@ -4735,7 +5716,320 @@ function calcolaDemoSnap(personale) {
 
 function generaPDFSnapshot() {
   if(!snapshotSelData || snapshotSelData.length===0) { showToast('Nessuno snapshot selezionato','error'); return; }
-  showToast('PDF Snapshot — prossimamente','');
+  function doGeneraSnap() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+  const pw = doc.internal.pageSize.getWidth();   // 297
+  const ph = doc.internal.pageSize.getHeight();  // 210
+  const mL=12, mR=12, mT=14, mB=10;
+  const usableH = ph - mT - mB;
+
+  // ── helpers ──────────────────────────────────────────────────────
+  const navy=[15,42,74], teal=[29,158,117], amber=[186,117,23];
+  const grey1=[245,247,250], grey2=[229,231,235];
+
+  function fmtData(dateStr) {
+    if(!dateStr) return '—';
+    const d = new Date(dateStr);
+    return d.getDate().toString().padStart(2,'0')+'/'+(d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getFullYear();
+  }
+
+  const ORDINE_NAVI_SNAP = ['Moby Fantasy','Moby Legacy','Moby Aki','Moby Wonder','Moby Orli','Moby Kiss','Vincenzo Florio','Raffaele Rubattino','Moby Tommy'];
+  const righe = snapshotSelData;
+  const dataSnap = righe[0]?.data_snapshot ? fmtData(righe[0].data_snapshot) : '—';
+  const meseLabel = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'][righe[0]?.mese||0]||'';
+  const naviOrd = [...ORDINE_NAVI_SNAP.map(n => righe.find(r => r.nave_nome && r.nave_nome.toLowerCase()===n.toLowerCase())).filter(Boolean),
+    ...righe.filter(r => !ORDINE_NAVI_SNAP.map(n=>n.toLowerCase()).includes((r.nave_nome||'').toLowerCase()))];
+
+  // ── pagina di copertina con totali flotta ────────────────────────
+  let totBordoC=0,totConfC=0,totBudC=0,totBordoCu=0,totConfCu=0,totBudCu=0;
+  let totIT=0,totCOM=0,totEX=0,totU=0,totD=0,totMin=0;
+  naviOrd.forEach(r => {
+    const repartiInfo = calcolaRepartiSnap(r.personale||[], r.nave_id, r.budget_reparto||{});
+    repartiInfo.forEach(rep => {
+      if(REPARTI_CUCINA.includes(rep.nome)){totBordoCu+=rep.bordo;totConfCu+=rep.conf;totBudCu+=rep.budget;}
+      else{totBordoC+=rep.bordo;totConfC+=rep.conf;totBudC+=rep.budget;}
+    });
+    const demo = calcolaDemoSnap(r.personale||[]);
+    totIT+=demo.it;totCOM+=demo.com;totEX+=demo.ex;totU+=demo.u;totD+=demo.d;totMin+=demo.min;
+  });
+
+  // Intestazione copertina
+  doc.setFillColor(...navy);
+  doc.rect(0,0,pw,18,'F');
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(13);
+  doc.setTextColor(255,255,255);
+  doc.text('Snapshot Posizionamento — '+meseLabel+' '+( righe[0]?.anno||''), mL, 11);
+  doc.setFontSize(9);
+  doc.setFont('helvetica','normal');
+  doc.text('Data snapshot: '+dataSnap, pw-mR, 11, {align:'right'});
+
+  let y = 26;
+  // Riquadri Camera / Cucina
+  const copC = totBudC>0?Math.round(totBordoC/totBudC*100):0;
+  const copCu = totBudCu>0?Math.round(totBordoCu/totBudCu*100):0;
+  const bw = (pw-mL-mR-8)/2;
+
+  [[' Camera — Totale flotta',teal,totBordoC,totConfC,totBudC,copC],[' Cucina — Totale flotta',amber,totBordoCu,totConfCu,totBudCu,copCu]].forEach(([lbl,col,b,c,bud,cop],i) => {
+    const x = mL + i*(bw+8);
+    doc.setFillColor(...grey1);
+    doc.roundedRect(x,y,bw,28,2,2,'F');
+    doc.setFillColor(...col);
+    doc.rect(x,y,3,28,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...navy);
+    doc.text(lbl, x+6, y+7);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(80,80,80);
+    const rows=[['A bordo',''+b],['Confermati',''+c],['Budget',''+bud],['Copertura',(bud>0?cop+'%':'—')]];
+    rows.forEach(([k,v],j)=>{
+      const ry=y+13+j*4;
+      doc.text(k,x+6,ry);
+      doc.setFont('helvetica','bold'); doc.text(v,x+bw-4,ry,{align:'right'}); doc.setFont('helvetica','normal');
+    });
+  });
+
+  y += 34;
+
+  // Nazionalità e Genere
+  const totAll=totIT+totCOM+totEX;
+  const totGen=totU+totD+totMin;
+  [[' Nazionalità',[['Italiani',totIT],['Comunitari',totCOM],['Ex-Com.',totEX],['Totale',totAll]],navy],
+   [' Genere',[['Uomini',totU],['Donne',totD],['Minorenni',totMin],['Totale',totGen]],teal]].forEach(([lbl,rows,col],i)=>{
+    const x = mL + i*(bw+8);
+    doc.setFillColor(...grey1);
+    doc.roundedRect(x,y,bw,26,2,2,'F');
+    doc.setFillColor(...col);
+    doc.rect(x,y,3,26,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...navy);
+    doc.text(lbl, x+6, y+7);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(80,80,80);
+    rows.forEach(([k,v],j)=>{
+      const ry=y+13+j*3.5;
+      const tot = j<3 ? (j===0?totAll:j===1?(j===0?totAll:totAll):totAll) : 0;
+      const pct = (j<3 && totAll>0 && i===0) ? ' ('+ Math.round(v/(i===0?totAll:totGen)*100)+'%)' : (j<3&&totGen>0&&i===1?' ('+Math.round(v/totGen*100)+'%)':'');
+      doc.text(k,x+6,ry);
+      doc.setFont('helvetica','bold'); doc.text(''+v+(j<3?pct:''),x+bw-4,ry,{align:'right'}); doc.setFont('helvetica','normal');
+    });
+  });
+
+  y += 32;
+
+  // Tabella riepilogo per nave (una riga per nave)
+  const colsH = ['Nave','B. Cam.','Conf. Cam.','Bud. Cam.','Cop. Cam.%','B. Cuc.','Conf. Cuc.','Bud. Cuc.','Cop. Cuc.%','IT','COM','Ex-COM','U','D','Min.','Tot.'];
+  const colW = [40,12,14,12,14,12,14,12,14,9,9,10,9,9,9,10];
+  // header
+  doc.setFillColor(...navy);
+  doc.rect(mL,y,pw-mL-mR,6,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(255,255,255);
+  let cx=mL+1;
+  colsH.forEach((h,i)=>{ doc.text(h,cx+(colW[i]/2),y+4,{align:'center'}); cx+=colW[i]; });
+  y+=6;
+
+  naviOrd.forEach((r,ri)=>{
+    const repartiInfo=calcolaRepartiSnap(r.personale||[],r.nave_id,r.budget_reparto||{});
+    let bCam=0,cCam=0,budCam=0,bCuc=0,cCuc=0,budCuc=0;
+    repartiInfo.forEach(rep=>{
+      if(REPARTI_CUCINA.includes(rep.nome)){bCuc+=rep.bordo;cCuc+=rep.conf;budCuc+=rep.budget;}
+      else{bCam+=rep.bordo;cCam+=rep.conf;budCam+=rep.budget;}
+    });
+    const demo=calcolaDemoSnap(r.personale||[]);
+    const copCamStr=budCam>0?Math.round(bCam/budCam*100)+'%':'—';
+    const copCucStr=budCuc>0?Math.round(bCuc/budCuc*100)+'%':'—';
+    const totP=demo.it+demo.com+demo.ex;
+    const row=[r.nave_nome||'—',''+bCam,''+cCam,''+budCam,copCamStr,''+bCuc,''+cCuc,''+budCuc,copCucStr,''+demo.it,''+demo.com,''+demo.ex,''+demo.u,''+demo.d,''+demo.min,''+totP];
+    doc.setFillColor(...(ri%2===0?grey1:[255,255,255]));
+    doc.rect(mL,y,pw-mL-mR,5,'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(30,30,30);
+    cx=mL+1;
+    row.forEach((v,i)=>{ doc.text(v,cx+(colW[i]/2),y+3.5,{align:'center'}); cx+=colW[i]; });
+    y+=5;
+  });
+
+  // ── da qui: una pagina (o più se necessario) per nave, con dettaglio reparti ──
+  const HDR_H = 10; // altezza intestazione nave
+  const ROW_H = 5;
+  const TABLE_HDR_H = 10; // due righe header tabella
+
+  naviOrd.forEach(r => {
+    const personale = r.personale || [];
+    const repartiInfo = calcolaRepartiSnap(personale, r.nave_id, r.budget_reparto||{});
+    if(repartiInfo.length===0) return;
+    const demo = calcolaDemoSnap(personale);
+    const totB=repartiInfo.reduce((a,x)=>a+x.bordo,0);
+    const totC=repartiInfo.reduce((a,x)=>a+x.conf,0);
+    const totBud=repartiInfo.reduce((a,x)=>a+x.budget,0);
+    const totCop=totBud>0?Math.round(totB/totBud*100):0;
+
+    // Stima altezza blocco nave: header + table_hdr + righe + totale
+    const nRighe = repartiInfo.length + 1; // +1 totale
+    const blockH = HDR_H + TABLE_HDR_H + nRighe * ROW_H + 4;
+
+    // Nuova pagina per questa nave
+    doc.addPage();
+
+    // Intestazione pagina
+    doc.setFillColor(...navy);
+    doc.rect(0,0,pw,12,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(255,255,255);
+ doc.text(r.nave_nome||'—', mL, 8.5);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8);
+    doc.text('Snapshot: '+dataSnap+' — '+meseLabel+' '+(r.anno||''), pw-mR, 8.5, {align:'right'});
+
+    y = 18;
+
+    // Sommario nave
+    doc.setFillColor(...grey1);
+    doc.roundedRect(mL,y,pw-mL-mR,14,2,2,'F');
+    const sumCols = [['A bordo',''+totB],['Confermati',''+totC],['Budget',''+totBud],['Copertura',totBud>0?totCop+'%':'—'],['Italiani',''+demo.it],['Comunitari',''+demo.com],['Ex-Com.',''+demo.ex],['Uomini',''+demo.u],['Donne',''+demo.d],['Minorenni',''+demo.min],['Tot. personale',''+(demo.it+demo.com+demo.ex)]];
+    const sw = (pw-mL-mR)/sumCols.length;
+    sumCols.forEach(([k,v],i)=>{
+      const sx = mL + i*sw + sw/2;
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(100,100,100);
+      doc.text(k,sx,y+5,{align:'center'});
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...navy);
+      doc.text(v,sx,y+11,{align:'center'});
+    });
+
+    y += 18;
+
+    // Tabella reparti
+    const tCols=['Reparto','A bordo','Confermati','Budget','Cop.%','IT','COM','Ex-COM','U','D','Min.'];
+    const tW=[50,18,18,18,18,12,12,14,12,12,14];
+    // header gruppo
+    doc.setFillColor(...grey2);
+    doc.rect(mL,y,pw-mL-mR,5,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(...navy);
+    cx=mL+2;
+    tCols.forEach((h,i)=>{ doc.text(h,cx,y+3.5); cx+=tW[i]; });
+    y+=5;
+
+    repartiInfo.forEach((rep,ri)=>{
+      const cop=rep.budget>0?Math.round(rep.bordo/rep.budget*100)+'%':'—';
+      const rowData=[rep.nome,''+rep.bordo,''+rep.conf,''+rep.budget,cop,''+rep.it,''+rep.com,''+rep.ex,''+rep.u,''+rep.d,''+rep.min];
+      doc.setFillColor(...(ri%2===0?grey1:[255,255,255]));
+      doc.rect(mL,y,pw-mL-mR,ROW_H,'F');
+      doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(30,30,30);
+      cx=mL+2;
+      rowData.forEach((v,i)=>{ doc.text(v,cx,y+3.5); cx+=tW[i]; });
+      y+=ROW_H;
+    });
+
+    // Riga totale
+    const copTot=totBud>0?totCop+'%':'—';
+    const totRow=['Totale',''+totB,''+totC,''+totBud,copTot,''+demo.it,''+demo.com,''+demo.ex,''+demo.u,''+demo.d,''+demo.min];
+    doc.setFillColor(220,232,248);
+    doc.rect(mL,y,pw-mL-mR,ROW_H,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(...navy);
+    cx=mL+2;
+    totRow.forEach((v,i)=>{ doc.text(v,cx,y+3.5); cx+=tW[i]; });
+    y+=ROW_H+3;
+
+// Lista nominativa — stesso ordine del posizionamento
+    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...navy);
+    doc.text('Personale a bordo', mL, y+4); y+=8;
+    const half = Math.floor((pw-mL-mR-6)/2);
+    let col0x=mL, col1x=mL+half+6, colIdx=0;
+    let colY=[y,y];
+
+    // Raggruppa per reparto: bordo e confermati separati, ordinati
+    const byRepSnap={};
+    personale.forEach(p=>{
+      const rn=p.pn_reparti?p.pn_reparti.nome:null; if(!rn) return;
+      if(!byRepSnap[rn]) byRepSnap[rn]={bordo:[],conf:[]};
+      if(p.stato==='confermato') byRepSnap[rn].conf.push(p); else byRepSnap[rn].bordo.push(p);
+    });
+   function sortSnap(lista) {
+      return lista.sort((a,b)=>{
+        const rA=a.pn_reparti?a.pn_reparti.nome:'', rB=b.pn_reparti?b.pn_reparti.nome:'';
+        const mA=a.pn_mansioni?a.pn_mansioni.nome:'', mB=b.pn_mansioni?b.pn_mansioni.nome:'';
+        const oA=getOrdine(rA,'',mA), oB=getOrdine(rB,'',mB);
+        if(oA!==oB) return oA-oB;
+        return (a.pn_dipendenti?a.pn_dipendenti.cognome_nome:'').localeCompare(b.pn_dipendenti?b.pn_dipendenti.cognome_nome:'','it');
+      });
+    }
+    Object.values(byRepSnap).forEach(g=>{ g.bordo=sortSnap(g.bordo); g.conf=sortSnap(g.conf); });
+
+    function snapNewPage2() {
+      doc.addPage();
+      doc.setFillColor(...navy); doc.rect(0,0,pw,8,'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(255,255,255);
+      doc.text((r.nave_nome||'')+'  (continua)', mL, 6);
+      colY=[14,14]; colIdx=0;
+    }
+
+    ORDINE_REPARTI.forEach(nomeR=>{
+      const g=byRepSnap[nomeR]; if(!g||(g.bordo.length===0&&g.conf.length===0)) return;
+      const nLinee=g.bordo.length+(g.conf.length>0?1+g.conf.length:0);
+      const needH=5+nLinee*4+3;
+      if(colY[colIdx]+needH>ph-mB){
+        const altro=colIdx===0?1:0;
+        if(colY[altro]+needH<=ph-mB) colIdx=altro; else snapNewPage2();
+      }
+      const cx2=colIdx===0?col0x:col1x;
+      if(colY[colIdx]+5>ph-mB) snapNewPage2();
+      doc.setFillColor(...grey2);
+      doc.rect(cx2,colY[colIdx],half,5,'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(...navy);
+      doc.text(nomeR,cx2+2,colY[colIdx]+3.5);
+      colY[colIdx]+=5;
+ // Bordo
+      g.bordo.forEach(p=>{
+        const dip=p.pn_dipendenti;
+        const nome=dip?dip.cognome_nome:'—';
+        const mans=p.pn_mansioni?p.pn_mansioni.nome:'';
+        const isTD=p.tipo_contratto==='TD';
+        if(colY[colIdx]+4>ph-mB) snapNewPage2();
+        doc.setFillColor(255,255,255);
+        doc.rect(cx2,colY[colIdx],half,4,'F');
+        doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(30,30,30);
+        doc.text(nome+(mans?' · '+mans:'')+(isTD?' [TD]':''),cx2+2,colY[colIdx]+2.8);
+        colY[colIdx]+=4;
+      });
+      // Confermati
+      if(g.conf.length>0){
+        if(colY[colIdx]+4>ph-mB) snapNewPage2();
+        doc.setFillColor(220,235,255);
+        doc.rect(cx2,colY[colIdx],half,4,'F');
+        doc.setFont('helvetica','italic'); doc.setFontSize(6); doc.setTextColor(80,100,140);
+        doc.text('Prossimi imbarchi confermati',cx2+2,colY[colIdx]+2.8);
+        colY[colIdx]+=4;
+    g.conf.forEach(p=>{
+          const dip=p.pn_dipendenti;
+          const nome=dip?dip.cognome_nome:'—';
+          const mans=p.pn_mansioni?p.pn_mansioni.nome:'';
+          const isTD=p.tipo_contratto==='TD';
+          if(colY[colIdx]+4>ph-mB) snapNewPage2();
+          doc.setFillColor(240,247,255);
+          doc.rect(cx2,colY[colIdx],half,4,'F');
+          doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(30,30,30);
+          doc.text(nome+(mans?' · '+mans:'')+(isTD?' [TD]':''),cx2+2,colY[colIdx]+2.8);
+          colY[colIdx]+=4;
+        });
+      }
+      colY[colIdx]+=2;
+      colIdx=colIdx===0?1:0;
+    });
+  });
+
+  // Footer su ogni pagina
+  const totalPages = doc.internal.getNumberOfPages();
+  for(let i=1;i<=totalPages;i++){
+    doc.setPage(i);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(150,150,150);
+    doc.text('Posizionamento Navi — Snapshot '+dataSnap, mL, ph-4);
+    doc.text('Pag. '+i+' / '+totalPages, pw-mR, ph-4, {align:'right'});
+  }
+
+doc.save('snapshot_posizionamento_'+dataSnap.replace(/\//g,'-')+'.pdf');
+  showToast('PDF snapshot esportato','success');
+  } // fine doGeneraSnap
+  if(window.jspdf && window.jspdf.jsPDF) { doGeneraSnap(); }
+  else {
+    const s1=document.createElement('script');
+    s1.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s1.onload=function(){const s2=document.createElement('script');s2.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';s2.onload=doGeneraSnap;document.head.appendChild(s2);};
+    document.head.appendChild(s1);
+  }
 }
 function closeNotifAmm() {
   document.getElementById('notifAmmOverlay').classList.remove('show');
@@ -4878,6 +6172,38 @@ document.addEventListener('click', function(e) {
       <div class="stats-box-row"><span class="stats-box-lbl">Media GG</span><span class="stats-box-val" id="slGGCu">—</span></div>
       <div class="stats-box-row"><span class="stats-box-lbl">Età media</span><span class="stats-box-val" id="slEtaCu">—</span></div>
     </div>
+</div>
+</div>
+
+<!-- PANNELLO APPUNTI POPUP -->
+<div id="appuntiOverlay" onclick="toggleAppuntiPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:290;"></div>
+<div id="appuntiPanelPop" style="display:none;position:fixed;top:136px;left:16px;width:300px;height:400px;min-height:200px;max-height:calc(100vh - 155px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:hidden;resize:vertical;">
+  <div style="background:linear-gradient(135deg,#7c6a2a,#c4a535);padding:10px 14px;display:flex;align-items:center;gap:8px;">
+    <div style="flex:1;">
+      <div style="font-size:12px;font-weight:600;color:#fff;">📝 Appunti</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.75);" id="appuntiPanelNave">—</div>
+    </div>
+    <button onclick="toggleAppuntiPanel()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.8);font-size:16px;line-height:1;">✕</button>
+  </div>
+  <div style="font-size:9px;color:var(--muted);padding:5px 12px;border-bottom:1px solid var(--border);background:var(--bg);" id="appuntiMeta">—</div>
+  <div style="overflow-y:auto;flex:1;">
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="background:var(--bg);border-bottom:1px solid var(--border);">
+          <th style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:5px 10px;text-align:left;width:45%;">Nome</th>
+          <th style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:5px 10px;text-align:left;">Nota</th>
+          <th style="width:20px;"></th>
+        </tr>
+      </thead>
+      <tbody id="appuntiBody"></tbody>
+    </table>
+  </div>
+  <div style="padding:7px 10px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:var(--bg);flex-shrink:0;">
+<button onclick="addAppuntiRow()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:var(--muted);border:1px dashed var(--border);cursor:pointer;">＋ Riga</button>
+    <button onclick="sortAppuntiAZ()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">A→Z</button>
+    <button onclick="stampaAppuntiPDF()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">📄 PDF</button>
+    <span style="font-size:9px;color:var(--muted);font-style:italic;" id="appuntiSaved"></span>
+    <button id="btnSalvaAppunti" onclick="salvaAppunti()" style="font-family:var(--font);font-size:10px;padding:3px 10px;border-radius:4px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:500;margin-left:auto;">💾 Salva</button>
   </div>
 </div>
 
@@ -4935,6 +6261,30 @@ document.addEventListener('click', function(e) {
   </div>
   <div class="snap-body" id="snapBody">
     <div class="snap-empty">Nessuno snapshot caricato.</div>
+  </div>
+</div>
+<!-- MODALE SCELTA POST-LOGIN -->
+<div id="modalSceltaModulo" style="display:none;position:fixed;inset:0;background:rgba(10,22,38,.82);z-index:9999;display:none;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:40px 48px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.3);max-width:460px;width:90%;">
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Moby Lines — Gestione Personale</div>
+    <div style="font-size:19px;font-weight:600;color:var(--navy);margin-bottom:6px;" id="sceltaWelcome">Benvenuto</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:28px;">Seleziona il modulo da aprire</div>
+    <div style="display:flex;gap:14px;justify-content:center;">
+      <div onclick="sceltaModulo('pos')" style="flex:1;padding:22px 16px;border-radius:10px;border:2px solid var(--border);cursor:pointer;background:var(--bg);transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:10px;"
+        onmouseover="this.style.borderColor='var(--navy)';this.style.background='#fff';this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg)';this.style.transform='none'">
+        <div style="font-size:32px;">&#128674;</div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);">Posizionamento</div>
+        <div style="font-size:11px;color:var(--muted);">Gestione personale a bordo</div>
+      </div>
+      <div onclick="sceltaModulo('prog')" style="flex:1;padding:22px 16px;border-radius:10px;border:2px solid var(--border);cursor:pointer;background:var(--bg);transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:10px;"
+        onmouseover="this.style.borderColor='var(--navy)';this.style.background='#fff';this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg)';this.style.transform='none'">
+        <div style="font-size:32px;">&#128197;</div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);">Programmazione</div>
+        <div style="font-size:11px;color:var(--muted);">Turni e periodi per nave</div>
+      </div>
+    </div>
   </div>
 </div>
 </body>
