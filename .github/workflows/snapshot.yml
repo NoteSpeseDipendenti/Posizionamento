@@ -1,14 +1,9 @@
 name: Snapshot Posizionamento
-
 on:
   schedule:
-    - cron: '0 22 14 * *'   # 15 del mese alle 23:00 CET
-    - cron: '0 22 27 * *'   # 28 del mese alle 23:00 CET
-    - cron: '0 22 28 * *'   # 29 del mese
-    - cron: '0 22 29 * *'   # 30 del mese
-    - cron: '0 22 30 * *'   # 31 del mese
-  workflow_dispatch:         # trigger manuale
-
+    - cron: '0 22 15 * *'   # 15 di ogni mese alle 23:00 CET
+    - cron: '0 22 28 * *'   # 28 di ogni mese alle 23:00 CET
+  workflow_dispatch:
 jobs:
   snapshot:
     runs-on: ubuntu-latest
