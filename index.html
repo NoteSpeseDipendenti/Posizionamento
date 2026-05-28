@@ -1851,7 +1851,7 @@ let editPosId=null, promuoviId=null, deleteTarget=null, editCommId=null, editLoo
 const MESI = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
 const ORDINE_REPARTI = ['Hotel Management','Ristorante','Self/Bistrot','Bar','Cabine','Saletta/Riposteria','Squadra Ecologica','Squadra Ecologica Notturna','Cucina'];
 const REPARTI_CUCINA = ['Cucina'];
-const ORDINE_CAMERA = ['Capo Commissario','1.Commissario','2.Commissario','3.Commissario','Assistente Commissario','Assistente D\u2019Ufficio','1.Cameriere','Cameriere','Garzone Di Camera','Piccolo Di Camera'];
+const ORDINE_CAMERA = ['Capo Commissario','1.Commissario','2.Commissario','3.Commissario','Assistente Commissario','Assistente D’Ufficio',"Assistente D'Ufficio",'1.Cameriere','Cameriere','Garzone Di Camera','Piccolo Di Camera','Hk Utility'];
 const ORDINE_CUCINA_Q = ['Capo Cuoco','Cuoco Equipaggio','Dispensiere Equipaggio','1.Cuoco','2.Cuoco','3.Cuoco','Garzone Di Cucina','Piccolo Di Cucina','Macellaio','Pasticcere','Panettiere','Cambusiere'];
 const ORDINE_MANSIONI_CAMERA = ['Commissario','Assistente','Ufficiali','1° Cameriere','Ristorante','Saletta','Self Service','Bar Notturno','Cabine Letti','Cabine Bagni','Cabine Aspirapolvere','Notturno Ufficio','Ripostiere','Squadra Ecologica','Bar Sport'];
 const ORDINE_MANSIONI_CUCINA = ['Capo Cuoco','Cucina Calda','Cucina Fredda','Cucina Pagliaccia','Cuoco Equipaggio','Cambusiere','Panettiere','Bar Sport'];
@@ -6595,106 +6595,222 @@ html += tutti.length > 0
 }
 
 // ── APPUNTI PER NAVE ─────────────────────────────────────────────
-let _appuntiRowId = 0;
-function addAppuntiRow(nome, nota, readonly) {
-  const rid = ++_appuntiRowId;
-  const tr = document.createElement('tr');
-  tr.style.borderBottom = '1px solid #f0ede8';
-  tr.dataset.rid = rid;
-  tr.innerHTML = `
- <td style="padding:3px 4px;width:45%;position:relative;">
-      <input type="text" id="apNome${rid}" value="${escHtml(nome||'')}" placeholder="Nome..." ${readonly?'disabled':''}
-        style="width:100%;border:none;background:transparent;font-family:var(--font);font-size:11px;color:var(--text);outline:none;padding:2px 4px;"
-        oninput="searchAppuntiNome(${rid})" autocomplete="off">
-<div id="apDrop${rid}" style="position:fixed;background:#fff;border:1px solid var(--border);border-radius:5px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:9999;max-height:130px;overflow-y:auto;display:none;width:180px;"></div>
-    </td>
-    <td style="padding:3px 4px;">
-      <input type="text" value="${escHtml(nota||'')}" placeholder="Nota..." ${readonly?'disabled':''}
-        style="width:100%;border:none;background:transparent;font-family:var(--font);font-size:11px;color:var(--text);outline:none;padding:2px 4px;">
-    </td>
-    <td style="padding:3px 4px;text-align:center;">${readonly?'':'<button onclick="this.closest(\'tr\').remove()" style="background:none;border:none;cursor:pointer;color:#ccc;font-size:11px;">✕</button>'}</td>`;
-  document.getElementById('appuntiBody').appendChild(tr);
+// ═══ APPUNTI - NUOVA LOGICA ═══
+let _appuntiTab = 'amm';
+
+function switchAppuntiTab(tab) {
+  _appuntiTab = tab;
+  const tabAmm = document.getElementById('appuntiTabAmm');
+  const tabComm = document.getElementById('appuntiTabComm');
+  if(tab === 'amm') {
+    tabAmm.style.borderBottom = '2px solid #c4a535'; tabAmm.style.color = '#7c6a2a'; tabAmm.style.background = 'var(--bg2)';
+    tabComm.style.borderBottom = '2px solid transparent'; tabComm.style.color = 'var(--muted)'; tabComm.style.background = '';
+  } else {
+    tabComm.style.borderBottom = '2px solid #185FA5'; tabComm.style.color = '#185FA5'; tabComm.style.background = 'var(--bg2)';
+    tabAmm.style.borderBottom = '2px solid transparent'; tabAmm.style.color = 'var(--muted)'; tabAmm.style.background = '';
+  }
+  renderAppuntiBody();
 }
 
-async function searchAppuntiNome(rid) {
-  const inp = document.getElementById('apNome'+rid);
-  const drop = document.getElementById('apDrop'+rid);
-  if(!inp||!drop) return;
-  const v = inp.value.trim();
-  if(v.length < 2) { drop.style.display='none'; return; }
-  const data = await sbGet(`pn_dipendenti?cognome_nome=ilike.*${encodeURIComponent(v)}*&select=id,cognome_nome&limit=8`);
-  if(!data||!data.length) { drop.style.display='none'; return; }
-  drop.innerHTML = data.map(d =>
-    `<div style="padding:5px 8px;font-size:11px;cursor:pointer;" data-rid="${rid}" data-nome="${escHtml(d.cognome_nome)}" onmousedown="selAppuntiNome(this)" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''">${escHtml(d.cognome_nome)}</div>`
-  ).join('');
-  const rect = inp.getBoundingClientRect();
-  drop.style.top = (rect.bottom+2)+'px';
-  drop.style.left = rect.left+'px';
-  drop.style.width = rect.width+'px';
-  drop.style.display = 'block';
-}
-
-function selAppuntiNome(el) {
-  const rid=el.dataset.rid;
-  const nome=el.dataset.nome;
-  const inp = document.getElementById('apNome'+rid);
-  const drop = document.getElementById('apDrop'+rid);
-  if(inp) inp.value = nome;
-  if(drop) drop.style.display = 'none';
-}
-
-function sortAppuntiAZ() {
+function renderAppuntiBody() {
+  const isAmm = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+  const canEdit = (_appuntiTab === 'amm' && isAmm) || (_appuntiTab === 'comm' && !isAmm);
+  const data = _appuntiTab === 'amm' ? (window._appuntiAmmData || []) : (window._appuntiCommData || []);
   const body = document.getElementById('appuntiBody');
-  const rows = [...body.querySelectorAll('tr')];
-  rows.sort((a,b) => {
-    const na = a.querySelector('input') ? a.querySelector('input').value : '';
-    const nb = b.querySelector('input') ? b.querySelector('input').value : '';
-    return na.localeCompare(nb, 'it');
+  if(!body) return;
+
+  // Aggiorna label tab con contatori
+  const cntAmm = (window._appuntiAmmData||[]).filter(r=>r&&String(r).trim()).length;
+  const cntComm = (window._appuntiCommData||[]).filter(r=>r&&String(r).trim()).length;
+  const tabAmmEl = document.getElementById('appuntiTabAmm');
+  const tabCommEl = document.getElementById('appuntiTabComm');
+  if(tabAmmEl) tabAmmEl.innerHTML = '📋 Note AMM' + (cntAmm > 0 ? ' <span style="font-size:10px;background:#FAEEDA;color:#7c6a2a;padding:1px 6px;border-radius:20px;">'+cntAmm+'</span>' : '');
+  if(tabCommEl) tabCommEl.innerHTML = '✏️ Note Commissario' + (cntComm > 0 ? ' <span style="font-size:10px;background:#E6F1FB;color:#0C447C;padding:1px 6px;border-radius:20px;">'+cntComm+'</span>' : '');
+  // Mostra/nascondi bottoni in base a chi può modificare
+  const btnAdd = document.getElementById('btnAddAppuntiRiga');
+  const btnSalva = document.getElementById('btnSalvaAppunti');
+  if(btnAdd) btnAdd.style.display = canEdit ? 'inline-block' : 'none';
+  if(btnSalva) btnSalva.style.display = canEdit ? 'inline-block' : 'none';
+
+  // Header info
+  const meta = document.getElementById('appuntiMeta');
+  const metaData = _appuntiTab === 'amm' ? window._appuntiAmmMeta : window._appuntiCommMeta;
+  if(meta) meta.textContent = metaData || '';
+
+  // Render righe
+  let html = '<div style="padding:4px 0;">';
+  data.forEach((riga, i) => {
+    const escaped = (riga||'').replace(/"/g,'&quot;');
+    if(canEdit) {
+      html += '<div style="display:flex;align-items:center;padding:5px 14px;border-bottom:0.5px solid var(--border);gap:8px;">'
+        + '<input type="text" value="'+escaped+'" oninput="updateAppuntiRiga('+i+',this.value)" placeholder="Scrivi una nota..." style="flex:1;font-size:12px;border:none;background:transparent;outline:none;color:var(--text);font-family:var(--font);padding:2px;"/>'
+        + '<button onclick="removeAppuntiRiga('+i+')" style="background:none;border:none;cursor:pointer;color:#ccc;font-size:13px;flex-shrink:0;padding:2px;" title="Elimina">🗑️</button>'
+        + '</div>';
+    } else {
+      html += '<div style="display:flex;align-items:center;padding:5px 14px;border-bottom:0.5px solid var(--border);">'
+        + '<span style="flex:1;font-size:12px;color:var(--text);padding:2px;">'+escHtml(riga||'')+'</span>'
+        + '</div>';
+    }
   });
-  rows.forEach(r => body.appendChild(r));
+  // Riga vuota per aggiungere (solo se può modificare)
+  if(canEdit) {
+    html += '<div style="display:flex;align-items:center;padding:5px 14px;gap:8px;">'
+      + '<input type="text" placeholder="+ Nuova nota..." oninput="addAppuntiRigaInline(this)" style="flex:1;font-size:12px;border:none;background:transparent;outline:none;color:var(--muted);font-family:var(--font);padding:2px;"/>'
+      + '<span style="width:24px;"></span>'
+      + '</div>';
+  }
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+function updateAppuntiRiga(idx, val) {
+  if(_appuntiTab === 'amm') {
+    if(!window._appuntiAmmData) window._appuntiAmmData = [];
+    window._appuntiAmmData[idx] = String(val||'');
+  } else {
+    if(!window._appuntiCommData) window._appuntiCommData = [];
+    window._appuntiCommData[idx] = String(val||'');
+  }
+}
+
+function removeAppuntiRiga(idx) {
+  if(_appuntiTab === 'amm') {
+    window._appuntiAmmData = (window._appuntiAmmData||[]).filter((_,i) => i !== idx);
+  } else {
+    window._appuntiCommData = (window._appuntiCommData||[]).filter((_,i) => i !== idx);
+  }
+  renderAppuntiBody();
+}
+
+function addAppuntiRiga() {
+  if(_appuntiTab === 'amm') {
+    if(!window._appuntiAmmData) window._appuntiAmmData = [];
+    window._appuntiAmmData.push('');
+  } else {
+    if(!window._appuntiCommData) window._appuntiCommData = [];
+    window._appuntiCommData.push('');
+  }
+  renderAppuntiBody();
+  // Focus sull'ultima riga
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('#appuntiBody input');
+    if(inputs.length) inputs[inputs.length-2]?.focus();
+  }, 50);
+}
+
+function addAppuntiRigaInline(input) {
+  if(!input.value.trim()) return;
+  if(_appuntiTab === 'amm') {
+    if(!window._appuntiAmmData) window._appuntiAmmData = [];
+    window._appuntiAmmData.push(input.value);
+  } else {
+    if(!window._appuntiCommData) window._appuntiCommData = [];
+    window._appuntiCommData.push(input.value);
+  }
+  input.value = '';
+  renderAppuntiBody();
+  setTimeout(() => {
+    const inputs = document.querySelectorAll('#appuntiBody input');
+    if(inputs.length) inputs[inputs.length-1]?.focus();
+  }, 50);
+}
+
+function toggleAppuntiPanel() {
+  const panel = document.getElementById('appuntiPanelPop');
+  const overlay = document.getElementById('appuntiOverlay');
+  const isOpen = panel.style.display === 'flex';
+  panel.style.display = isOpen ? 'none' : 'flex';
+  overlay.style.display = isOpen ? 'none' : 'block';
+  if(!isOpen) loadAppunti(utente.nave_id);
+}
+
+async function loadAppunti(naveId) {
+  if(!naveId) naveId = utente ? utente.nave_id : null;
+  if(!naveId) return;
+  const isAmm = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+  // Aggiorna nome nave
+  const nave = navi ? navi.find(n=>n.id===naveId) : null;
+  const panelNave = document.getElementById('appuntiPanelNave');
+  if(panelNave && nave) panelNave.textContent = nave.nome;
+  // Stile header in base al ruolo
+  const handle = document.getElementById('appuntiDragHandle');
+  if(handle) handle.style.background = isAmm ? 'linear-gradient(135deg,#7c6a2a,#c4a535)' : 'linear-gradient(135deg,#185fa5,#0c447c)';
+  // Tab attiva per default
+  if(!isAmm) switchAppuntiTab('comm');
+  try {
+    // Carica note AMM
+    const ammData = await sbGet('pn_appunti_nave?nave_id=eq.'+naveId+'&tipo=eq.amm&select=*&limit=1');
+    const ammRec = ammData && ammData[0];
+    const rawAmm = ammRec && ammRec.testo ? JSON.parse(ammRec.testo) : [];
+    window._appuntiAmmData = rawAmm.map(r => typeof r === 'object' ? (r.nome||'')+' '+(r.nota||'') : String(r||''));
+    window._appuntiAmmMeta = ammRec && ammRec.updated_at ? (ammRec.autore||'AMM')+' · '+new Date(ammRec.updated_at).toLocaleDateString('it-IT')+' '+new Date(ammRec.updated_at).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}) : '';
+    // Carica note Commissario
+    const commData = await sbGet('pn_appunti_nave?nave_id=eq.'+naveId+'&tipo=eq.comm&select=*&limit=1');
+    const commRec = commData && commData[0];
+    const rawComm = commRec && commRec.testo ? JSON.parse(commRec.testo) : [];
+    window._appuntiCommData = rawComm.map(r => typeof r === 'object' ? (r.nome||'')+' '+(r.nota||'') : String(r||''));
+    window._appuntiCommMeta = commRec && commRec.updated_at ? (commRec.autore||'Comm')+' · '+new Date(commRec.updated_at).toLocaleDateString('it-IT')+' '+new Date(commRec.updated_at).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}) : '';
+  } catch(e) {
+    window._appuntiAmmData = [];
+    window._appuntiCommData = [];
+  }
+  renderAppuntiBody();
+  // Drag
+  initAppuntiDrag();
+  // Aggiorna badge bottone
+  const btnA = document.getElementById('btnAppunti');
+  if(btnA) {
+    const hasNotes = (window._appuntiAmmData||[]).length > 0 || (window._appuntiCommData||[]).length > 0;
+    btnA.style.fontWeight = hasNotes ? '700' : '400';
+    btnA.style.background = hasNotes ? 'rgba(255,180,50,.28)' : 'rgba(255,180,50,.12)';
+    btnA.style.borderColor = hasNotes ? 'rgba(255,200,100,.6)' : 'rgba(255,200,100,.3)';
+  }
+}
+
+async function salvaAppunti() {
+  const naveId = utente.nave_id;
+  const isAmm = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+  const tipo = _appuntiTab;
+  const dataArr = tipo === 'amm' ? (window._appuntiAmmData||[]) : (window._appuntiCommData||[]);
+  const testo = JSON.stringify(dataArr.filter(r => r && String(r).trim()));
+  const payload = { nave_id: naveId, tipo, testo, autore: utente.nome||utente.username, updated_at: new Date().toISOString() };
+  try {
+    const existing = await sbGet('pn_appunti_nave?nave_id=eq.'+naveId+'&tipo=eq.'+tipo+'&select=id&limit=1');
+    if(existing && existing[0]) { await sbPatch('pn_appunti_nave', existing[0].id, payload); }
+    else { await sbPost('pn_appunti_nave', payload); }
+    showToast('Appunti salvati','success');
+    await loadAppunti(naveId);
+  } catch(e) { showToast('Errore salvataggio','error'); }
 }
 
 function stampaAppuntiPDF() {
+  const data = _appuntiTab === 'amm' ? (window._appuntiAmmData||[]) : (window._appuntiCommData||[]);
+  const righe = data.filter(r => r && String(r).trim());
+  if(!righe.length) { showToast('Nessuna nota da stampare','error'); return; }
   function doStampa() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-    const pw = doc.internal.pageSize.getWidth();
     const navy=[15,42,74];
     const nave = document.getElementById('appuntiPanelNave')?.textContent||'—';
-    const meta = document.getElementById('appuntiMeta')?.textContent||'';
-    // Header
+    const tipo = _appuntiTab === 'amm' ? 'Note AMM' : 'Note Commissario';
+    const today = new Date();
+    const todayFmt = today.getDate().toString().padStart(2,'0')+'/'+(today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getFullYear();
     doc.setFillColor(...navy);
-    doc.rect(0,0,pw,16,'F');
+    doc.rect(0,0,210,16,'F');
     doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(255,255,255);
-    doc.text('Appunti — '+nave, 12, 10);
+    doc.text('Appunti '+tipo+' — '+nave, 12, 11);
     doc.setFont('helvetica','normal'); doc.setFontSize(8);
-    doc.text(meta, pw-12, 10, {align:'right'});
-    // Tabella
+    doc.text(todayFmt, 198, 11, {align:'right'});
     let y = 24;
-    doc.setFillColor(240,244,250);
-    doc.rect(12,y,186,6,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...navy);
-    doc.text('NOME', 14, y+4);
-    doc.text('NOTA', 90, y+4);
-    y += 6;
-    const rows = [...document.querySelectorAll('#appuntiBody tr')];
-    rows.forEach((tr,i) => {
-      const inputs = tr.querySelectorAll('input');
-      const nome = inputs[0]?inputs[0].value:'';
-      const nota = inputs[1]?inputs[1].value:'';
-      if(!nome&&!nota) return;
+    righe.forEach((riga, i) => {
       if(y > 270) { doc.addPage(); y=14; }
-      if(i%2===0){ doc.setFillColor(248,250,252); doc.rect(12,y,186,6,'F'); }
-      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(30,30,30);
-      doc.text(nome, 14, y+4);
-      doc.text(nota, 90, y+4);
-      y += 6;
+      if(i%2===0){ doc.setFillColor(248,250,252); doc.rect(12,y-3,186,7,'F'); }
+      doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(30,30,30);
+      const lines = doc.splitTextToSize(riga, 180);
+      doc.text(lines, 14, y);
+      y += lines.length * 6;
     });
-    // Footer
-    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(150,150,150);
-    doc.text('Posizionamento Navi — Appunti '+nave, 12, 290);
     doc.save('appunti_'+nave.replace(/\s+/g,'_')+'.pdf');
-    showToast('PDF esportato','success');
   }
   if(window.jspdf&&window.jspdf.jsPDF){ doStampa(); }
   else {
@@ -6704,88 +6820,28 @@ function stampaAppuntiPDF() {
   }
 }
 
-document.addEventListener('click', e => {
-  document.querySelectorAll('[id^="apDrop"]').forEach(d => {
-    if(!e.target.closest('[id^="apNome"]')) d.style.display='none';
-  });
-});
-function toggleAppuntiPanel() {
+function initAppuntiDrag() {
+  const handle = document.getElementById('appuntiDragHandle');
   const panel = document.getElementById('appuntiPanelPop');
-  const overlay = document.getElementById('appuntiOverlay');
-  const isOpen = panel.style.display === 'flex';
-  panel.style.display = isOpen ? 'none' : 'flex';
-  overlay.style.display = isOpen ? 'none' : 'block';
-  if(!isOpen) loadAppunti(utente.nave_id);
+  if(!handle || !panel || handle._dragInit) return;
+  handle._dragInit = true;
+  let dx=0, dy=0, mx=0, my=0;
+  handle.addEventListener('mousedown', function(e) {
+    if(e.target.tagName === 'BUTTON') return;
+    e.preventDefault();
+    mx=e.clientX; my=e.clientY;
+    document.onmouseup = () => { document.onmouseup=null; document.onmousemove=null; };
+    document.onmousemove = function(e) {
+      dx=mx-e.clientX; dy=my-e.clientY;
+      mx=e.clientX; my=e.clientY;
+      panel.style.top=(panel.offsetTop-dy)+'px';
+      panel.style.left=(panel.offsetLeft-dx)+'px';
+    };
+  });
 }
-async function loadAppunti(naveId) {
-  if(!naveId) naveId = utente ? utente.nave_id : null;
-  if(!naveId) return;
-  const btnA = document.getElementById('btnAppunti');
-  const nave = navi.find(n=>n.id===naveId);
-  const panelNave = document.getElementById('appuntiPanelNave');
-  if(panelNave && nave) panelNave.textContent = nave.nome;
-  const isAmm = utente && (utente.ruolo==='admin'||utente.ruolo==='semiadmin');
-  const meta = document.getElementById('appuntiMeta');
-  const body = document.getElementById('appuntiBody');
-  const btn = document.getElementById('btnSalvaAppunti');
-  const addBtn = document.querySelector('[onclick="addAppuntiRow()"]');
-  if(!body) return;
-if(btn) btn.style.display = isAmm ? 'inline-block' : 'none';
-  if(addBtn) addBtn.style.display = isAmm ? 'inline-block' : 'none';
-  // PDF e A→Z sempre visibili
-  document.querySelectorAll('#appuntiPanelPop [onclick="stampaAppuntiPDF()"], #appuntiPanelPop [onclick="sortAppuntiAZ()"]').forEach(b=>b.style.display='inline-block');
-  try {
-    const data = await sbGet(`pn_appunti_nave?nave_id=eq.${naveId}&select=*`);
-    const rec = data && data[0];
-    body.innerHTML = '';
-    if(rec && rec.testo) {
-      try {
-        const righe = JSON.parse(rec.testo);
-        righe.forEach(r => addAppuntiRow(r.nome, r.nota, !isAmm));
-      } catch(e) {
-        // fallback testo libero
-        addAppuntiRow('', rec.testo, !isAmm);
-      }
-    }
-    if(rec && rec.updated_at) {
-      const d = new Date(rec.updated_at);
-      meta.textContent = (rec.autore||'—') + ' — ' + d.toLocaleDateString('it-IT') + ' ' + d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
-    } else { meta.textContent = 'Nessuna nota'; }
-} catch(e) { body.innerHTML=''; meta.textContent=''; }
-  // Grassetto se ci sono note
-  if(btnA) {
-const hasNotes = document.querySelectorAll('#appuntiBody tr').length > 0;
-    btnA.innerHTML = '📝 Appunti';
-    if(hasNotes) {
-      btnA.style.fontWeight='700';
-      btnA.style.background='rgba(255,180,50,.28)';
-      btnA.style.borderColor='rgba(255,200,100,.6)';
-    } else {
-      btnA.style.fontWeight='400';
-      btnA.style.background='rgba(255,180,50,.12)';
-      btnA.style.borderColor='rgba(255,200,100,.3)';
-    }
-  }
-}
-async function salvaAppunti() {
-  const naveId = utente.nave_id;
-  if(!naveId) return;
-  const rows = [...document.querySelectorAll('#appuntiBody tr')].map(tr => {
-    const inputs = tr.querySelectorAll('input');
-    return {nome: inputs[0]?inputs[0].value:'', nota: inputs[1]?inputs[1].value:''};
-  }).filter(r => r.nome||r.nota);
-  const testo = JSON.stringify(rows);
-  const saved = document.getElementById('appuntiSaved');
-  try {
-    const existing = await sbGet(`pn_appunti_nave?nave_id=eq.${naveId}&select=id`);
-    const payload = {nave_id:naveId, testo, autore:utente.nome||utente.username, updated_at:new Date().toISOString()};
-    if(existing && existing[0]) { await sbPatch('pn_appunti_nave', existing[0].id, payload); }
-    else { await sbPost('pn_appunti_nave', payload); }
-    saved.textContent = 'Salvato ✓';
-    setTimeout(()=>{ saved.textContent=''; }, 3000);
-    loadAppunti(naveId);
-  } catch(e){ showToast('Errore salvataggio appunti','error'); }
-}
+
+// ═══ FINE APPUNTI ═══
+
 
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -7153,26 +7209,26 @@ const [pos, bud, prog] = await Promise.all([
   }
 }
 
+function normStr(s) { return (s||'').toLowerCase().replace(/[‘’′']/g,"'").trim(); }
+
 function getOrdine(nomeReparto, nomeQualifica, nomeMansione) {
   if(REPARTI_CUCINA.includes(nomeReparto)) {
-    // Per cucina: cerca prima nella mansione, poi nella qualifica, usando ORDINE_CUCINA_Q
-    const mLow = (nomeMansione||'').toLowerCase();
-    const qLow = (nomeQualifica||'').toLowerCase();
-    // Prova mansione
-  let idx = ORDINE_CUCINA_Q.findIndex(v => v.toLowerCase() === mLow);
+    const mNorm = normStr(nomeMansione);
+    const qNorm = normStr(nomeQualifica);
+    let idx = ORDINE_CUCINA_Q.findIndex(v => normStr(v) === mNorm);
     if(idx >= 0) return idx;
-    // Prova qualifica
-    idx = ORDINE_CUCINA_Q.findIndex(v => v.toLowerCase() === qLow);
+    idx = ORDINE_CUCINA_Q.findIndex(v => normStr(v) === qNorm);
     if(idx >= 0) return idx;
-    // fallback mansione cucina per snapshot
-    idx = ORDINE_MANSIONI_CUCINA.findIndex(v => v.toLowerCase() === mLow);
+    idx = ORDINE_MANSIONI_CUCINA.findIndex(v => normStr(v) === mNorm);
     return idx >= 0 ? idx : 999;
   }
-const ord = ORDINE_CAMERA;
-  let idx = ord.findIndex(q => q.toLowerCase() === (nomeQualifica||'').toLowerCase());
+  const ord = ORDINE_CAMERA;
+  const qNorm = normStr(nomeQualifica);
+  const mNorm = normStr(nomeMansione);
+  let idx = ord.findIndex(q => normStr(q) === qNorm);
   if(idx >= 0) return idx;
-  // fallback mansione per snapshot
-  idx = ORDINE_MANSIONI_CAMERA.findIndex(q => q.toLowerCase() === (nomeMansione||'').toLowerCase());
+  // fallback mansione
+  idx = ORDINE_MANSIONI_CAMERA.findIndex(q => normStr(q) === mNorm);
   return idx >= 0 ? idx : 999;
 }
 
@@ -11371,33 +11427,26 @@ var firmaUtente = utente ? (utente.nome || utente.username || 'Ufficio Armamento
 
 <!-- PANNELLO APPUNTI POPUP -->
 <div id="appuntiOverlay" onclick="toggleAppuntiPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:290;"></div>
-<div id="appuntiPanelPop" style="display:none;position:fixed;top:136px;left:16px;width:300px;height:400px;min-height:200px;max-height:calc(100vh - 155px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:hidden;resize:vertical;">
-  <div style="background:linear-gradient(135deg,#7c6a2a,#c4a535);padding:10px 14px;display:flex;align-items:center;gap:8px;">
+<div id="appuntiPanelPop" style="display:none;position:fixed;top:80px;left:16px;width:600px;height:460px;min-height:200px;max-height:calc(100vh - 100px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:hidden;resize:both;">
+  <div id="appuntiDragHandle" style="background:linear-gradient(135deg,#7c6a2a,#c4a535);padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:move;user-select:none;flex-shrink:0;">
     <div style="flex:1;">
       <div style="font-size:12px;font-weight:600;color:#fff;">📝 Appunti</div>
       <div style="font-size:10px;color:rgba(255,255,255,.75);" id="appuntiPanelNave">—</div>
     </div>
     <button onclick="toggleAppuntiPanel()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.8);font-size:16px;line-height:1;">✕</button>
   </div>
-  <div style="font-size:9px;color:var(--muted);padding:5px 12px;border-bottom:1px solid var(--border);background:var(--bg);" id="appuntiMeta">—</div>
-  <div style="overflow-y:auto;flex:1;">
-    <table style="width:100%;border-collapse:collapse;">
-      <thead>
-        <tr style="background:var(--bg);border-bottom:1px solid var(--border);">
-          <th style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:5px 10px;text-align:left;width:45%;">Nome</th>
-          <th style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding:5px 10px;text-align:left;">Nota</th>
-          <th style="width:20px;"></th>
-        </tr>
-      </thead>
-      <tbody id="appuntiBody"></tbody>
-    </table>
+  <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;">
+    <div id="appuntiTabAmm" onclick="switchAppuntiTab('amm')" style="flex:1;padding:7px;text-align:center;font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid #c4a535;color:#7c6a2a;background:var(--bg2);">📋 Note AMM</div>
+    <div id="appuntiTabComm" onclick="switchAppuntiTab('comm')" style="flex:1;padding:7px;text-align:center;font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);">✏️ Note Commissario</div>
   </div>
-  <div style="padding:7px 10px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:var(--bg);flex-shrink:0;">
-<button onclick="addAppuntiRow()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:var(--muted);border:1px dashed var(--border);cursor:pointer;">＋ Riga</button>
-    <button onclick="sortAppuntiAZ()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">A→Z</button>
-    <button onclick="stampaAppuntiPDF()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">📄 PDF</button>
-    <span style="font-size:9px;color:var(--muted);font-style:italic;" id="appuntiSaved"></span>
-    <button id="btnSalvaAppunti" onclick="salvaAppunti()" style="font-family:var(--font);font-size:10px;padding:3px 10px;border-radius:4px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:500;margin-left:auto;">💾 Salva</button>
+  <div style="overflow-y:auto;flex:1;" id="appuntiBody"></div>
+  <div style="padding:7px 10px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:var(--bg);flex-shrink:0;" id="appuntiFooter">
+    <span style="font-size:9px;color:var(--muted);font-style:italic;" id="appuntiMeta">—</span>
+    <div style="margin-left:auto;display:flex;gap:5px;">
+      <button id="btnAddAppuntiRiga" onclick="addAppuntiRiga()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:var(--muted);border:1px dashed var(--border);cursor:pointer;">＋ Riga</button>
+      <button onclick="stampaAppuntiPDF()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#A32D2D;border:1px solid #A32D2D;cursor:pointer;">📄 PDF</button>
+      <button id="btnSalvaAppunti" onclick="salvaAppunti()" style="font-family:var(--font);font-size:10px;padding:3px 10px;border-radius:4px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:500;">💾 Salva</button>
+    </div>
   </div>
 </div>
 
