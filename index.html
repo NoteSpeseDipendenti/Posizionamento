@@ -639,7 +639,7 @@ select.mform-control{cursor:pointer;}
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v31c1 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div class="login-version">Posizionamento Navi &mdash; v35a1 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
       <div style="text-align:center;margin-top:10px;font-size:10px;color:#c0c4cc;">&copy; 2025 S.M.A.R.T Solutions &mdash; Tutti i diritti riservati</div>
     </div>
   </div>
@@ -743,9 +743,9 @@ select.mform-control{cursor:pointer;}
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:20px;">
       <span class="brand">Programmazione Turni</span>
-    <button id="btnConfermeTopbar" onclick="toggleConfermePanel()" style="font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer;font-family:var(--font);position:relative;">Conferme<span id="confBadgeTopbar" style="display:none;position:absolute;top:-7px;right:-7px;background:#E24B4A;color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;align-items:center;justify-content:center;"></span></button>
+    <button id="btnConfermeTopbar" onclick="toggleConfermePanel()" style="font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer;font-family:var(--font);position:relative;display:flex;align-items:center;gap:6px;min-width:110px;justify-content:center;">Conferme<span id="confBadgeTopbar" style="display:none;position:absolute;top:-7px;right:-7px;background:#E24B4A;color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;align-items:center;justify-content:center;"></span></button>
       <div style="position:relative;" id="slotMansWrapper">
-        <button onclick="toggleSlotMansMenu()" style="font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;">
+        <button onclick="toggleSlotMansMenu()" style="font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;min-width:110px;justify-content:center;">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
           Slot Mansioni
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
@@ -764,6 +764,10 @@ select.mform-control{cursor:pointer;}
           <div onclick="toggleMacellaioPanelFn();closeSlotMansMenu()" style="padding:8px 14px;font-size:11px;color:#fff;cursor:pointer;" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background=''">Macellaio</div>
         </div>
       </div>
+      <button id="btnImbarchi" onclick="toggleImbarchiPanel()" style="font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;min-width:110px;justify-content:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 17h18M3 12h18M3 7h18"/></svg>
+        Imbarchi
+      </button>
     </div>
     <div class="topbar-right">
       <span class="user-pill" id="progUserLabel"></span>
@@ -6594,125 +6598,57 @@ html += tutti.length > 0
   else el.innerHTML = html;
 }
 
-// ── APPUNTI PER NAVE ─────────────────────────────────────────────
-// ═══ APPUNTI - NUOVA LOGICA ═══
-let _appuntiTab = 'amm';
+// ── APPUNTI PER NAVE (v35a1 — due tab AMM / COMM) ────────────────
+let _appuntiRowId = 0;
+let _appuntiTabAttiva = 'AMM'; // 'AMM' o 'COMM'
 
-function switchAppuntiTab(tab) {
-  _appuntiTab = tab;
-  const tabAmm = document.getElementById('appuntiTabAmm');
-  const tabComm = document.getElementById('appuntiTabComm');
-  if(tab === 'amm') {
-    tabAmm.style.borderBottom = '2px solid #c4a535'; tabAmm.style.color = '#7c6a2a'; tabAmm.style.background = 'var(--bg2)';
-    tabComm.style.borderBottom = '2px solid transparent'; tabComm.style.color = 'var(--muted)'; tabComm.style.background = '';
-  } else {
-    tabComm.style.borderBottom = '2px solid #185FA5'; tabComm.style.color = '#185FA5'; tabComm.style.background = 'var(--bg2)';
-    tabAmm.style.borderBottom = '2px solid transparent'; tabAmm.style.color = 'var(--muted)'; tabAmm.style.background = '';
-  }
-  renderAppuntiBody();
+function setAppuntiTab(tipo) {
+  _appuntiTabAttiva = tipo;
+  document.getElementById('appuntiTabAMM').style.borderBottom = tipo==='AMM' ? '2px solid #c4a535' : '2px solid transparent';
+  document.getElementById('appuntiTabAMM').style.fontWeight  = tipo==='AMM' ? '700' : '400';
+  document.getElementById('appuntiTabCOMM').style.borderBottom = tipo==='COMM' ? '2px solid #185fa5' : '2px solid transparent';
+  document.getElementById('appuntiTabCOMM').style.fontWeight  = tipo==='COMM' ? '700' : '400';
+  // mostra/nascondi i due body
+  document.getElementById('appuntiBodyAMMWrap').style.display  = tipo==='AMM'  ? '' : 'none';
+  document.getElementById('appuntiBodyCOMMWrap').style.display = tipo==='COMM' ? '' : 'none';
+  // aggiorna il footer (salva + aggiungi riga)
+  _aggiornaAppuntiFooter();
 }
 
-function renderAppuntiBody() {
-  const isAmm = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
-  const canEdit = (_appuntiTab === 'amm' && isAmm) || (_appuntiTab === 'comm' && !isAmm);
-  const data = _appuntiTab === 'amm' ? (window._appuntiAmmData || []) : (window._appuntiCommData || []);
-  const body = document.getElementById('appuntiBody');
+function _aggiornaAppuntiFooter() {
+  const isAmm  = utente && (utente.ruolo==='admin'||utente.ruolo==='semiadmin');
+  const isComm = utente && (utente.ruolo==='admin'||utente.ruolo==='commissario');
+  const puoScrivere = (_appuntiTabAttiva==='AMM' && isAmm) || (_appuntiTabAttiva==='COMM' && isComm);
+  document.getElementById('btnAppuntiAddRiga').style.display  = puoScrivere ? 'inline-block' : 'none';
+  document.getElementById('btnSalvaAppunti').style.display    = puoScrivere ? 'inline-block' : 'none';
+}
+
+function addAppuntiRiga(tipo, testo, readonly) {
+  const bodyId = tipo==='AMM' ? 'appuntiBodyAMM' : 'appuntiBodyCOMM';
+  const body = document.getElementById(bodyId);
   if(!body) return;
-
-  // Aggiorna label tab con contatori
-  const cntAmm = (window._appuntiAmmData||[]).filter(r=>r&&String(r).trim()).length;
-  const cntComm = (window._appuntiCommData||[]).filter(r=>r&&String(r).trim()).length;
-  const tabAmmEl = document.getElementById('appuntiTabAmm');
-  const tabCommEl = document.getElementById('appuntiTabComm');
-  if(tabAmmEl) tabAmmEl.innerHTML = '📋 Note AMM' + (cntAmm > 0 ? ' <span style="font-size:10px;background:#FAEEDA;color:#7c6a2a;padding:1px 6px;border-radius:20px;">'+cntAmm+'</span>' : '');
-  if(tabCommEl) tabCommEl.innerHTML = '✏️ Note Commissario' + (cntComm > 0 ? ' <span style="font-size:10px;background:#E6F1FB;color:#0C447C;padding:1px 6px;border-radius:20px;">'+cntComm+'</span>' : '');
-  // Mostra/nascondi bottoni in base a chi può modificare
-  const btnAdd = document.getElementById('btnAddAppuntiRiga');
-  const btnSalva = document.getElementById('btnSalvaAppunti');
-  if(btnAdd) btnAdd.style.display = canEdit ? 'inline-block' : 'none';
-  if(btnSalva) btnSalva.style.display = canEdit ? 'inline-block' : 'none';
-
-  // Header info
-  const meta = document.getElementById('appuntiMeta');
-  const metaData = _appuntiTab === 'amm' ? window._appuntiAmmMeta : window._appuntiCommMeta;
-  if(meta) meta.textContent = metaData || '';
-
-  // Render righe
-  let html = '<div style="padding:4px 0;">';
-  data.forEach((riga, i) => {
-    const escaped = (riga||'').replace(/"/g,'&quot;');
-    if(canEdit) {
-      html += '<div style="display:flex;align-items:center;padding:5px 14px;border-bottom:0.5px solid var(--border);gap:8px;">'
-        + '<input type="text" value="'+escaped+'" oninput="updateAppuntiRiga('+i+',this.value)" placeholder="Scrivi una nota..." style="flex:1;font-size:12px;border:none;background:transparent;outline:none;color:var(--text);font-family:var(--font);padding:2px;"/>'
-        + '<button onclick="removeAppuntiRiga('+i+')" style="background:none;border:none;cursor:pointer;color:#ccc;font-size:13px;flex-shrink:0;padding:2px;" title="Elimina">🗑️</button>'
-        + '</div>';
-    } else {
-      html += '<div style="display:flex;align-items:center;padding:5px 14px;border-bottom:0.5px solid var(--border);">'
-        + '<span style="flex:1;font-size:12px;color:var(--text);padding:2px;">'+escHtml(riga||'')+'</span>'
-        + '</div>';
-    }
-  });
-  // Riga vuota per aggiungere (solo se può modificare)
-  if(canEdit) {
-    html += '<div style="display:flex;align-items:center;padding:5px 14px;gap:8px;">'
-      + '<input type="text" placeholder="+ Nuova nota..." oninput="addAppuntiRigaInline(this)" style="flex:1;font-size:12px;border:none;background:transparent;outline:none;color:var(--muted);font-family:var(--font);padding:2px;"/>'
-      + '<span style="width:24px;"></span>'
-      + '</div>';
-  }
-  html += '</div>';
-  body.innerHTML = html;
+  const rid = ++_appuntiRowId;
+  const tr = document.createElement('tr');
+  tr.style.borderBottom = '1px solid #f0ede8';
+  tr.dataset.tipo = tipo;
+  tr.innerHTML = `
+    <td style="padding:4px 6px;">
+      <input type="text" value="${escHtml(testo||'')}" placeholder="Scrivi una nota..." ${readonly?'disabled':''}
+        style="width:100%;border:none;background:transparent;font-family:var(--font);font-size:12px;color:var(--text);outline:none;padding:2px 4px;">
+    </td>
+    <td style="padding:4px 4px;text-align:center;width:22px;">${readonly?'':'<button onclick="this.closest(\'tr\').remove()" title="Elimina riga" style="background:none;border:none;cursor:pointer;color:#ccc;font-size:13px;line-height:1;">🗑</button>'}</td>`;
+  body.appendChild(tr);
 }
 
-function updateAppuntiRiga(idx, val) {
-  if(_appuntiTab === 'amm') {
-    if(!window._appuntiAmmData) window._appuntiAmmData = [];
-    window._appuntiAmmData[idx] = String(val||'');
-  } else {
-    if(!window._appuntiCommData) window._appuntiCommData = [];
-    window._appuntiCommData[idx] = String(val||'');
+function addAppuntiRigaAttiva() {
+  addAppuntiRiga(_appuntiTabAttiva, '', false);
+  // focus sull'ultima riga aggiunta
+  const bodyId = _appuntiTabAttiva==='AMM' ? 'appuntiBodyAMM' : 'appuntiBodyCOMM';
+  const rows = document.querySelectorAll('#'+bodyId+' tr');
+  if(rows.length) {
+    const lastInput = rows[rows.length-1].querySelector('input');
+    if(lastInput) lastInput.focus();
   }
-}
-
-function removeAppuntiRiga(idx) {
-  if(_appuntiTab === 'amm') {
-    window._appuntiAmmData = (window._appuntiAmmData||[]).filter((_,i) => i !== idx);
-  } else {
-    window._appuntiCommData = (window._appuntiCommData||[]).filter((_,i) => i !== idx);
-  }
-  renderAppuntiBody();
-}
-
-function addAppuntiRiga() {
-  if(_appuntiTab === 'amm') {
-    if(!window._appuntiAmmData) window._appuntiAmmData = [];
-    window._appuntiAmmData.push('');
-  } else {
-    if(!window._appuntiCommData) window._appuntiCommData = [];
-    window._appuntiCommData.push('');
-  }
-  renderAppuntiBody();
-  // Focus sull'ultima riga
-  setTimeout(() => {
-    const inputs = document.querySelectorAll('#appuntiBody input');
-    if(inputs.length) inputs[inputs.length-2]?.focus();
-  }, 50);
-}
-
-function addAppuntiRigaInline(input) {
-  if(!input.value.trim()) return;
-  if(_appuntiTab === 'amm') {
-    if(!window._appuntiAmmData) window._appuntiAmmData = [];
-    window._appuntiAmmData.push(input.value);
-  } else {
-    if(!window._appuntiCommData) window._appuntiCommData = [];
-    window._appuntiCommData.push(input.value);
-  }
-  input.value = '';
-  renderAppuntiBody();
-  setTimeout(() => {
-    const inputs = document.querySelectorAll('#appuntiBody input');
-    if(inputs.length) inputs[inputs.length-1]?.focus();
-  }, 50);
 }
 
 function toggleAppuntiPanel() {
@@ -6721,96 +6657,120 @@ function toggleAppuntiPanel() {
   const isOpen = panel.style.display === 'flex';
   panel.style.display = isOpen ? 'none' : 'flex';
   overlay.style.display = isOpen ? 'none' : 'block';
-  if(!isOpen) loadAppunti(utente.nave_id);
+  if(!isOpen) { _appuntiTabAttiva='AMM'; loadAppunti(utente.nave_id); }
 }
 
 async function loadAppunti(naveId) {
   if(!naveId) naveId = utente ? utente.nave_id : null;
   if(!naveId) return;
-  const isAmm = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
-  // Aggiorna nome nave
-  const nave = navi ? navi.find(n=>n.id===naveId) : null;
+  const btnA = document.getElementById('btnAppunti');
+  const nave = navi.find(n=>n.id===naveId);
   const panelNave = document.getElementById('appuntiPanelNave');
   if(panelNave && nave) panelNave.textContent = nave.nome;
-  // Stile header in base al ruolo
-  const handle = document.getElementById('appuntiDragHandle');
-  if(handle) handle.style.background = isAmm ? 'linear-gradient(135deg,#7c6a2a,#c4a535)' : 'linear-gradient(135deg,#185fa5,#0c447c)';
-  // Tab attiva per default
-  if(!isAmm) switchAppuntiTab('comm');
+
+  const isAmm  = utente && (utente.ruolo==='admin'||utente.ruolo==='semiadmin');
+  const isComm = utente && (utente.ruolo==='admin'||utente.ruolo==='commissario');
+
+  // reset
+  const bodyAMM  = document.getElementById('appuntiBodyAMM');
+  const bodyCOMM = document.getElementById('appuntiBodyCOMM');
+  if(bodyAMM)  bodyAMM.innerHTML  = '';
+  if(bodyCOMM) bodyCOMM.innerHTML = '';
+
+  // mostra tab COMM solo se esiste il ruolo commissario o admin
+  const tabComm = document.getElementById('appuntiTabCOMM');
+  if(tabComm) tabComm.style.display = (isComm||isAmm) ? 'inline-block' : 'none';
+
+  setAppuntiTab(_appuntiTabAttiva);
+
   try {
-    // Carica note AMM
-    const ammData = await sbGet('pn_appunti_nave?nave_id=eq.'+naveId+'&tipo=eq.amm&select=*&limit=1');
-    const ammRec = ammData && ammData[0];
-    const rawAmm = ammRec && ammRec.testo ? JSON.parse(ammRec.testo) : [];
-    window._appuntiAmmData = rawAmm.map(r => typeof r === 'object' ? (r.nome||'')+' '+(r.nota||'') : String(r||''));
-    window._appuntiAmmMeta = ammRec && ammRec.updated_at ? (ammRec.autore||'AMM')+' · '+new Date(ammRec.updated_at).toLocaleDateString('it-IT')+' '+new Date(ammRec.updated_at).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}) : '';
-    // Carica note Commissario
-    const commData = await sbGet('pn_appunti_nave?nave_id=eq.'+naveId+'&tipo=eq.comm&select=*&limit=1');
-    const commRec = commData && commData[0];
-    const rawComm = commRec && commRec.testo ? JSON.parse(commRec.testo) : [];
-    window._appuntiCommData = rawComm.map(r => typeof r === 'object' ? (r.nome||'')+' '+(r.nota||'') : String(r||''));
-    window._appuntiCommMeta = commRec && commRec.updated_at ? (commRec.autore||'Comm')+' · '+new Date(commRec.updated_at).toLocaleDateString('it-IT')+' '+new Date(commRec.updated_at).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}) : '';
+    const data = await sbGet(`pn_appunti_nave?nave_id=eq.${naveId}&select=*`);
+    // Cerca record AMM e COMM separatamente
+    const recAMM  = data && data.find(r=>r.tipo==='AMM');
+    const recCOMM = data && data.find(r=>r.tipo==='COMM');
+
+    // Popola tab AMM
+    if(recAMM && recAMM.testo) {
+      try {
+        const righe = JSON.parse(recAMM.testo);
+        righe.forEach(r => addAppuntiRiga('AMM', typeof r==='string'?r:(r.testo||r.nota||''), !isAmm));
+      } catch(e) { addAppuntiRiga('AMM', recAMM.testo, !isAmm); }
+    }
+    // Popola tab COMM
+    if(recCOMM && recCOMM.testo) {
+      try {
+        const righe = JSON.parse(recCOMM.testo);
+        righe.forEach(r => addAppuntiRiga('COMM', typeof r==='string'?r:(r.testo||r.nota||''), !isComm));
+      } catch(e) { addAppuntiRiga('COMM', recCOMM.testo, !isComm); }
+    }
+
+    // Badge bottone
+    const hasNotes = (bodyAMM&&bodyAMM.querySelectorAll('tr').length>0) || (bodyCOMM&&bodyCOMM.querySelectorAll('tr').length>0);
+    if(btnA) {
+      btnA.innerHTML = '📝 Appunti';
+      btnA.style.fontWeight = hasNotes ? '700' : '400';
+      btnA.style.background = hasNotes ? 'rgba(255,180,50,.28)' : 'rgba(255,180,50,.12)';
+      btnA.style.borderColor = hasNotes ? 'rgba(255,200,100,.6)' : 'rgba(255,200,100,.3)';
+    }
   } catch(e) {
-    window._appuntiAmmData = [];
-    window._appuntiCommData = [];
-  }
-  renderAppuntiBody();
-  // Drag
-  initAppuntiDrag();
-  // Aggiorna badge bottone
-  const btnA = document.getElementById('btnAppunti');
-  if(btnA) {
-    const hasNotes = (window._appuntiAmmData||[]).length > 0 || (window._appuntiCommData||[]).length > 0;
-    btnA.style.fontWeight = hasNotes ? '700' : '400';
-    btnA.style.background = hasNotes ? 'rgba(255,180,50,.28)' : 'rgba(255,180,50,.12)';
-    btnA.style.borderColor = hasNotes ? 'rgba(255,200,100,.6)' : 'rgba(255,200,100,.3)';
+    if(bodyAMM)  bodyAMM.innerHTML='';
+    if(bodyCOMM) bodyCOMM.innerHTML='';
   }
 }
 
 async function salvaAppunti() {
-  const naveId = utente.nave_id;
-  const isAmm = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
-  const tipo = _appuntiTab;
-  const dataArr = tipo === 'amm' ? (window._appuntiAmmData||[]) : (window._appuntiCommData||[]);
-  const testo = JSON.stringify(dataArr.filter(r => r && String(r).trim()));
-  const payload = { nave_id: naveId, tipo, testo, autore: utente.nome||utente.username, updated_at: new Date().toISOString() };
+  const naveId = utente ? utente.nave_id : null;
+  if(!naveId) return;
+  const tipo = _appuntiTabAttiva;
+  const bodyId = tipo==='AMM' ? 'appuntiBodyAMM' : 'appuntiBodyCOMM';
+  const rows = [...document.querySelectorAll('#'+bodyId+' tr')].map(tr => {
+    const inp = tr.querySelector('input');
+    return inp ? inp.value.trim() : '';
+  }).filter(v => v);
+  const testo = JSON.stringify(rows);
+  const saved = document.getElementById('appuntiSaved');
   try {
-    const existing = await sbGet('pn_appunti_nave?nave_id=eq.'+naveId+'&tipo=eq.'+tipo+'&select=id&limit=1');
+    const existing = await sbGet(`pn_appunti_nave?nave_id=eq.${naveId}&tipo=eq.${tipo}&select=id`);
+    const payload = {nave_id:naveId, tipo, testo, autore:utente.nome||utente.username, updated_at:new Date().toISOString()};
     if(existing && existing[0]) { await sbPatch('pn_appunti_nave', existing[0].id, payload); }
     else { await sbPost('pn_appunti_nave', payload); }
-    showToast('Appunti salvati','success');
-    await loadAppunti(naveId);
-  } catch(e) { showToast('Errore salvataggio','error'); }
+    if(saved) { saved.textContent='Salvato ✓'; setTimeout(()=>{ saved.textContent=''; },3000); }
+    loadAppunti(naveId);
+  } catch(e) { showToast('Errore salvataggio appunti','error'); }
 }
 
 function stampaAppuntiPDF() {
-  const data = _appuntiTab === 'amm' ? (window._appuntiAmmData||[]) : (window._appuntiCommData||[]);
-  const righe = data.filter(r => r && String(r).trim());
-  if(!righe.length) { showToast('Nessuna nota da stampare','error'); return; }
   function doStampa() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+    const pw = doc.internal.pageSize.getWidth();
     const navy=[15,42,74];
     const nave = document.getElementById('appuntiPanelNave')?.textContent||'—';
-    const tipo = _appuntiTab === 'amm' ? 'Note AMM' : 'Note Commissario';
-    const today = new Date();
-    const todayFmt = today.getDate().toString().padStart(2,'0')+'/'+(today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getFullYear();
+    const tipoLabel = _appuntiTabAttiva==='AMM' ? 'Note AMM' : 'Note Commissario';
     doc.setFillColor(...navy);
-    doc.rect(0,0,210,16,'F');
+    doc.rect(0,0,pw,16,'F');
     doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(255,255,255);
-    doc.text('Appunti '+tipo+' — '+nave, 12, 11);
+    doc.text('Appunti '+tipoLabel+' — '+nave, 12, 10);
     doc.setFont('helvetica','normal'); doc.setFontSize(8);
-    doc.text(todayFmt, 198, 11, {align:'right'});
-    let y = 24;
-    righe.forEach((riga, i) => {
+    doc.text(new Date().toLocaleDateString('it-IT'), pw-12, 10, {align:'right'});
+    const bodyId = _appuntiTabAttiva==='AMM' ? 'appuntiBodyAMM' : 'appuntiBodyCOMM';
+    const rows = [...document.querySelectorAll('#'+bodyId+' tr')];
+    let y = 26;
+    rows.forEach((tr,i) => {
+      const inp = tr.querySelector('input');
+      const testo = inp ? inp.value : '';
+      if(!testo) return;
       if(y > 270) { doc.addPage(); y=14; }
-      if(i%2===0){ doc.setFillColor(248,250,252); doc.rect(12,y-3,186,7,'F'); }
-      doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(30,30,30);
-      const lines = doc.splitTextToSize(riga, 180);
-      doc.text(lines, 14, y);
-      y += lines.length * 6;
+      if(i%2===0){ doc.setFillColor(248,250,252); doc.rect(12,y,186,6,'F'); }
+      doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(30,30,30);
+      const lines = doc.splitTextToSize(testo, 182);
+      doc.text(lines, 14, y+4);
+      y += Math.max(6, lines.length*5);
     });
-    doc.save('appunti_'+nave.replace(/\s+/g,'_')+'.pdf');
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(150,150,150);
+    doc.text('Posizionamento Navi — '+tipoLabel+' — '+nave, 12, 290);
+    doc.save('appunti_'+_appuntiTabAttiva.toLowerCase()+'_'+nave.replace(/\s+/g,'_')+'.pdf');
+    showToast('PDF esportato','success');
   }
   if(window.jspdf&&window.jspdf.jsPDF){ doStampa(); }
   else {
@@ -6819,29 +6779,6 @@ function stampaAppuntiPDF() {
     s.onload=doStampa; document.head.appendChild(s);
   }
 }
-
-function initAppuntiDrag() {
-  const handle = document.getElementById('appuntiDragHandle');
-  const panel = document.getElementById('appuntiPanelPop');
-  if(!handle || !panel || handle._dragInit) return;
-  handle._dragInit = true;
-  let dx=0, dy=0, mx=0, my=0;
-  handle.addEventListener('mousedown', function(e) {
-    if(e.target.tagName === 'BUTTON') return;
-    e.preventDefault();
-    mx=e.clientX; my=e.clientY;
-    document.onmouseup = () => { document.onmouseup=null; document.onmousemove=null; };
-    document.onmousemove = function(e) {
-      dx=mx-e.clientX; dy=my-e.clientY;
-      mx=e.clientX; my=e.clientY;
-      panel.style.top=(panel.offsetTop-dy)+'px';
-      panel.style.left=(panel.offsetLeft-dx)+'px';
-    };
-  });
-}
-
-// ═══ FINE APPUNTI ═══
-
 
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -11034,6 +10971,187 @@ function setConfSort(sort) {
   renderConferme();
 }
 
+// Drag pannello imbarchi
+(function(){
+  function initDrag(handle, panel) {
+    let dx=0, dy=0, mx=0, my=0;
+    handle.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      mx=e.clientX; my=e.clientY;
+      document.onmouseup = stopDrag;
+      document.onmousemove = doDrag;
+    });
+    function doDrag(e) {
+      dx=mx-e.clientX; dy=my-e.clientY;
+      mx=e.clientX; my=e.clientY;
+      panel.style.top=(panel.offsetTop-dy)+'px';
+      panel.style.right='auto';
+      panel.style.left=(panel.offsetLeft-dx)+'px';
+    }
+    function stopDrag() {
+      document.onmouseup=null;
+      document.onmousemove=null;
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    const handle = document.getElementById('imbarchiDragHandle');
+    const panel = document.getElementById('imbarchiPanel');
+    if(handle && panel) initDrag(handle, panel);
+  });
+})();
+
+// ═══ PANNELLO IMBARCHI ═══
+let _imbarchiTab = 'da';
+let _imbarchiData = [];
+
+async function toggleImbarchiPanel() {
+  const panel = document.getElementById('imbarchiPanel');
+  const overlay = document.getElementById('imbarchiOverlay');
+  const isOpen = panel.style.display === 'flex';
+  if(isOpen) {
+    panel.style.display = 'none';
+    overlay.style.display = 'none';
+  } else {
+    panel.style.display = 'flex';
+    overlay.style.display = 'block';
+    await loadImbarchi();
+  }
+}
+
+async function loadImbarchi() {
+  document.getElementById('imbarchiBody').innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">Caricamento...</div>';
+  try {
+    const oggi = new Date().toISOString().split('T')[0];
+    const data = await sbGet('pn_programmazione?data_imbarco=gte.'+oggi+'&select=id,data_imbarco,data_sbarco,imbarco_inviato,pn_dipendenti(id,cognome_nome,pn_qualifiche(nome)),pn_navi(id,nome)&order=data_imbarco.asc');
+    _imbarchiData = data || [];
+    renderImbarchi();
+  } catch(e) {
+    document.getElementById('imbarchiBody').innerHTML = '<div style="padding:20px;text-align:center;color:#A32D2D;font-size:12px;">Errore caricamento</div>';
+  }
+}
+
+function switchImbarchiTab(tab) {
+  _imbarchiTab = tab;
+  const tabDa = document.getElementById('tabDaInviare');
+  const tabInv = document.getElementById('tabInviate');
+  if(tab === 'da') {
+    tabDa.style.borderBottom = '2px solid #185FA5'; tabDa.style.color = '#185FA5'; tabDa.style.background = 'var(--bg2)';
+    tabInv.style.borderBottom = '2px solid transparent'; tabInv.style.color = 'var(--muted)'; tabInv.style.background = '';
+  } else {
+    tabInv.style.borderBottom = '2px solid #3B6D11'; tabInv.style.color = '#3B6D11'; tabInv.style.background = 'var(--bg2)';
+    tabDa.style.borderBottom = '2px solid transparent'; tabDa.style.color = 'var(--muted)'; tabDa.style.background = '';
+  }
+  renderImbarchi();
+}
+
+function renderImbarchi() {
+  const daInviare = _imbarchiData.filter(r => !r.imbarco_inviato);
+  const inviate = _imbarchiData.filter(r => r.imbarco_inviato);
+  document.getElementById('badgeDaInviare').textContent = daInviare.length;
+  document.getElementById('badgeInviate').textContent = inviate.length;
+  document.getElementById('imbarchiCount').textContent = daInviare.length + ' da inviare · ' + inviate.length + ' inviate';
+
+  const lista = _imbarchiTab === 'da' ? daInviare : inviate;
+  if(lista.length === 0) {
+    document.getElementById('imbarchiBody').innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">' + (_imbarchiTab === 'da' ? 'Nessun imbarco da inviare' : 'Nessun imbarco inviato') + '</div>';
+    return;
+  }
+
+  const fmtD = d => { const p=d.split('-'); return p[2]+'/'+p[1]; };
+  let html = '';
+  lista.forEach(r => {
+    const nome = r.pn_dipendenti ? r.pn_dipendenti.cognome_nome : '—';
+    const qual = r.pn_dipendenti && r.pn_dipendenti.pn_qualifiche ? r.pn_dipendenti.pn_qualifiche.nome : '';
+    const nave = r.pn_navi ? r.pn_navi.nome.replace('MOBY ','') : '—';
+    const data = r.data_imbarco ? fmtD(r.data_imbarco) : '—';
+    const checked = r.imbarco_inviato ? 'checked' : '';
+    const opacityStyle = r.imbarco_inviato ? 'opacity:0.5;' : '';
+    const strikeStyle = r.imbarco_inviato ? 'text-decoration:line-through;color:var(--muted);' : '';
+    html += '<div style="display:flex;align-items:center;padding:7px 14px;border-bottom:0.5px solid var(--border);gap:10px;">'
+      + '<input type="checkbox" '+checked+' onchange="toggleImbarcoInviato('+r.id+',this.checked)" style="width:15px;height:15px;accent-color:#185FA5;flex-shrink:0;cursor:pointer;"/>'
+      + '<div style="font-size:11px;font-weight:500;color:#5b3fc8;font-family:monospace;white-space:nowrap;min-width:36px;'+opacityStyle+'">'+data+'</div>'
+      + '<div style="flex:1;min-width:0;'+opacityStyle+'">'
+      + '<div style="font-size:12px;font-weight:500;'+strikeStyle+'">'+nome+'</div>'
+      + '<div style="font-size:11px;color:var(--muted);">'+qual+'</div>'
+      + '</div>'
+      + '<div style="font-size:10px;background:#E6F1FB;color:#0C447C;padding:1px 7px;border-radius:20px;white-space:nowrap;flex-shrink:0;'+opacityStyle+'">'+nave+'</div>'
+      + '</div>';
+  });
+  document.getElementById('imbarchiBody').innerHTML = html;
+}
+
+async function toggleImbarcoInviato(id, inviato) {
+  try {
+    await sbPatch('pn_programmazione', id, { imbarco_inviato: inviato });
+    const rec = _imbarchiData.find(r => r.id === id);
+    if(rec) rec.imbarco_inviato = inviato;
+    renderImbarchi();
+  } catch(e) { showToast('Errore: '+e.message, 'error'); }
+}
+
+async function stampaPDFImbarchi() {
+  const lista = _imbarchiTab === 'da'
+    ? _imbarchiData.filter(r => !r.imbarco_inviato)
+    : _imbarchiData.filter(r => r.imbarco_inviato);
+  if(lista.length === 0) { showToast('Nessun imbarco da esportare', 'error'); return; }
+
+  function doGenera() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const navy = [12,68,124];
+    const muted = [120,120,120];
+    const today = new Date();
+    const todayFmt = today.getDate().toString().padStart(2,'0')+'/'+(today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getFullYear();
+    const titolo = _imbarchiTab === 'da' ? 'Imbarchi da inviare' : 'Imbarchi inviati';
+
+    doc.setFillColor(...navy);
+    doc.rect(0,0,210,18,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica','bold');
+    doc.text(titolo, 12, 12);
+    doc.setFontSize(8);
+    doc.setFont('helvetica','normal');
+    doc.text('Stampato il '+todayFmt, 198, 12, {align:'right'});
+
+    const fmtD = d => { const p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; };
+    let y = 26;
+
+    lista.forEach(r => {
+      if(y > 270) { doc.addPage(); y = 15; }
+      const nome = r.pn_dipendenti ? r.pn_dipendenti.cognome_nome : '—';
+      const qual = r.pn_dipendenti && r.pn_dipendenti.pn_qualifiche ? r.pn_dipendenti.pn_qualifiche.nome : '';
+      const nave = r.pn_navi ? r.pn_navi.nome : '—';
+      const data = r.data_imbarco ? fmtD(r.data_imbarco) : '—';
+
+      doc.setTextColor(...navy);
+      doc.setFontSize(8);
+      doc.setFont('helvetica','bold');
+      doc.text(data, 12, y);
+      doc.setTextColor(20,20,80);
+      doc.setFontSize(9);
+      doc.text(nome, 30, y);
+      doc.setTextColor(...muted);
+      doc.setFontSize(8);
+      doc.setFont('helvetica','normal');
+      doc.text(qual, 30, y+4);
+      doc.setTextColor(...navy);
+      doc.text(nave, 198, y, {align:'right'});
+      doc.setDrawColor(220,220,220);
+      doc.line(10,y+7,200,y+7);
+      y += 10;
+    });
+
+    doc.save('imbarchi_'+_imbarchiTab+'_'+todayFmt.replace(/\//g,'-')+'.pdf');
+  }
+
+  if(window.jspdf) { doGenera(); return; }
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload=doGenera;
+  document.head.appendChild(s);
+}
+
 function toggleConfermePanel() {
   var panel = document.getElementById('confermePanelPop');
   var overlay = document.getElementById('confermeOverlay');
@@ -11425,30 +11543,92 @@ var firmaUtente = utente ? (utente.nome || utente.username || 'Ufficio Armamento
 </div>
 </div>
 
-<!-- PANNELLO APPUNTI POPUP -->
+<!-- PANNELLO APPUNTI POPUP (v35a1 — due tab AMM / COMM) -->
 <div id="appuntiOverlay" onclick="toggleAppuntiPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:290;"></div>
-<div id="appuntiPanelPop" style="display:none;position:fixed;top:80px;left:16px;width:600px;height:460px;min-height:200px;max-height:calc(100vh - 100px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:hidden;resize:both;">
-  <div id="appuntiDragHandle" style="background:linear-gradient(135deg,#7c6a2a,#c4a535);padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:move;user-select:none;flex-shrink:0;">
+<div id="appuntiPanelPop" style="display:none;position:fixed;top:100px;left:50%;transform:translateX(-50%);width:600px;max-width:96vw;height:480px;min-height:220px;max-height:calc(100vh-120px);background:#fff;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.25);z-index:300;flex-direction:column;overflow:hidden;">
+  <!-- Header draggable -->
+  <div id="appuntiTitleBar" style="background:linear-gradient(135deg,#7c6a2a,#c4a535);padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:move;user-select:none;flex-shrink:0;">
     <div style="flex:1;">
-      <div style="font-size:12px;font-weight:600;color:#fff;">📝 Appunti</div>
+      <div style="font-size:13px;font-weight:600;color:#fff;">📝 Appunti</div>
       <div style="font-size:10px;color:rgba(255,255,255,.75);" id="appuntiPanelNave">—</div>
     </div>
     <button onclick="toggleAppuntiPanel()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.8);font-size:16px;line-height:1;">✕</button>
   </div>
-  <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;">
-    <div id="appuntiTabAmm" onclick="switchAppuntiTab('amm')" style="flex:1;padding:7px;text-align:center;font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid #c4a535;color:#7c6a2a;background:var(--bg2);">📋 Note AMM</div>
-    <div id="appuntiTabComm" onclick="switchAppuntiTab('comm')" style="flex:1;padding:7px;text-align:center;font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);">✏️ Note Commissario</div>
+  <!-- Tab bar -->
+  <div style="display:flex;border-bottom:1px solid #e5e7eb;flex-shrink:0;background:#f7f8fb;">
+    <button id="appuntiTabAMM" onclick="setAppuntiTab('AMM')"
+      style="font-family:var(--font);font-size:12px;padding:8px 20px;border:none;border-bottom:2px solid #c4a535;background:none;color:#7c6a2a;font-weight:700;cursor:pointer;">
+      📋 Note AMM
+    </button>
+    <button id="appuntiTabCOMM" onclick="setAppuntiTab('COMM')"
+      style="font-family:var(--font);font-size:12px;padding:8px 20px;border:none;border-bottom:2px solid transparent;background:none;color:#888;font-weight:400;cursor:pointer;">
+      🧾 Note Commissario
+    </button>
   </div>
-  <div style="overflow-y:auto;flex:1;" id="appuntiBody"></div>
-  <div style="padding:7px 10px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:var(--bg);flex-shrink:0;" id="appuntiFooter">
-    <span style="font-size:9px;color:var(--muted);font-style:italic;" id="appuntiMeta">—</span>
-    <div style="margin-left:auto;display:flex;gap:5px;">
-      <button id="btnAddAppuntiRiga" onclick="addAppuntiRiga()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:var(--muted);border:1px dashed var(--border);cursor:pointer;">＋ Riga</button>
-      <button onclick="stampaAppuntiPDF()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#A32D2D;border:1px solid #A32D2D;cursor:pointer;">📄 PDF</button>
-      <button id="btnSalvaAppunti" onclick="salvaAppunti()" style="font-family:var(--font);font-size:10px;padding:3px 10px;border-radius:4px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:500;">💾 Salva</button>
+  <!-- Body tabs -->
+  <div style="overflow-y:auto;flex:1;">
+    <div id="appuntiBodyAMMWrap">
+      <table style="width:100%;border-collapse:collapse;">
+        <tbody id="appuntiBodyAMM"></tbody>
+      </table>
+    </div>
+    <div id="appuntiBodyCOMMWrap" style="display:none;">
+      <table style="width:100%;border-collapse:collapse;">
+        <tbody id="appuntiBodyCOMM"></tbody>
+      </table>
     </div>
   </div>
+  <!-- Footer -->
+  <div style="padding:7px 12px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:var(--bg);flex-shrink:0;">
+    <button id="btnAppuntiAddRiga" onclick="addAppuntiRigaAttiva()" style="font-family:var(--font);font-size:11px;padding:4px 10px;border-radius:5px;background:transparent;color:var(--muted);border:1px dashed var(--border);cursor:pointer;">＋ Riga</button>
+    <button onclick="stampaAppuntiPDF()" style="font-family:var(--font);font-size:11px;padding:4px 10px;border-radius:5px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">📄 PDF</button>
+    <span style="font-size:10px;color:var(--teal);font-style:italic;" id="appuntiSaved"></span>
+    <button id="btnSalvaAppunti" onclick="salvaAppunti()" style="font-family:var(--font);font-size:11px;padding:4px 14px;border-radius:5px;background:var(--navy);color:#fff;border:none;cursor:pointer;font-weight:600;margin-left:auto;">💾 Salva</button>
+  </div>
+  <!-- Resize handle -->
+  <div id="appuntiResizeHandle" style="position:absolute;bottom:0;right:0;width:18px;height:18px;cursor:se-resize;z-index:10;">
+    <svg width="18" height="18" viewBox="0 0 18 18"><path d="M6 16l10-10M10 16l6-6M14 16l2-2" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </div>
 </div>
+<script>
+// Drag appuntiPanelPop
+(function(){
+  const panel = document.getElementById('appuntiPanelPop');
+  const bar   = document.getElementById('appuntiTitleBar');
+  if(!panel||!bar) return;
+  let dragging=false, ox=0, oy=0;
+  bar.addEventListener('mousedown', function(e){
+    if(e.target.tagName==='BUTTON') return;
+    dragging=true;
+    const r=panel.getBoundingClientRect();
+    ox=e.clientX-r.left; oy=e.clientY-r.top;
+    panel.style.transform='none';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e){
+    if(!dragging) return;
+    panel.style.left=(e.clientX-ox)+'px';
+    panel.style.top=(e.clientY-oy)+'px';
+  });
+  document.addEventListener('mouseup', function(){ dragging=false; });
+  // Resize handle
+  const rh = document.getElementById('appuntiResizeHandle');
+  if(rh){
+    let resizing=false, rsx=0, rsy=0, rw=0, rh0=0;
+    rh.addEventListener('mousedown', function(e){
+      resizing=true; rsx=e.clientX; rsy=e.clientY;
+      rw=panel.offsetWidth; rh0=panel.offsetHeight; e.preventDefault(); e.stopPropagation();
+    });
+    document.addEventListener('mousemove', function(e){
+      if(!resizing) return;
+      const nw=Math.max(340, rw+(e.clientX-rsx));
+      const nh=Math.max(220, rh0+(e.clientY-rsy));
+      panel.style.width=nw+'px'; panel.style.height=nh+'px';
+    });
+    document.addEventListener('mouseup', function(){ resizing=false; });
+  }
+})();
+</script>
 
 <!-- MODAL SPOSTA DISPONIBILE -->
 <div id="modalSpostaDisp" style="position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9999;align-items:center;justify-content:center;" class="modal-overlay">
@@ -11507,6 +11687,35 @@ var firmaUtente = utente ? (utente.nome || utente.username || 'Ufficio Armamento
     <div style="margin-left:auto;display:flex;gap:6px;">
       <button id="btnDispAdd" onclick="openDispAddForm()" style="display:none;font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#185FA5;border:1px solid #185FA5;cursor:pointer;">＋</button>
       <button onclick="stampaPDFDisponibili()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#A32D2D;border:1px solid #A32D2D;cursor:pointer;">📄 PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- PANNELLO IMBARCHI -->
+<div id="imbarchiOverlay" onclick="toggleImbarchiPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:290;"></div>
+<div id="imbarchiPanel" style="display:none;position:fixed;top:136px;right:16px;width:420px;height:520px;max-height:calc(100vh - 155px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:hidden;">
+  <div id="imbarchiDragHandle" style="background:linear-gradient(135deg,#185fa5,#0c447c);padding:10px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0;cursor:move;user-select:none;">
+    <div style="flex:1;">
+      <div style="font-size:12px;font-weight:600;color:#fff;">🚢 Prossimi Imbarchi</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.75);">tutte le navi · ordinati per data</div>
+    </div>
+    <button onclick="toggleImbarchiPanel()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.8);font-size:16px;line-height:1;">✕</button>
+  </div>
+  <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;">
+    <div id="tabDaInviare" onclick="switchImbarchiTab('da')" style="flex:1;padding:8px;text-align:center;font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid #185FA5;color:#185FA5;background:var(--bg2);">
+      Da inviare <span id="badgeDaInviare" style="display:inline-block;font-size:10px;padding:1px 6px;border-radius:20px;margin-left:4px;background:#E6F1FB;color:#0C447C;font-weight:500;">0</span>
+    </div>
+    <div id="tabInviate" onclick="switchImbarchiTab('inv')" style="flex:1;padding:8px;text-align:center;font-size:11px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);">
+      Inviate <span id="badgeInviate" style="display:inline-block;font-size:10px;padding:1px 6px;border-radius:20px;margin-left:4px;background:#EAF3DE;color:#27500A;font-weight:500;">0</span>
+    </div>
+  </div>
+  <div style="overflow-y:auto;flex:1;" id="imbarchiBody">
+    <div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">Caricamento...</div>
+  </div>
+  <div style="padding:7px 10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-shrink:0;background:var(--bg);">
+    <span style="font-size:9px;color:var(--muted);font-style:italic;" id="imbarchiCount"></span>
+    <div style="margin-left:auto;">
+      <button onclick="stampaPDFImbarchi()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#A32D2D;border:1px solid #A32D2D;cursor:pointer;">📄 PDF</button>
     </div>
   </div>
 </div>
