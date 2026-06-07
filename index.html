@@ -1894,6 +1894,7 @@ async function sbDelete(table, id) {
 let utente = null;
 let semiadmins=[];
 let navi=[], reparti=[], mansioni=[], qualifiche=[], commissari=[];
+let _fromPortale = false; // true quando autologin da portale
 let posizionamento=[], budgetData={};
 let editPosId=null, promuoviId=null, deleteTarget=null, editCommId=null, editLookupType=null, editLookupId=null;
 
@@ -6875,10 +6876,14 @@ window.addEventListener('DOMContentLoaded', async function(){
       if(naviTmp && naviTmp.length > 0) { naveId = naviTmp[0].id; naveNome = naviTmp[0].nome; }
     }
     utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome, flotta:u.flotta||'entrambe', moduli:u.moduli||[]};
+    _fromPortale = true;
     await loadLookups();
     startApp();
-    if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') buildNavePills();
-    console.log('Autologin: completato OK per', utente.nome);
+    // showScreen già chiamato da startApp con _fromPortale=true
+    // Ora vai al modulo specifico scelto dal portale
+    const modulo = al.modulo || 'pos';
+    if(modulo !== 'pos') showScreen(modulo);
+    console.log('Autologin: completato OK per', utente.nome, '→', modulo);
   } catch(e) { console.warn('Autologin error:', e); }
 });
 
@@ -6926,6 +6931,8 @@ async function loadLookups() {
 }
 
 function startApp() {
+  // Nascondi sempre il login screen
+  document.getElementById('screenLogin').classList.remove('active');
   const roleLabel = utente.ruolo==='admin' ? 'Admin' : utente.ruolo==='semiadmin' ? 'Semi-Admin' : 'Commissario';
   document.getElementById('posUserLabel').textContent = utente.nome + ' — ' + roleLabel;
   const now = new Date();
@@ -6965,7 +6972,7 @@ if(utente.ruolo==='commissario') {
     badge.textContent = utente.nave_nome || '—';
     badge.style.display = 'inline-block';
   }
-  if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') {
+  if((utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') && !_fromPortale) {
     document.getElementById('sceltaWelcome').textContent = 'Benvenuto, ' + (utente.nome || utente.username);
     const m = document.getElementById('modalSceltaModulo');
     m.style.display = 'flex';
