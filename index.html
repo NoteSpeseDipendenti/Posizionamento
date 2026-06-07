@@ -619,6 +619,15 @@ select.mform-control{cursor:pointer;}
 </style>
 </head>
 <body>
+<script>
+// Nasconde subito il login se arriva dal portale — evita il flash
+if(new URLSearchParams(window.location.search).get('al')) {
+  document.addEventListener('DOMContentLoaded', function(){
+    var sl = document.getElementById('screenLogin');
+    if(sl) sl.classList.remove('active');
+  });
+}
+</script>
 
 <!-- LOGIN -->
 <div class="screen active" id="screenLogin">
