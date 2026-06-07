@@ -1155,6 +1155,51 @@ select.mform-control{cursor:pointer;}
         <select class="mform-control" id="commNave"></select>
       </div>
     </div>
+    <!-- SEZIONE PERMESSI SEMIADMIN -->
+    <div id="semiadminPermSection" style="display:none;margin-top:4px;">
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:10px;">
+        <div class="mform-label" style="margin-bottom:8px;">Flotta visibile</div>
+        <div style="display:flex;gap:16px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-flotta" value="moby" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Moby
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-flotta" value="cin" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            CIN
+          </label>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:10px;">
+        <div class="mform-label" style="margin-bottom:8px;">Moduli abilitati nel portale</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-modulo" value="posizionamento" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Posizionamento
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-modulo" value="programmazione" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Programmazione
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-modulo" value="vmc" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            VMC
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-modulo" value="corsi" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Corsi IMAT
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-modulo" value="statistiche" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Statistiche
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-modulo" value="documenti" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Documenti
+          </label>
+        </div>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModalComm()">Annulla</button>
       <button class="btn-save" id="btnSaveComm" onclick="saveComm()">Salva</button>
@@ -6805,6 +6850,38 @@ if(_ld){const _d=new Date();_ld.textContent=_d.getDate().toString().padStart(2,'
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
+// ── AUTOLOGIN DA PORTALE ─────────────────────────────
+window.addEventListener('DOMContentLoaded', async function(){
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('al');
+    if(!encoded) return;
+    let al;
+    try {
+      al = JSON.parse(atob(decodeURIComponent(encoded)));
+    } catch(e2) {
+      console.warn('Autologin decode failed:', e2); return;
+    }
+    if(!al || !al.username) { console.warn('Autologin: dati mancanti'); return; }
+    if(al.ruolo === 'commissario') return;
+    console.log('Autologin: trovato utente', al.username);
+    const data = await sbGet(`pn_utenti?username=eq.${encodeURIComponent(al.username)}&attivo=eq.true&select=id,nome,username,ruolo,nave_id,attivo,flotta,moduli,pn_navi(id,nome,compagnia)`);
+    if(!data||!data.length) { console.warn('Autologin: utente non trovato su Supabase'); return; }
+    const u = data[0];
+    let naveId = u.nave_id;
+    let naveNome = u.pn_navi ? u.pn_navi.nome : '—';
+    if(u.ruolo === 'admin' && !naveId) {
+      const naviTmp = await sbGet('pn_navi?order=nome&limit=1');
+      if(naviTmp && naviTmp.length > 0) { naveId = naviTmp[0].id; naveNome = naviTmp[0].nome; }
+    }
+    utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome, flotta:u.flotta||'entrambe', moduli:u.moduli||[]};
+    await loadLookups();
+    startApp();
+    if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') buildNavePills();
+    console.log('Autologin: completato OK per', utente.nome);
+  } catch(e) { console.warn('Autologin error:', e); }
+});
+
 
 async function doLogin() {
   const user = document.getElementById('loginUser').value.trim();
@@ -6814,7 +6891,7 @@ async function doLogin() {
   errEl.classList.remove('show');
   btn.disabled=true; btn.textContent='Accesso...';
   try {
-    const data = await sbGet(`pn_utenti?username=eq.${encodeURIComponent(user)}&password=eq.${encodeURIComponent(pass)}&attivo=eq.true&select=id,nome,username,ruolo,nave_id,attivo,pn_navi(id,nome,compagnia)`);
+    const data = await sbGet(`pn_utenti?username=eq.${encodeURIComponent(user)}&password=eq.${encodeURIComponent(pass)}&attivo=eq.true&select=id,nome,username,ruolo,nave_id,attivo,flotta,moduli,pn_navi(id,nome,compagnia)`);
     if(!data||data.length===0){errEl.classList.add('show');return;}
     const u = data[0];
     let naveId = u.nave_id;
@@ -6827,7 +6904,7 @@ async function doLogin() {
       const naviTmp = await sbGet('pn_navi?order=nome&limit=1');
       if(naviTmp && naviTmp.length > 0) { naveId = naviTmp[0].id; naveNome = naviTmp[0].nome; }
     }
-    utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome};
+    utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome, flotta:u.flotta||'entrambe', moduli:u.moduli||[]};
     await loadLookups();
   startApp();
   if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') buildNavePills();
@@ -6903,8 +6980,14 @@ function sceltaModulo(m) {
 }
 
 function renderNaveSelection() {
-  const moby = navi.filter(n => n.compagnia==='MOBY');
-  const cin = navi.filter(n => n.compagnia==='CIN');
+  const flotta = utente.flotta || 'entrambe';
+  const moby = navi.filter(n => n.compagnia==='MOBY' && (flotta==='entrambe'||flotta==='moby'));
+  const cin  = navi.filter(n => n.compagnia==='CIN'  && (flotta==='entrambe'||flotta==='cin'));
+  // Nascondi sezione se vuota
+  const mobySection = document.getElementById('naveGridMoby');
+  const cinSection  = document.getElementById('naveGridCin');
+  if(mobySection) mobySection.closest('.nave-section-label') && (mobySection.previousElementSibling.style.display = moby.length ? '' : 'none');
+  if(cinSection)  cinSection.closest('.nave-section-label')  && (cinSection.previousElementSibling.style.display  = cin.length  ? '' : 'none');
   function makeBtn(n, cls) {
     const btn = document.createElement('button');
     btn.className = 'nave-btn '+cls;
@@ -6953,8 +7036,14 @@ document.getElementById('btnAppunti').style.display = 'inline-block';
 function buildNavePills() {
   const container = document.getElementById('navePills');
   container.innerHTML = '';
-  // Usa naviSorted() che filtra già per attiva===true
-  const naviOrd = naviSorted();
+  const flotta = utente.flotta || 'entrambe';
+  // Filtra per flotta se semiadmin
+  const naviOrd = naviSorted().filter(n => {
+    if(flotta==='entrambe') return true;
+    if(flotta==='moby') return n.compagnia==='MOBY';
+    if(flotta==='cin')  return n.compagnia==='CIN';
+    return true;
+  });
   naviOrd.forEach((n, i) => {
     const btn = document.createElement('button');
     btn.className = 'nave-pill' + (i === 0 ? ' active' : '');
@@ -7946,16 +8035,37 @@ function renderComm(){
 }
 
 // ─── Semi-Admin ───
+const MODULI_LIST = [
+  {key:'posizionamento', label:'Posizionamento'},
+  {key:'programmazione', label:'Programmazione'},
+  {key:'vmc',           label:'VMC'},
+  {key:'corsi',         label:'Corsi IMAT'},
+  {key:'statistiche',   label:'Statistiche'},
+  {key:'documenti',     label:'Documenti'},
+];
+
 function renderSemiadmin(){
   const tbody=document.getElementById('tbodySemiadmin');
   document.getElementById('countSemiadmin').textContent=semiadmins.length+' semi-admin';
   tbody.innerHTML=semiadmins.length===0
-    ?'<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--muted);font-style:italic">Nessun semi-amministratore</td></tr>'
+    ?'<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--muted);font-style:italic">Nessun semi-amministratore</td></tr>'
     :semiadmins.map(u=>{
+      const flotta = u.flotta || 'entrambe';
+      const flottaBadge = flotta==='entrambe'
+        ? '<span style="font-size:10px;background:#e0f2fe;color:#0369a1;border-radius:4px;padding:2px 7px;font-weight:600;">Moby + CIN</span>'
+        : '<span style="font-size:10px;background:#f0fdf4;color:#15803d;border-radius:4px;padding:2px 7px;font-weight:600;">'+flotta.toUpperCase()+'</span>';
+      let moduli = [];
+      try { moduli = Array.isArray(u.moduli) ? u.moduli : JSON.parse(u.moduli||'[]'); } catch(e){ moduli=[]; }
+      if(!moduli.length) moduli = MODULI_LIST.map(m=>m.key);
+      const moduliBadges = MODULI_LIST
+        .filter(m => moduli.includes(m.key))
+        .map(m=>'<span style="font-size:10px;background:#f1f5f9;color:#475569;border-radius:4px;padding:2px 6px;margin:1px;display:inline-block;">'+m.label+'</span>')
+        .join('');
       return '<tr>'
-        +'<td><strong>'+u.nome+'</strong></td>'
-        +'<td style="font-family:monospace;font-size:11px;color:var(--muted)">'+u.username+'</td>'
+        +'<td><strong>'+u.nome+'</strong><br><span style="font-family:monospace;font-size:10px;color:var(--muted)">'+u.username+'</span></td>'
         +'<td style="font-family:monospace;font-size:11px">'+u.password+'</td>'
+        +'<td>'+flottaBadge+'</td>'
+        +'<td style="max-width:220px;line-height:1.8;">'+moduliBadges+'</td>'
         +'<td>'
         +'<button class="admin-icon-btn edit" onclick="openModalUtente(\'semiadmin\','+u.id+')" title="Modifica"><svg viewBox="0 0 12 12" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"/></svg></button>'
         +'<button class="admin-icon-btn del" onclick="openConfirmDel(\'semiadmin\','+u.id+',\''+u.nome+'\')" title="Elimina"><svg viewBox="0 0 12 12" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h8M5 3V2h2v1M4.5 5v4M7.5 5v4M3 3l.5 7h5l.5-7"/></svg></button>'
@@ -7984,9 +8094,12 @@ async function saveAccount(){
 let editUtenteType=null, editUtenteId=null;
 function openModalUtente(tipo, id) {
   editUtenteType=tipo; editUtenteId=id||null;
-  editCommId = null; // reset per non bloccare autoUsername
+  editCommId = null;
   const titles={semiadmin:'Semi-Amministratore'};
   document.getElementById('modalCommTitle').textContent=(id?'Modifica ':'Nuovo ')+titles[tipo];
+  // Mostra/nascondi sezione permessi semiadmin
+  const permSection = document.getElementById('semiadminPermSection');
+  if(permSection) permSection.style.display = tipo==='semiadmin' ? 'block' : 'none';
   if(id){
     const u=semiadmins.find(x=>x.id===id);
     if(u){
@@ -7994,13 +8107,23 @@ function openModalUtente(tipo, id) {
       document.getElementById('commUsername').value=u.username;
       document.getElementById('commPassword').value=u.password;
       document.getElementById('commNave').value='';
+      // Flotta
+      const flotta = u.flotta || 'entrambe';
+      document.querySelectorAll('.chk-flotta').forEach(c=>{ c.checked = (flotta==='entrambe' || flotta===c.value); });
+      // Moduli
+      let moduli = [];
+      try { moduli = Array.isArray(u.moduli) ? u.moduli : JSON.parse(u.moduli||'[]'); } catch(e){ moduli=[]; }
+      if(!moduli.length) moduli = MODULI_LIST.map(m=>m.key);
+      document.querySelectorAll('.chk-modulo').forEach(c=>{ c.checked = moduli.includes(c.value); });
     }
   } else {
     document.getElementById('commNome').value='';
     document.getElementById('commUsername').value='';
     document.getElementById('commPassword').value='';
+    // Default: tutto abilitato
+    document.querySelectorAll('.chk-flotta').forEach(c=>{ c.checked=true; });
+    document.querySelectorAll('.chk-modulo').forEach(c=>{ c.checked=true; });
   }
-  // Hide nave for semiadmin
   document.getElementById('commNave').closest('.mform-group').style.display=tipo==='semiadmin'?'none':'block';
   document.getElementById('modalComm').classList.add('show');
 }
@@ -8065,14 +8188,19 @@ async function saveUtente(){
   const username=document.getElementById('commUsername').value.trim();
   const password=document.getElementById('commPassword').value.trim();
   if(!nome||!username||!password){showToast('Compila tutti i campi','error');return;}
+  // Flotta
+  const flottaChecked = [...document.querySelectorAll('.chk-flotta:checked')].map(c=>c.value);
+  const flotta = flottaChecked.length===2 ? 'entrambe' : (flottaChecked[0]||'entrambe');
+  // Moduli
+  const moduli = [...document.querySelectorAll('.chk-modulo:checked')].map(c=>c.value);
   const btn=document.getElementById('btnSaveComm');
   btn.disabled=true;btn.textContent='Salvataggio...';
   try{
     if(editUtenteId){
-      await sbPatch('pn_utenti',editUtenteId,{nome,username,password});
+      await sbPatch('pn_utenti',editUtenteId,{nome,username,password,flotta,moduli:JSON.stringify(moduli)});
       showToast('Aggiornato','success');
     }else{
-      await sbPost('pn_utenti',{nome,username,password,ruolo:'semiadmin',nave_id:null,attivo:true});
+      await sbPost('pn_utenti',{nome,username,password,ruolo:'semiadmin',nave_id:null,attivo:true,flotta,moduli:JSON.stringify(moduli)});
       showToast('Semi-admin aggiunto','success');
     }
     closeModalComm();
