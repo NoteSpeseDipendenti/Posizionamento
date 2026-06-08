@@ -898,7 +898,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
             <button class="btn-new" onclick="openModalUtente('semiadmin')">+ Nuovo semi-admin</button>
           </div>
           <table class="admin-table">
-            <thead><tr><th>Nome</th><th>Username</th><th>Password</th><th></th></tr></thead>
+            <thead><tr><th>Nome</th><th>Username</th><th>Password</th><th>Livello</th><th></th></tr></thead>
             <tbody id="tbodySemiadmin"></tbody>
           </table>
         </div>
@@ -1205,6 +1205,19 @@ if(new URLSearchParams(window.location.search).get('al')) {
           <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
             <input type="checkbox" class="chk-modulo" value="documenti" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
             Documenti
+          </label>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:10px;">
+        <div class="mform-label" style="margin-bottom:8px;">Livello accesso Posizionamento</div>
+        <div style="display:flex;gap:16px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="radio" name="livello" value="alto" id="livelloAlto" style="cursor:pointer;accent-color:var(--navy);">
+            Alto (può modificare)
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="radio" name="livello" value="basso" id="livelloBasso" style="cursor:pointer;accent-color:var(--navy);">
+            Basso (solo lettura)
           </label>
         </div>
       </div>
@@ -6875,7 +6888,7 @@ window.addEventListener('DOMContentLoaded', async function(){
     if(!al || !al.username) { console.warn('Autologin: dati mancanti'); return; }
     if(al.ruolo === 'commissario') return;
     console.log('Autologin: trovato utente', al.username);
-    const data = await sbGet(`pn_utenti?username=eq.${encodeURIComponent(al.username)}&attivo=eq.true&select=id,nome,username,ruolo,nave_id,attivo,flotta,moduli,pn_navi(id,nome,compagnia)`);
+    const data = await sbGet(`pn_utenti?username=eq.${encodeURIComponent(al.username)}&attivo=eq.true&select=id,nome,username,ruolo,nave_id,attivo,flotta,moduli,livello,pn_navi(id,nome,compagnia)`);
     if(!data||!data.length) { console.warn('Autologin: utente non trovato su Supabase'); return; }
     const u = data[0];
     let naveId = u.nave_id;
@@ -6884,7 +6897,7 @@ window.addEventListener('DOMContentLoaded', async function(){
       const naviTmp = await sbGet('pn_navi?order=nome&limit=1');
       if(naviTmp && naviTmp.length > 0) { naveId = naviTmp[0].id; naveNome = naviTmp[0].nome; }
     }
-    utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome, flotta:u.flotta||'entrambe', moduli:u.moduli||[]};
+    utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome, flotta:u.flotta||'entrambe', moduli:u.moduli||[], livello:u.livello||'alto'};
     _fromPortale = true;
     await loadLookups();
     startApp();
@@ -6905,7 +6918,7 @@ async function doLogin() {
   errEl.classList.remove('show');
   btn.disabled=true; btn.textContent='Accesso...';
   try {
-    const data = await sbGet(`pn_utenti?username=eq.${encodeURIComponent(user)}&password=eq.${encodeURIComponent(pass)}&attivo=eq.true&select=id,nome,username,ruolo,nave_id,attivo,flotta,moduli,pn_navi(id,nome,compagnia)`);
+    const data = await sbGet(`pn_utenti?username=eq.${encodeURIComponent(user)}&password=eq.${encodeURIComponent(pass)}&attivo=eq.true&select=id,nome,username,ruolo,nave_id,attivo,flotta,moduli,livello,pn_navi(id,nome,compagnia)`);
     if(!data||data.length===0){errEl.classList.add('show');return;}
     const u = data[0];
     let naveId = u.nave_id;
@@ -6918,7 +6931,7 @@ async function doLogin() {
       const naviTmp = await sbGet('pn_navi?order=nome&limit=1');
       if(naviTmp && naviTmp.length > 0) { naveId = naviTmp[0].id; naveNome = naviTmp[0].nome; }
     }
-    utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome, flotta:u.flotta||'entrambe', moduli:u.moduli||[]};
+    utente = {id:u.id, nome:u.nome, username:u.username, ruolo:u.ruolo, nave_id:naveId, nave_nome:naveNome, flotta:u.flotta||'entrambe', moduli:u.moduli||[], livello:u.livello||'alto'};
     await loadLookups();
   startApp();
   if(utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') buildNavePills();
@@ -6981,6 +6994,10 @@ if(utente.ruolo==='commissario') {
     badge.textContent = utente.nave_nome || '—';
     badge.style.display = 'inline-block';
   }
+
+  // Applica modalità sola lettura per livello=basso
+  if(utente.ruolo === 'semiadmin' && utente.livello === 'basso') applyReadOnly();
+
   if((utente.ruolo === 'admin' || utente.ruolo === 'semiadmin') && !_fromPortale) {
     document.getElementById('sceltaWelcome').textContent = 'Benvenuto, ' + (utente.nome || utente.username);
     const m = document.getElementById('modalSceltaModulo');
@@ -6988,6 +7005,27 @@ if(utente.ruolo==='commissario') {
   } else {
     showScreen('pos');
   }
+}
+
+function applyReadOnly() {
+  // Disabilita bottoni topbar
+  const toDisable = ['btnStorico','btnMsg','btnAppunti','btnSnapshot','btnRiepilogo'];
+  toDisable.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.disabled = true;
+    el.style.opacity = '0.4';
+    el.style.cursor = 'not-allowed';
+    el.onclick = function(e){ e.stopPropagation(); return false; };
+  });
+  // Disabilita Esporta
+  const esportaBtn = document.querySelector('.btn-orange[onclick*="toggleEsportaMenu"]');
+  if(esportaBtn){ esportaBtn.disabled=true; esportaBtn.style.opacity='0.4'; esportaBtn.style.cursor='not-allowed'; esportaBtn.onclick=function(e){e.stopPropagation();return false;}; }
+  // Disabilita + Aggiungi
+  const btnAdd = document.querySelector('.btn-add[onclick*="openModalAddPos"]');
+  if(btnAdd){ btnAdd.disabled=true; btnAdd.style.opacity='0.4'; btnAdd.style.cursor='not-allowed'; btnAdd.onclick=function(e){e.stopPropagation();return false;}; }
+  // Setta flag globale usato nel render righe
+  window._readOnly = true;
 }
 
 function sceltaModulo(m) {
@@ -7409,10 +7447,10 @@ function renderRow(p,isConf,W) {
     +'<td style="width:'+W[5]+'">'+rapp+'</td>'
     +'<td class="col-contr" style="width:'+W[6]+'">'+contr+'</td><td style="width:'+W[7]+'">'+note+'</td>'
     +'<td style="width:'+W[8]+'">'
-    +plusBtn
-    +'<button class="icon-btn move" onclick="openModalSposta('+p.id+')" title="Sposta reparto"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h8M6 3l3 3-3 3"/></svg></button>'
-    +'<button class="icon-btn edit" onclick="openModalEditPos('+p.id+')" title="Modifica"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"/></svg></button>'
-  +'<button class="icon-btn del" onclick="openConfirmDel(\'pos\','+p.id+',`'+nome+'`)" title="Elimina"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h8M5 3V2h2v1M4.5 5v4M7.5 5v4M3 3l.5 7h5l.5-7"/></svg></button>'
+    +(window._readOnly ? '' : plusBtn)
+    +(window._readOnly ? '' : '<button class="icon-btn move" onclick="openModalSposta('+p.id+')" title="Sposta reparto"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h8M6 3l3 3-3 3"/></svg></button>')
+    +(window._readOnly ? '' : '<button class="icon-btn edit" onclick="openModalEditPos('+p.id+')" title="Modifica"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"/></svg></button>')
+    +(window._readOnly ? '' : '<button class="icon-btn del" onclick="openConfirmDel(\'pos\','+p.id+',`'+nome+'`)" title="Elimina"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h8M5 3V2h2v1M4.5 5v4M7.5 5v4M3 3l.5 7h5l.5-7"/></svg></button>')
     +'</td>'
     +(()=>{
       const oggi = new Date();
@@ -8077,11 +8115,15 @@ function renderSemiadmin(){
         .filter(m => moduli.includes(m.key))
         .map(m=>'<span style="font-size:10px;background:#f1f5f9;color:#475569;border-radius:4px;padding:2px 6px;margin:1px;display:inline-block;">'+m.label+'</span>')
         .join('');
+      const livelloBadge = (u.livello||'alto')==='basso'
+        ? '<span style="font-size:10px;background:#fef2f2;color:#dc2626;border-radius:4px;padding:2px 7px;font-weight:600;">Sola lettura</span>'
+        : '<span style="font-size:10px;background:#f0fdf4;color:#15803d;border-radius:4px;padding:2px 7px;font-weight:600;">Completo</span>';
       return '<tr>'
         +'<td><strong>'+u.nome+'</strong><br><span style="font-family:monospace;font-size:10px;color:var(--muted)">'+u.username+'</span></td>'
         +'<td style="font-family:monospace;font-size:11px">'+u.password+'</td>'
         +'<td>'+flottaBadge+'</td>'
         +'<td style="max-width:220px;line-height:1.8;">'+moduliBadges+'</td>'
+        +'<td>'+livelloBadge+'</td>'
         +'<td>'
         +'<button class="admin-icon-btn edit" onclick="openModalUtente(\'semiadmin\','+u.id+')" title="Modifica"><svg viewBox="0 0 12 12" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z"/></svg></button>'
         +'<button class="admin-icon-btn del" onclick="openConfirmDel(\'semiadmin\','+u.id+',\''+u.nome+'\')" title="Elimina"><svg viewBox="0 0 12 12" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h8M5 3V2h2v1M4.5 5v4M7.5 5v4M3 3l.5 7h5l.5-7"/></svg></button>'
@@ -8131,6 +8173,9 @@ function openModalUtente(tipo, id) {
       try { moduli = Array.isArray(u.moduli) ? u.moduli : JSON.parse(u.moduli||'[]'); } catch(e){ moduli=[]; }
       if(!moduli.length) moduli = MODULI_LIST.map(m=>m.key);
       document.querySelectorAll('.chk-modulo').forEach(c=>{ c.checked = moduli.includes(c.value); });
+      // Livello
+      const livello = u.livello || 'alto';
+      document.querySelectorAll('input[name="livello"]').forEach(r=>{ r.checked = r.value === livello; });
     }
   } else {
     document.getElementById('commNome').value='';
@@ -8139,6 +8184,7 @@ function openModalUtente(tipo, id) {
     // Default: tutto abilitato
     document.querySelectorAll('.chk-flotta').forEach(c=>{ c.checked=true; });
     document.querySelectorAll('.chk-modulo').forEach(c=>{ c.checked=true; });
+    document.getElementById('livelloAlto').checked = true;
   }
   document.getElementById('commNave').closest('.mform-group').style.display=tipo==='semiadmin'?'none':'block';
   document.getElementById('modalComm').classList.add('show');
@@ -8209,14 +8255,17 @@ async function saveUtente(){
   const flotta = flottaChecked.length===2 ? 'entrambe' : (flottaChecked[0]||'entrambe');
   // Moduli
   const moduli = [...document.querySelectorAll('.chk-modulo:checked')].map(c=>c.value);
+  // Livello
+  const livelloEl = document.querySelector('input[name="livello"]:checked');
+  const livello = livelloEl ? livelloEl.value : 'alto';
   const btn=document.getElementById('btnSaveComm');
   btn.disabled=true;btn.textContent='Salvataggio...';
   try{
     if(editUtenteId){
-      await sbPatch('pn_utenti',editUtenteId,{nome,username,password,flotta,moduli:JSON.stringify(moduli)});
+      await sbPatch('pn_utenti',editUtenteId,{nome,username,password,flotta,moduli:JSON.stringify(moduli),livello});
       showToast('Aggiornato','success');
     }else{
-      await sbPost('pn_utenti',{nome,username,password,ruolo:'semiadmin',nave_id:null,attivo:true,flotta,moduli:JSON.stringify(moduli)});
+      await sbPost('pn_utenti',{nome,username,password,ruolo:'semiadmin',nave_id:null,attivo:true,flotta,moduli:JSON.stringify(moduli),livello});
       showToast('Semi-admin aggiunto','success');
     }
     closeModalComm();
