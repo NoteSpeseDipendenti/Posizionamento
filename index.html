@@ -237,25 +237,56 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .cascade-count.zero{background:#f1f5f9;color:#9ca3af;}
 
 /* PANNELLO STATS SINISTRA */
-.stats-left-wrap{position:fixed;top:136px;left:16px;width:170px;z-index:140;display:none;flex-direction:column;gap:8px;}
+.stats-left-wrap{display:none;flex-direction:column;gap:0;padding:0 6px;}
 .stats-left-wrap.show{display:flex;}
-.stats-box{background:var(--white);border:0.5px solid var(--border);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.10);overflow:hidden;}
-.stats-box-head{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
-.stats-box-head.camera{background:var(--navy);}
-.stats-box-head.cucina{background:var(--teal);}
-.stats-box-title{font-size:12px;font-weight:600;color:#fff;}
-.stats-box-arrow{font-size:10px;color:rgba(255,255,255,.8);transition:transform .2s;}
+.sb-inline-row{display:flex;justify-content:space-between;align-items:center;padding:3px 4px;border-bottom:0.5px solid rgba(255,255,255,.08);font-size:11px;}
+.sb-inline-row:last-child{border-bottom:none;}
+.sb-inline-lbl{color:rgba(255,255,255,.5);}
+.sb-inline-val{font-weight:500;color:#fff;}
+.sb-inline-val.ok{color:#5DCAA5;}
+/* TD e AMM inline nella sidebar */
+.sb-notif-row{display:flex;justify-content:space-between;align-items:center;padding:4px 8px 4px 14px;font-size:11px;}
+.sb-notif-nave{color:rgba(232,240,250,.75);font-size:11px;}
+.sb-notif-num{font-size:11px;font-weight:700;color:#FFD700;}
+.sb-notif-empty{font-size:10px;color:rgba(255,255,255,.35);padding:4px 14px;font-style:italic;}
+/* frecette sempre visibili, numeri a destra */
+.sb-item .sb-sub-arrow{opacity:1;color:rgba(255,255,255,.75);font-size:13px;font-weight:700;}
+.sb-item:hover .sb-sub-arrow{color:#fff;}
+.sb-sub-item .sb-sub-arrow{color:rgba(255,255,255,.6);font-size:12px;}
+.sb-badge{}
+/* tooltip sidebar */
+.sb-item[title]:hover::after,.sb-sub-item[title]:hover::after{
+  content:attr(title);
+  position:fixed;
+  left:218px;
+  background:#1a2a3a;
+  color:#e8f0fa;
+  font-size:11px;
+  padding:5px 10px;
+  border-radius:6px;
+  white-space:nowrap;
+  z-index:9999;
+  pointer-events:none;
+  border:0.5px solid rgba(255,255,255,.15);
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.stats-box{background:transparent;border:0.5px solid rgba(255,255,255,.15);border-radius:8px;overflow:hidden;}
+.stats-box-head{padding:7px 10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:0.5px solid rgba(255,255,255,.1);}
+.stats-box-head.camera{background:transparent;}
+.stats-box-head.cucina{background:transparent;}
+.stats-box-title{font-size:11px;font-weight:500;color:rgba(255,255,255,.85);}
+.stats-box-arrow{font-size:10px;color:rgba(255,255,255,.4);transition:transform .2s;}
 .stats-box.closed .stats-box-arrow{transform:rotate(180deg);}
-.stats-box-body{padding:8px 10px;display:block;}
+.stats-box-body{padding:6px 10px;display:block;}
 #appuntiBox .stats-box-body{padding:8px;}
 #appuntiText{width:100%;min-height:80px;}
 .stats-box.closed .stats-box-body{display:none;}
-.stats-box-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid #f1f5f9;font-size:11px;}
+.stats-box-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid rgba(255,255,255,.08);font-size:11px;}
 .stats-box-row:last-child{border-bottom:none;}
-.stats-box-lbl{color:var(--muted);}
-.stats-box-val{font-weight:600;color:var(--text);}
-.stats-box-val.ok{color:var(--teal);}
-.stats-box-val.warn{color:var(--amber);}
+.stats-box-lbl{color:rgba(255,255,255,.45);}
+.stats-box-val{font-weight:500;color:rgba(255,255,255,.85);}
+.stats-box-val.ok{color:#5DCAA5;}
+.stats-box-val.warn{color:#EF9F27;}
 
 /* PANNELLO NOTIFICHE AMM */
 .notif-amm-overlay{position:fixed;top:0;right:0;bottom:0;width:270px;z-index:155;transform:translateX(100%);transition:transform .25s ease;pointer-events:none;}
@@ -322,6 +353,36 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .nave-pill.pill-unread{background:#f1f5f9;border-color:#94a3b8;color:#475569;}
 .nave-pill.pill-unread::after{content:'●';font-size:7px;color:#EF9F27;margin-left:4px;vertical-align:middle;}
 .navebar{background:#f8fafc;border-bottom:1px solid var(--border);padding:6px 20px;display:flex;align-items:center;flex-shrink:0;}
+
+
+/* ═══ SIDEBAR ═══ */
+.pos-with-sidebar{display:flex;flex:1;overflow:hidden;}
+.pos-sidebar{width:210px;background:#3d5370;border-right:1px solid #2a3d52;flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;padding-bottom:16px;}
+.pos-sidebar::-webkit-scrollbar{width:3px;}
+.pos-sidebar::-webkit-scrollbar-thumb{background:#2a3d52;border-radius:3px;}
+.sb-cat{display:flex;align-items:center;gap:7px;padding:10px 12px 5px;cursor:pointer;user-select:none;}
+.sb-cat-icon{font-size:14px;color:rgba(255,255,255,.0);display:none;}
+.sb-cat-label{font-size:9px;font-weight:700;color:#fff;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:20px;}
+.sb-cat-arrow{font-size:11px;color:rgba(255,255,255,.4);transition:transform .18s;display:inline-block;margin-left:4px;}
+.sb-cat-arrow.open{transform:rotate(90deg);}
+.sb-children{display:none;padding-bottom:4px;}
+.sb-children.open{display:block;}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 10px 7px 14px;font-size:11px;color:#e8f0fa;cursor:pointer;border-radius:7px;margin:1px 4px;transition:background .1s;white-space:nowrap;}
+.sb-item:hover{background:rgba(255,255,255,.08);}
+.sb-item i{font-size:15px;flex-shrink:0;color:rgba(255,255,255,.4);}
+.sb-badge{margin-left:auto;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;}
+.sb-badge.red{background:rgba(255,200,0,.2);color:#FFD700;font-weight:700;}
+.sb-badge.orange{background:rgba(255,200,0,.2);color:#FFD700;font-weight:700;}
+.sb-badge.blue{background:rgba(255,200,0,.2);color:#FFD700;font-weight:700;}
+.sb-sub-children{display:none;padding-bottom:2px;}
+.sb-sub-children.open{display:block;}
+.sb-sub-item{display:flex;align-items:center;gap:7px;padding:5px 10px 5px 24px;font-size:11px;color:rgba(232,240,250,.65);cursor:pointer;border-radius:6px;margin:1px 4px;transition:background .1s;}
+.sb-sub-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+.sb-sub-item i{font-size:13px;flex-shrink:0;color:rgba(255,255,255,.35);}
+.sb-divider{height:1px;background:rgba(255,255,255,.1);margin:6px 12px;}
+.sb-sub-arrow{font-size:12px;color:rgba(255,255,255,.3);margin-left:auto;transition:transform .18s;display:inline-block;}
+.sb-sub-arrow.open{transform:rotate(90deg);}
+/* pos-content ora è dentro pos-with-sidebar, deve scrollare da solo */
 
 /* POSIZIONAMENTO */
 #screenPos{overflow:hidden;}
@@ -541,6 +602,8 @@ select.mform-control{cursor:pointer;}
 /* BOLLINO TD */
 .bollino-td{width:12px;height:12px;border-radius:50%;display:inline-block;cursor:pointer;flex-shrink:0;vertical-align:middle;transition:transform .15s;}
 .bollino-td:hover{transform:scale(1.3);}
+.bollino-td.attesa{cursor:default;}
+.bollino-td.attesa:hover{transform:none;}
 .bollino-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;vertical-align:middle;}
 .bollino-flag{font-size:11px;font-weight:700;line-height:1;cursor:default;}
 .bollino-flag.verde{color:#27500A;}
@@ -648,7 +711,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
         <input type="password" class="form-input" id="loginPass" placeholder="Password" autocomplete="current-password"/>
       </div>
       <button class="btn-login" id="btnLogin" onclick="doLogin()">Accedi</button>
-      <div class="login-version">Posizionamento Navi &mdash; v35a1 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
+      <div class="login-version">Posizionamento Navi &mdash; v1.6 &nbsp;&middot;&nbsp; <span id="loginDate"></span></div>
       <div style="text-align:center;margin-top:10px;font-size:10px;color:#c0c4cc;">&copy; 2025 S.M.A.R.T Solutions &mdash; Tutti i diritti riservati</div>
     </div>
   </div>
@@ -674,29 +737,26 @@ if(new URLSearchParams(window.location.search).get('al')) {
 
 <!-- POSIZIONAMENTO -->
 <div class="screen" id="screenPos">
-  <div class="topbar">
-  <div style="display:flex;align-items:center;gap:5px;">
-      <span class="brand">Posizionamento Navi</span>
-      <button class="btn-orange" onclick="toggleStatPanel()" id="btnStatPanel">&#9776; Statistiche</button>
-      <button class="btn-orange" onclick="toggleStorico()" id="btnStorico">&#128203; Storico</button>
-      <button class="btn-orange" onclick="toggleFiltriPanel()" id="btnFiltri">&#9636; Filtri</button>
-      <div class="esporta-wrap" id="esportaWrap" style="display:inline-block;position:relative;">
-        <button class="btn-orange" onclick="toggleEsportaMenu(event)">&#128228; Esporta &#9660;</button>
-        <div class="esporta-menu" id="esportaMenu">
-          <div class="esporta-item" onclick="esportaMenuClick('posizionamento')">&#128196; PDF Posizionamento</div>
-          <div class="esporta-item" onclick="esportaMenuClick('td')">&#128197; PDF TD</div>
-          <div class="esporta-item esporta-item-admin" id="esportaItemRiepilogo" onclick="esportaMenuClick('riepilogo')">&#128202; PDF Riepilogo navi</div>
-        </div>
+  <!-- elementi nascosti per compatibilità JS - FUORI dalla topbar -->
+  <div style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;">
+    <button id="btnStatPanel" onclick="toggleStatPanel()"></button>
+    <button id="btnStorico" onclick="toggleStorico()"></button>
+    <button id="btnFiltri" onclick="toggleFiltriPanel()"></button>
+    <button id="btnTD" onclick="toggleTDPanel()"></button>
+    <button id="btnMsg" onclick="openModalMsg()"></button>
+    <button id="btnDisponibili" onclick="toggleDisponibiliPanel()"></button>
+    <button id="btnExcel" onclick="esportaExcel()"></button>
+    <button id="btnProg" onclick="showScreen('prog')"></button>
+    <div id="esportaWrap">
+      <div id="esportaMenu">
+        <div id="esportaItemRiepilogo" onclick="esportaMenuClick('riepilogo')"></div>
       </div>
-      <button class="btn-topbar" onclick="toggleTDPanel()" id="btnTD">&#128197; TD</button>
-    <button class="btn-orange" id="btnMsg" onclick="openModalMsg()"><span class="msg-dot"></span>Messaggi</button>
-      <button class="btn-orange" id="btnAppunti" onclick="toggleAppuntiPanel()">📝 Appunti</button>
-      <button class="btn-orange" id="btnDisponibili" onclick="toggleDisponibiliPanel()">👥 Disponibili</button>
     </div>
+  </div>
+  <div class="topbar">
+    <span class="brand">Posizionamento Navi</span>
     <div class="topbar-right">
       <span class="user-pill" id="posUserLabel"></span>
-  <button class="btn-topbar" id="btnExcel" onclick="esportaExcel()" style="display:none" title="Esporta Excel">&#128202; Excel</button>
-     <button class="btn-topbar" id="btnProg" style="display:none" onclick="showScreen('prog')">&#128197; Prog.</button>
       <button class="btn-topbar" id="btnAmm" style="display:none" onclick="showScreen('admin')">&#9881; AMM</button>
       <button class="btn-help" onclick="openHelp()" title="Guida">?</button>
       <button class="btn-logout" onclick="doLogout()">Esci</button>
@@ -723,8 +783,8 @@ if(new URLSearchParams(window.location.search).get('al')) {
   <div style="display:flex;gap:6px;align-items:center;">
    <span class="alert-td-badge" id="alertTDBadge" onclick="toggleTDPanel()"><span class="alert-td-badge-dot"></span><span id="alertTDText">TD senza risposta — PROVVEDERE</span></span>
      <button class="btn-add" onclick="openModalAddPos()">+ Aggiungi</button>
-    <button class="btn-filtri" id="btnSnapshot" onclick="openSnapshot()">&#128247; Snapshot</button>
-      <button class="btn-filtri" id="btnRiepilogo" onclick="toggleDashboard()">&#128202; Riepilogo navi</button>
+    <button id="btnSnapshot" style="display:none" onclick="openSnapshot()"></button>
+      <button class="btn-filtri" id="btnRiepilogo" onclick="toggleDashboard()" style="display:none">&#128202; Riepilogo navi</button>
       <button class="btn-filtri" id="btnAggiorna" onclick="aggiornaPos()">&#8635; Aggiorna</button>
     </div>
   </div>
@@ -733,7 +793,151 @@ if(new URLSearchParams(window.location.search).get('al')) {
     <div class="nave-pills" id="navePills"></div>
     <span id="posNaveLabel" style="display:none;font-size:11px;font-weight:600;color:var(--navy);padding:3px 10px;border-radius:6px;background:#e8eef5;">—</span>
   </div>
-  <div class="pos-content">
+  <div class="pos-with-sidebar">
+  <!-- SIDEBAR -->
+  <nav class="pos-sidebar" id="posSidebar">
+    <!-- 1. NOTIFICHE -->
+    <div class="sb-cat" onclick="sbToggleCat(this)">
+      <i class="ti ti-bell sb-cat-icon" aria-hidden="true"></i>
+      <span class="sb-cat-label">Notifiche</span>
+      <span class="sb-cat-arrow open">&#8250;</span>
+    </div>
+    <div class="sb-children open">
+      <!-- TD urgenti inline -->
+      <div class="sb-item" title="Contratti a termine in scadenza per nave" onclick="sbToggleInlineStats('sbPanelTD',this)">
+        <i class="ti ti-alert-circle" aria-hidden="true"></i> TD urgenti
+        <span style="margin-left:auto;display:flex;align-items:center;gap:6px;"><span class="sb-badge red" id="sbTDBadge" style="display:none">0</span><span class="sb-sub-arrow" id="sbArrTD">&#8250;</span></span>
+      </div>
+      <div id="sbPanelTD" style="display:none;padding:2px 0 4px 0;" id="sbPanelTD">
+        <div id="sbTDList"><div class="sb-notif-empty">Caricamento...</div></div>
+      </div>
+      <!-- Presa visione AMM inline -->
+      <div class="sb-item" title="Navi con modifiche non ancora visionate dal AMM" onclick="sbToggleInlineStats('sbPanelAmm',this)">
+        <i class="ti ti-flag" aria-hidden="true"></i> Presa visione AMM
+        <span style="margin-left:auto;display:flex;align-items:center;gap:6px;"><span class="sb-badge orange" id="sbAmmBadge" style="display:none">0</span><span class="sb-sub-arrow" id="sbArrAmm">&#8250;</span></span>
+      </div>
+      <div id="sbPanelAmm" style="display:none;padding:2px 0 4px 0;">
+        <div id="sbAmmList"><div class="sb-notif-empty">Caricamento...</div></div>
+      </div>
+      <!-- Messaggi -->
+      <div class="sb-item" title="Messaggi dall'ufficio per i commissari" onclick="openModalMsg()">
+        <i class="ti ti-message" aria-hidden="true"></i> Messaggi
+        <span style="margin-left:auto;"><span class="sb-badge blue" id="sbMsgBadge" style="display:none">0</span></span>
+      </div>
+    </div>
+    <div class="sb-divider"></div>
+    <!-- 2. PERSONALE -->
+    <div class="sb-cat" onclick="sbToggleCat(this)">
+      <i class="ti ti-users sb-cat-icon" aria-hidden="true"></i>
+      <span class="sb-cat-label">Personale</span>
+      <span class="sb-cat-arrow open">&#8250;</span>
+    </div>
+    <div class="sb-children open">
+      <div class="sb-item" title="Data disponibilità per prossimo imbarco" onclick="toggleDisponibiliPanel()">
+        <i class="ti ti-user-check" aria-hidden="true"></i> Disponibili
+      </div>
+    </div>
+    <div class="sb-divider"></div>
+    <!-- 3. FUNZIONI -->
+    <div class="sb-cat" onclick="sbToggleCat(this)">
+      <i class="ti ti-tool sb-cat-icon" aria-hidden="true"></i>
+      <span class="sb-cat-label">Funzioni</span>
+      <span class="sb-cat-arrow open">&#8250;</span>
+    </div>
+    <div class="sb-children open">
+      <div class="sb-item" title="Riepilogo bordo, budget e copertura" onclick="sbToggleSub(this)">
+        <i class="ti ti-chart-bar" aria-hidden="true"></i> Statistiche
+        <span class="sb-sub-arrow open">&#8250;</span>
+      </div>
+      <div class="sb-sub-children open" id="statsLeftWrap">
+        <!-- CAMERA -->
+        <div class="sb-sub-item" title="Statistiche reparto camera" onclick="sbToggleInlineStats('sbStatsCamera',this)">
+          <i class="ti ti-bed" aria-hidden="true"></i> Camera
+          <span class="sb-sub-arrow" id="sbArrCamera">&#8250;</span>
+        </div>
+        <div id="sbStatsCamera" style="display:none;padding:2px 6px 6px 12px;">
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Bordo</span><span class="sb-inline-val" id="slBordoC">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Confermati</span><span class="sb-inline-val ok" id="slConfC">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Budget</span><span class="sb-inline-val" id="slBudgetC">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Copertura</span><span class="sb-inline-val" id="slCopC">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Media GG</span><span class="sb-inline-val" id="slGGC">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Età media</span><span class="sb-inline-val" id="slEtaC">—</span></div>
+        </div>
+        <!-- CUCINA -->
+        <div class="sb-sub-item" title="Statistiche reparto cucina" onclick="sbToggleInlineStats('sbStatsCucina',this)">
+          <i class="ti ti-chef-hat" aria-hidden="true"></i> Cucina
+          <span class="sb-sub-arrow" id="sbArrCucina">&#8250;</span>
+        </div>
+        <div id="sbStatsCucina" style="display:none;padding:2px 6px 6px 12px;">
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Bordo</span><span class="sb-inline-val" id="slBordoCu">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Confermati</span><span class="sb-inline-val ok" id="slConfCu">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Budget</span><span class="sb-inline-val" id="slBudgetCu">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Copertura</span><span class="sb-inline-val" id="slCopCu">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Media GG</span><span class="sb-inline-val" id="slGGCu">—</span></div>
+          <div class="sb-inline-row"><span class="sb-inline-lbl">Età media</span><span class="sb-inline-val" id="slEtaCu">—</span></div>
+        </div>
+      </div>
+      <div class="sb-item" title="Storico sbarchi" onclick="toggleStorico()">
+        <i class="ti ti-history" aria-hidden="true"></i> Storico
+      </div>
+      <div class="sb-item" title="Filtra per qualifica, contratto o reparto" onclick="toggleFiltriPanel()">
+        <i class="ti ti-filter" aria-hidden="true"></i> Filtri
+      </div>
+    </div>
+    <div class="sb-divider"></div>
+    <!-- 4. STAMPE -->
+    <div class="sb-cat" onclick="sbToggleCat(this)">
+      <i class="ti ti-printer sb-cat-icon" aria-hidden="true"></i>
+      <span class="sb-cat-label">Stampe</span>
+      <span class="sb-cat-arrow open">&#8250;</span>
+    </div>
+    <div class="sb-children open">
+      <div class="sb-item" title="Stampa PDF del posizionamento attuale" onclick="esportaMenuClick('posizionamento')">
+        <i class="ti ti-file-text" aria-hidden="true"></i> PDF Posizionamento
+      </div>
+      <div class="sb-item" title="Stampa PDF contratti TD in scadenza" onclick="esportaMenuClick('td')">
+        <i class="ti ti-file-time" aria-hidden="true"></i> PDF TD
+      </div>
+      <div class="sb-item" id="sbPdfRiepilogo" title="Stampa PDF riepilogo di tutte le navi" onclick="esportaMenuClick('riepilogo')">
+        <i class="ti ti-file-analytics" aria-hidden="true"></i> PDF Riepilogo navi
+      </div>
+    </div>
+    <div class="sb-divider"></div>
+    <!-- 5. AMM -->
+    <div class="sb-cat" id="sbCatAmm" onclick="sbToggleCat(this)">
+      <i class="ti ti-shield sb-cat-icon" aria-hidden="true"></i>
+      <span class="sb-cat-label">AMM</span>
+      <span class="sb-cat-arrow open">&#8250;</span>
+    </div>
+    <div class="sb-children open" id="sbChildrenAmm">
+      <div class="sb-item" id="sbExcel" style="display:none" title="Esporta posizionamento in Excel" onclick="esportaExcel()">
+        <i class="ti ti-file-spreadsheet" aria-hidden="true"></i> Excel
+      </div>
+      <div class="sb-item" title="Salva foto del posizionamento attuale" onclick="openSnapshot()">
+        <i class="ti ti-camera" aria-hidden="true"></i> Snapshot
+      </div>
+      <div class="sb-item" title="Panoramica budget di tutte le navi" onclick="toggleDashboard()">
+        <i class="ti ti-layout-list" aria-hidden="true"></i> Riepilogo navi
+      </div>
+      <div class="sb-item" title="Accesso alle altre applicazioni" onclick="sbToggleSub(this)">
+        <i class="ti ti-apps" aria-hidden="true"></i> Gestionali
+        <span class="sb-sub-arrow open">&#8250;</span>
+      </div>
+      <div class="sb-sub-children open">
+        <div class="sb-sub-item" id="sbProg" style="display:none" title="Gestione turni e programmazione" onclick="showScreen('prog')">
+          <i class="ti ti-calendar-event" aria-hidden="true"></i> Programmazione
+        </div>
+        <div class="sb-sub-item" title="Gestione visite mediche" onclick="window.open('vmc.html','_blank')">
+          <i class="ti ti-stethoscope" aria-hidden="true"></i> VMC
+        </div>
+        <div class="sb-sub-item" title="Gestione corsi e certificati" onclick="window.open('corsi.html','_blank')">
+          <i class="ti ti-school" aria-hidden="true"></i> Corsi
+        </div>
+      </div>
+    </div>
+  </nav>
+  <!-- CONTENUTO PRINCIPALE — invariato -->
+  <div class="pos-content" id="posContent">
   <div id="msgAlertBanner" style="display:none;position:fixed;inset:0;background:rgba(15,42,74,.55);z-index:500;align-items:center;justify-content:center;">
       <div style="background:#fff;border-radius:14px;padding:24px 28px;max-width:380px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.2);text-align:center;">
         <div style="font-size:28px;margin-bottom:10px;">&#9993;</div>
@@ -744,6 +948,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
     </div>
     <div class="pos-inner" id="mainContent"><div class="loading-bar">Caricamento...</div></div>
   </div>
+  </div><!-- /pos-with-sidebar -->
   <div class="app-footer">&copy; 2025 S.M.A.R.T Solutions RT &mdash; Posizionamento Navi v30 &mdash; Uso interno riservato</div>
 </div>
 
@@ -1593,7 +1798,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
   <div class="modal" style="max-width:580px;max-height:88vh;display:flex;flex-direction:column;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0;">
       <div class="modal-title" style="margin-bottom:0;">&#9432; Guida rapida</div>
-      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v31c1</span>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v1.6 · 22/06/2026</span>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:12px;flex-shrink:0;">
       <button id="helpTabGuida" onclick="switchHelpTab('guida')" style="font-size:12px;padding:5px 14px;border-radius:6px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-family:inherit;font-weight:500;">Guida</button>
@@ -1603,17 +1808,15 @@ if(new URLSearchParams(window.location.search).get('al')) {
 
       <!-- TAB GUIDA -->
 <div id="helpViewGuida">
-        <!-- v31c1 -->
+        <!-- v1.6 · 22/06/2026 -->
         <div class="nov-item nov-blue open">
           <div class="nov-head" onclick="this.closest('.nov-item').classList.toggle('open')">
-            <span class="nov-title">&#127381; Novità v31c1</span>
+            <span class="nov-title">&#127381; Novità v1.6 · 22/06/2026</span>
             <span class="nov-arrow">&#9660;</span>
           </div>
           <div class="nov-body">
             <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
-              <li><strong>&#128197; Data disponibilità</strong> — per i dipendenti non programmati appare il bottone <em>Disponibile dal...</em> nella colonna Programmazione. La data può essere inserita anche dal modale <strong>Comunicazione TD</strong> nel campo <em>Prossima disponibilità</em>. Una volta inserita compare una pill verde con cestino per rimuoverla.</li>
-              <li><strong>&#128260; Colonna Programmazione</strong> — mostra la data sbarco e il successore programmato. Per coloro che hanno una programmazione senza successore appare N/A.</li>
-              <li><strong>&#128100; Pannello Disponibili</strong> — nuovo bottone in topbar vicino ad Appunti. Mostra i dipendenti disponibili organizzati per reparto. La data viene inserita dalla colonna Programmazione o dal modale TD. Per ogni riga: ✏️ modifica reparto/data, 🗑️ cancella, → imbarca nel posizionamento. Bottone <strong>PDF</strong> per stampare la lista.</li>
+              <li><strong>&#8617; Risposta ai messaggi</strong> — ora puoi rispondere direttamente ai messaggi che l'ufficio ti invia sulla tua nave. Apri il pannello Messaggi, clicca <strong>Rispondi</strong> sotto al messaggio e scrivi la tua risposta. Non è possibile rispondere ai messaggi inviati in invio multiplo (a tutte le navi o a un gruppo).</li>
             </ul>
           </div>
         </div>
@@ -1644,7 +1847,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
             <div style="font-weight:600;color:var(--navy);font-size:12px;margin-bottom:7px;">📋 Contratti TD</div>
             <ul style="padding-left:15px;display:flex;flex-direction:column;gap:4px;">
               <li>Bottone <strong>TD</strong> diventa rosso con scadenze entro 15 giorni</li>
-              <li>Click sul <strong>pallino colorato</strong> per registrare la comunicazione: <span style="color:#854F0B;">in attesa</span> / <span style="color:#3B6D11;">prolunga</span> / <span style="color:#A32D2D;">non prolunga</span></li>
+              <li>Click sul <strong>pallino colorato</strong> per registrare la comunicazione: <span style="color:#9ca3af;">vuoto</span> = in attesa, non urgente (non cliccabile) / <span style="color:#A32D2D;">rosso</span> = in attesa, urgente (&le;23 giorni) / <span style="color:#3B6D11;">verde</span> = prolunga / <span style="color:#854F0B;">arancione</span> = non prolunga</li>
               <li><strong>&#10007; rosso</strong> = ufficio non ha letto la comunicazione. <strong>&#10003; verde</strong> = preso visione</li>
               <li>La nota TD ha un massimo di 71 caratteri</li>
             </ul>
@@ -1662,6 +1865,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
               <li>Bottone <strong>arancione</strong> = messaggi non letti</li>
               <li>Spunta <em>Segna come letto</em> per confermare la lettura</li>
               <li>All'apertura, se ci sono messaggi non letti, appare una finestra che blocca l'accesso finché non si preme <em>Leggi ora</em></li>
+              <li><strong>&#8617; Rispondi</strong> — puoi rispondere ai messaggi diretti alla tua nave (non a quelli multipli/di gruppo)</li>
               <li>Bottone <strong>Appunti</strong> — note rapide per ogni nave, esportazione PDF</li>
             </ul>
           </div>
@@ -1711,7 +1915,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
           </div>
           <div class="qa-topic-body">
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come registro la comunicazione di un contratto TD?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Clicca il <strong>pallino colorato</strong> accanto alla data TD nella riga del dipendente. Scegli lo stato e aggiungi una nota facoltativa.</div></div>
-            <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa significano i colori del bollino TD?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a"><strong style="color:#854F0B;">Arancione</strong> — in attesa. <strong style="color:#3B6D11;">Verde</strong> — prolunga. <strong style="color:#A32D2D;">Rosso</strong> — non prolunga.</div></div>
+            <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa significano i colori del bollino TD?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a"><strong style="color:#9ca3af;">Vuoto/grigio</strong> — in attesa, non urgente (non cliccabile). <strong style="color:#A32D2D;">Rosso</strong> — in attesa ma urgente, mancano 23 giorni o meno alla scadenza. <strong style="color:#3B6D11;">Verde</strong> — comunicato: prolunga. <strong style="color:#854F0B;">Arancione</strong> — comunicato: non prolunga.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Perché il bottone TD è diventato rosso?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Ci sono contratti TD in scadenza entro <strong>15 giorni</strong>. Clicca per vedere la lista con i giorni rimanenti.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa significa il ✗ rosso vicino alla data TD?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">L'ufficio non ha ancora preso visione della tua comunicazione. Scompare appena l'ufficio la legge.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa significa il ✓ verde vicino alla data TD?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">L'ufficio ha letto e preso visione della tua comunicazione TD.</div></div>
@@ -1732,14 +1936,15 @@ if(new URLSearchParams(window.location.search).get('al')) {
 
         <div class="qa-topic-item">
           <div class="qa-topic-head" onclick="toggleHelpTopic(this)">
-            <div class="qa-topic-left"><span style="font-size:13px;width:20px;text-align:center;">📨</span><span class="qa-topic-label">Messaggi</span><span class="qa-topic-count">6 domande</span></div>
+            <div class="qa-topic-left"><span style="font-size:13px;width:20px;text-align:center;">📨</span><span class="qa-topic-label">Messaggi</span><span class="qa-topic-count">7 domande</span></div>
             <span class="qa-topic-arrow">&#9660;</span>
           </div>
           <div class="qa-topic-body">
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa significa il bottone arancione Messaggi?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Hai <strong>messaggi non letti</strong> dall'ufficio. Clicca per aprire il pannello e leggerli.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come segno un messaggio come letto?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Apri il pannello Messaggi e spunta <em>Segna come letto</em>. Viene registrata automaticamente la data e ora.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Cosa succede dopo che segno come letto un messaggio?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Viene registrata la data e ora della lettura, visibile anche all'ufficio come conferma di ricezione.</div></div>
-            <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Posso rispondere a un messaggio?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">No, puoi solo leggere i messaggi dell'ufficio. Per comunicare contatta direttamente il tuo referente AMM.</div></div>
+            <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Posso rispondere a un messaggio?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Sì, se il messaggio è inviato direttamente alla tua nave. Clicca <strong>&#8617; Rispondi</strong> sotto al messaggio. Non puoi rispondere ai messaggi inviati in invio multiplo (a tutte le navi o a un gruppo Moby/CIN), né ad altre risposte.</div></div>
+            <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Come faccio a rispondere a un messaggio dell'ufficio?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Apri il pannello Messaggi, individua il messaggio e clicca <strong>&#8617; Rispondi</strong>. Scrivi il testo e invia: la risposta apparirà subito sotto al messaggio originale, visibile anche all'ufficio.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Perché all'apertura mi appare una finestra messaggi?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">Hai messaggi non letti. Devi premere <strong>Leggi ora</strong> prima di poter utilizzare l'app.</div></div>
             <div class="qa-acc-item"><div class="qa-acc-q" onclick="toggleHelpQA(this)"><span>Il badge "TD senza risposta" sparisce da solo?</span><span class="qa-acc-arr">&#9660;</span></div><div class="qa-acc-a">No, rimane finché non registri la comunicazione per tutti i TD in attesa.</div></div>
           </div>
@@ -1803,6 +2008,16 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <div class="new-msg-actions">
         <button class="btn-cancel" onclick="hideNewMsg()">Annulla</button>
         <button class="btn-save" onclick="inviaMessaggio()">Invia</button>
+      </div>
+    </div>
+    <!-- Area risposta commissario -->
+    <div id="replyMsgArea" style="border-top:1px solid var(--border);padding:12px 18px;flex-shrink:0;display:none;">
+      <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;">&#8617; Risposta al messaggio</div>
+      <input type="hidden" id="replyMsgId">
+      <textarea id="replyMsgText" style="width:100%;height:60px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;resize:none;outline:none;" placeholder="Scrivi la tua risposta..."></textarea>
+      <div style="display:flex;justify-content:flex-end;gap:7px;margin-top:8px;">
+        <button class="btn-cancel" onclick="hideReplyMsg()">Annulla</button>
+        <button class="btn-save" onclick="inviaRisposta()">Invia risposta</button>
       </div>
     </div>
     <div class="modal-msg-footer" id="msgFooter">
@@ -4059,7 +4274,7 @@ function toggleBarManagerPanel() {
         pill.textContent = n.nome.replace('MOBY ','').replace('MOBY','');
         pill.dataset.nome = n.nome;
         pill.style.cssText = 'font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid #ddd;background:#fff;color:#444;cursor:pointer;white-space:nowrap;';
-        pill.onclick = function() { toggleBarmanagerNave(n.nome); };
+        pill.onclick = function() { toggleBarManagerNave(n.nome); };
         pillsCont.appendChild(pill);
       });
     }
@@ -4068,7 +4283,7 @@ function toggleBarManagerPanel() {
   }
 }
 
-function toggleBarmanagerNave(nome) {
+function toggleBarManagerNave(nome) {
   if (nome === '__tutte__') {
     barManagerFiltroNave = [];
     document.querySelectorAll('#barManagerNavePills span').forEach(function(p) { p.style.background='#fff';p.style.color='#444';p.style.borderColor='#ddd';p.style.fontWeight=''; });
@@ -4207,7 +4422,7 @@ async function editBarmanagerPeriodo(id){
   document.getElementById('barManagerModalSb').value=p.data_sbarco;
   document.getElementById('barManagerModal').style.display='flex';
 }
-async function saveBarmanagerPeriodo(){
+async function saveBarManagerPeriodo(){
   var dipId=parseInt(document.getElementById('barManagerModalDipId').value);
   var naveId=parseInt(document.getElementById('barManagerModalNaveId').value);
   var slot=parseInt(document.getElementById('barManagerModalSlot').value);
@@ -4221,19 +4436,19 @@ async function saveBarmanagerPeriodo(){
   try{
     if(periodoId){await sbPatch('pn_programmazione',parseInt(periodoId),{dipendente_id:dipId,nave_id:naveId,slot:slot,turno:turnoInt,data_imbarco:imb,data_sbarco:sb,categoria:'Bar Manager'});}
     else{await sbPost('pn_programmazione',{dipendente_id:dipId,nave_id:naveId,slot:slot,turno:turnoInt,data_imbarco:imb,data_sbarco:sb,categoria:'Bar Manager'});}
-    closeBarmanagerModal();
+    closeBarManagerModal();
     await loadBarmanager(true);
   }catch(e){alert('Errore: '+e.message);}
 }
-async function deleteBarmanagerPeriodo(){
+async function deleteBarManagerPeriodo(){
   var periodoId=document.getElementById('barManagerModalPeriodoId').value;
   if(!periodoId)return;
   if(!confirm('Eliminare questo periodo?'))return;
   await sbDelete('pn_programmazione',parseInt(periodoId));
-  closeBarmanagerModal();
+  closeBarManagerModal();
   await loadBarmanager(true);
 }
-function closeBarmanagerModal(){document.getElementById('barManagerModal').style.display='none';}
+function closeBarManagerModal(){document.getElementById('barManagerModal').style.display='none';}
 var _dragbarManagerId=null;
 function onBarmanagerDragStart(e,id){_dragbarManagerId=id;e.dataTransfer.effectAllowed='move';e.currentTarget.style.opacity='.4';}
 function onBarmanagerDragEnd(e){e.currentTarget.style.opacity='1';}
@@ -4256,7 +4471,7 @@ async function onBarmanagerDrop(e,targetId,nomeNave,slot,turno){
   }
   await loadBarmanager(true);
 }
-async function searchBarmanagerNome(v){
+async function searchBarManagerNome(v){
   var drop=document.getElementById('barManagerNomeDrop');
   if(!v||v.length<2){drop.style.display='none';return;}
   var cats=await sbGet('pn_prog_categorie?nome=eq.Bar%20Manager&select=id');
@@ -4265,12 +4480,12 @@ async function searchBarmanagerNome(v){
   var abilitati=await sbGet('pn_prog_dipendenti?categoria_id=eq.'+catId+'&select=pn_dipendenti(id,cognome_nome)');
   var dips=(abilitati||[]).map(r=>r.pn_dipendenti).filter(d=>d&&d.cognome_nome.toLowerCase().includes(v.toLowerCase()));
   if(!dips.length){drop.style.display='none';return;}
-  drop.innerHTML=dips.map(d=>`<div style="padding:6px 10px;font-size:11px;cursor:pointer;" onmousedown="selBarmanagerNome(${d.id},'${escHtml(d.cognome_nome)}')" onmouseover="this.style.background='#f0f4fa'" onmouseout="this.style.background=''">${escHtml(d.cognome_nome)}</div>`).join('');
+  drop.innerHTML=dips.map(d=>`<div style="padding:6px 10px;font-size:11px;cursor:pointer;" onmousedown="selBarManagerNome(${d.id},'${escHtml(d.cognome_nome)}')" onmouseover="this.style.background='#f0f4fa'" onmouseout="this.style.background=''">${escHtml(d.cognome_nome)}</div>`).join('');
   var inp=document.getElementById('barManagerModalNome');
   var rect=inp.getBoundingClientRect();
   drop.style.cssText=`display:block;position:fixed;top:${rect.bottom+2}px;left:${rect.left}px;width:${rect.width}px;z-index:500;max-height:160px;overflow-y:auto;background:#fff;border:1px solid #ddd;border-radius:6px;`;
 }
-function selBarmanagerNome(id,nome){
+function selBarManagerNome(id,nome){
   document.getElementById('barManagerModalNome').value=nome;
   document.getElementById('barManagerModalDipId').value=id;
   document.getElementById('barManagerNomeDrop').style.display='none';
@@ -4295,7 +4510,7 @@ function toggleCapoCuocoPanel() {
         pill.textContent = n.nome.replace('MOBY ','').replace('MOBY','');
         pill.dataset.nome = n.nome;
         pill.style.cssText = 'font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid #ddd;background:#fff;color:#444;cursor:pointer;white-space:nowrap;';
-        pill.onclick = function() { toggleCapocuocoNave(n.nome); };
+        pill.onclick = function() { toggleCapoCuocoNave(n.nome); };
         pillsCont.appendChild(pill);
       });
     }
@@ -4304,7 +4519,7 @@ function toggleCapoCuocoPanel() {
   }
 }
 
-function toggleCapocuocoNave(nome) {
+function toggleCapoCuocoNave(nome) {
   if (nome === '__tutte__') {
     capoCuocoFiltroNave = [];
     document.querySelectorAll('#capoCuocoNavePills span').forEach(function(p) { p.style.background='#fff';p.style.color='#444';p.style.borderColor='#ddd';p.style.fontWeight=''; });
@@ -4443,7 +4658,7 @@ async function editCapocuocoPeriodo(id){
   document.getElementById('capoCuocoModalSb').value=p.data_sbarco;
   document.getElementById('capoCuocoModal').style.display='flex';
 }
-async function saveCapocuocoPeriodo(){
+async function saveCapoCuocoPeriodo(){
   var dipId=parseInt(document.getElementById('capoCuocoModalDipId').value);
   var naveId=parseInt(document.getElementById('capoCuocoModalNaveId').value);
   var slot=parseInt(document.getElementById('capoCuocoModalSlot').value);
@@ -4457,19 +4672,19 @@ async function saveCapocuocoPeriodo(){
   try{
     if(periodoId){await sbPatch('pn_programmazione',parseInt(periodoId),{dipendente_id:dipId,nave_id:naveId,slot:slot,turno:turnoInt,data_imbarco:imb,data_sbarco:sb,categoria:'Capo Cuoco'});}
     else{await sbPost('pn_programmazione',{dipendente_id:dipId,nave_id:naveId,slot:slot,turno:turnoInt,data_imbarco:imb,data_sbarco:sb,categoria:'Capo Cuoco'});}
-    closeCapocuocoModal();
+    closeCapoCuocoModal();
     await loadCapocuoco(true);
   }catch(e){alert('Errore: '+e.message);}
 }
-async function deleteCapocuocoPeriodo(){
+async function deleteCapoCuocoPeriodo(){
   var periodoId=document.getElementById('capoCuocoModalPeriodoId').value;
   if(!periodoId)return;
   if(!confirm('Eliminare questo periodo?'))return;
   await sbDelete('pn_programmazione',parseInt(periodoId));
-  closeCapocuocoModal();
+  closeCapoCuocoModal();
   await loadCapocuoco(true);
 }
-function closeCapocuocoModal(){document.getElementById('capoCuocoModal').style.display='none';}
+function closeCapoCuocoModal(){document.getElementById('capoCuocoModal').style.display='none';}
 var _dragcapoCuocoId=null;
 function onCapocuocoDragStart(e,id){_dragcapoCuocoId=id;e.dataTransfer.effectAllowed='move';e.currentTarget.style.opacity='.4';}
 function onCapocuocoDragEnd(e){e.currentTarget.style.opacity='1';}
@@ -4492,7 +4707,7 @@ async function onCapocuocoDrop(e,targetId,nomeNave,slot,turno){
   }
   await loadCapocuoco(true);
 }
-async function searchCapocuocoNome(v){
+async function searchCapoCuocoNome(v){
   var drop=document.getElementById('capoCuocoNomeDrop');
   if(!v||v.length<2){drop.style.display='none';return;}
   var cats=await sbGet('pn_prog_categorie?nome=eq.Capo%20Cuoco&select=id');
@@ -4501,12 +4716,12 @@ async function searchCapocuocoNome(v){
   var abilitati=await sbGet('pn_prog_dipendenti?categoria_id=eq.'+catId+'&select=pn_dipendenti(id,cognome_nome)');
   var dips=(abilitati||[]).map(r=>r.pn_dipendenti).filter(d=>d&&d.cognome_nome.toLowerCase().includes(v.toLowerCase()));
   if(!dips.length){drop.style.display='none';return;}
-  drop.innerHTML=dips.map(d=>`<div style="padding:6px 10px;font-size:11px;cursor:pointer;" onmousedown="selCapocuocoNome(${d.id},'${escHtml(d.cognome_nome)}')" onmouseover="this.style.background='#f0f4fa'" onmouseout="this.style.background=''">${escHtml(d.cognome_nome)}</div>`).join('');
+  drop.innerHTML=dips.map(d=>`<div style="padding:6px 10px;font-size:11px;cursor:pointer;" onmousedown="selCapoCuocoNome(${d.id},'${escHtml(d.cognome_nome)}')" onmouseover="this.style.background='#f0f4fa'" onmouseout="this.style.background=''">${escHtml(d.cognome_nome)}</div>`).join('');
   var inp=document.getElementById('capoCuocoModalNome');
   var rect=inp.getBoundingClientRect();
   drop.style.cssText=`display:block;position:fixed;top:${rect.bottom+2}px;left:${rect.left}px;width:${rect.width}px;z-index:500;max-height:160px;overflow-y:auto;background:#fff;border:1px solid #ddd;border-radius:6px;`;
 }
-function selCapocuocoNome(id,nome){
+function selCapoCuocoNome(id,nome){
   document.getElementById('capoCuocoModalNome').value=nome;
   document.getElementById('capoCuocoModalDipId').value=id;
   document.getElementById('capoCuocoNomeDrop').style.display='none';
@@ -4531,7 +4746,7 @@ function toggleCuocoEquipaggioPanel() {
         pill.textContent = n.nome.replace('MOBY ','').replace('MOBY','');
         pill.dataset.nome = n.nome;
         pill.style.cssText = 'font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid #ddd;background:#fff;color:#444;cursor:pointer;white-space:nowrap;';
-        pill.onclick = function() { toggleCuocoequipaggioNave(n.nome); };
+        pill.onclick = function() { toggleCuocoEquipaggioNave(n.nome); };
         pillsCont.appendChild(pill);
       });
     }
@@ -4540,7 +4755,7 @@ function toggleCuocoEquipaggioPanel() {
   }
 }
 
-function toggleCuocoequipaggioNave(nome) {
+function toggleCuocoEquipaggioNave(nome) {
   if (nome === '__tutte__') {
     cuocoEquipaggioFiltroNave = [];
     document.querySelectorAll('#cuocoEquipaggioNavePills span').forEach(function(p) { p.style.background='#fff';p.style.color='#444';p.style.borderColor='#ddd';p.style.fontWeight=''; });
@@ -4679,7 +4894,7 @@ async function editCuocoequipaggioPeriodo(id){
   document.getElementById('cuocoEquipaggioModalSb').value=p.data_sbarco;
   document.getElementById('cuocoEquipaggioModal').style.display='flex';
 }
-async function saveCuocoequipaggioPeriodo(){
+async function saveCuocoEquipaggioPeriodo(){
   var dipId=parseInt(document.getElementById('cuocoEquipaggioModalDipId').value);
   var naveId=parseInt(document.getElementById('cuocoEquipaggioModalNaveId').value);
   var slot=parseInt(document.getElementById('cuocoEquipaggioModalSlot').value);
@@ -4693,19 +4908,19 @@ async function saveCuocoequipaggioPeriodo(){
   try{
     if(periodoId){await sbPatch('pn_programmazione',parseInt(periodoId),{dipendente_id:dipId,nave_id:naveId,slot:slot,turno:turnoInt,data_imbarco:imb,data_sbarco:sb,categoria:'Cuoco Equipaggio'});}
     else{await sbPost('pn_programmazione',{dipendente_id:dipId,nave_id:naveId,slot:slot,turno:turnoInt,data_imbarco:imb,data_sbarco:sb,categoria:'Cuoco Equipaggio'});}
-    closeCuocoequipaggioModal();
+    closeCuocoEquipaggioModal();
     await loadCuocoequipaggio(true);
   }catch(e){alert('Errore: '+e.message);}
 }
-async function deleteCuocoequipaggioPeriodo(){
+async function deleteCuocoEquipaggioPeriodo(){
   var periodoId=document.getElementById('cuocoEquipaggioModalPeriodoId').value;
   if(!periodoId)return;
   if(!confirm('Eliminare questo periodo?'))return;
   await sbDelete('pn_programmazione',parseInt(periodoId));
-  closeCuocoequipaggioModal();
+  closeCuocoEquipaggioModal();
   await loadCuocoequipaggio(true);
 }
-function closeCuocoequipaggioModal(){document.getElementById('cuocoEquipaggioModal').style.display='none';}
+function closeCuocoEquipaggioModal(){document.getElementById('cuocoEquipaggioModal').style.display='none';}
 var _dragcuocoEquipaggioId=null;
 function onCuocoequipaggioDragStart(e,id){_dragcuocoEquipaggioId=id;e.dataTransfer.effectAllowed='move';e.currentTarget.style.opacity='.4';}
 function onCuocoequipaggioDragEnd(e){e.currentTarget.style.opacity='1';}
@@ -4728,7 +4943,7 @@ async function onCuocoequipaggioDrop(e,targetId,nomeNave,slot,turno){
   }
   await loadCuocoequipaggio(true);
 }
-async function searchCuocoequipaggioNome(v){
+async function searchCuocoEquipaggioNome(v){
   var drop=document.getElementById('cuocoEquipaggioNomeDrop');
   if(!v||v.length<2){drop.style.display='none';return;}
   var cats=await sbGet('pn_prog_categorie?nome=eq.Cuoco%20Equipaggio&select=id');
@@ -4737,12 +4952,12 @@ async function searchCuocoequipaggioNome(v){
   var abilitati=await sbGet('pn_prog_dipendenti?categoria_id=eq.'+catId+'&select=pn_dipendenti(id,cognome_nome)');
   var dips=(abilitati||[]).map(r=>r.pn_dipendenti).filter(d=>d&&d.cognome_nome.toLowerCase().includes(v.toLowerCase()));
   if(!dips.length){drop.style.display='none';return;}
-  drop.innerHTML=dips.map(d=>`<div style="padding:6px 10px;font-size:11px;cursor:pointer;" onmousedown="selCuocoequipaggioNome(${d.id},'${escHtml(d.cognome_nome)}')" onmouseover="this.style.background='#f0f4fa'" onmouseout="this.style.background=''">${escHtml(d.cognome_nome)}</div>`).join('');
+  drop.innerHTML=dips.map(d=>`<div style="padding:6px 10px;font-size:11px;cursor:pointer;" onmousedown="selCuocoEquipaggioNome(${d.id},'${escHtml(d.cognome_nome)}')" onmouseover="this.style.background='#f0f4fa'" onmouseout="this.style.background=''">${escHtml(d.cognome_nome)}</div>`).join('');
   var inp=document.getElementById('cuocoEquipaggioModalNome');
   var rect=inp.getBoundingClientRect();
   drop.style.cssText=`display:block;position:fixed;top:${rect.bottom+2}px;left:${rect.left}px;width:${rect.width}px;z-index:500;max-height:160px;overflow-y:auto;background:#fff;border:1px solid #ddd;border-radius:6px;`;
 }
-function selCuocoequipaggioNome(id,nome){
+function selCuocoEquipaggioNome(id,nome){
   document.getElementById('cuocoEquipaggioModalNome').value=nome;
   document.getElementById('cuocoEquipaggioModalDipId').value=id;
   document.getElementById('cuocoEquipaggioNomeDrop').style.display='none';
@@ -6852,8 +7067,8 @@ function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
   if(name==='admin' || name==='prog') {
-    document.getElementById('cascadeAmmWrap').classList.remove('show');
-    document.getElementById('statsLeftWrap').classList.remove('show');
+    
+    document.getElementById('sbStatsCamera') && (document.getElementById('sbStatsCamera').style.display='none'); document.getElementById('sbStatsCucina') && (document.getElementById('sbStatsCucina').style.display='none');
   }
   if(name==='pos') {
     if(utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin')) {
@@ -7242,8 +7457,8 @@ function doLogout() {
 document.getElementById('btnAmm').style.display='none';
   document.getElementById('btnProg').style.display='none';
   document.getElementById('msgAlertBanner').style.display='none';
-document.getElementById('cascadeAmmWrap').classList.remove('show');
-document.getElementById('statsLeftWrap').classList.remove('show');
+
+document.getElementById('sbStatsCamera') && (document.getElementById('sbStatsCamera').style.display='none'); document.getElementById('sbStatsCucina') && (document.getElementById('sbStatsCucina').style.display='none');
   document.getElementById('notifAmmOverlay').classList.remove('show');
 }
 
@@ -7260,6 +7475,8 @@ function populateSelects() {
 // POSIZIONAMENTO
 // ═══════════════════════════════════════════
 async function loadPosizionamento() {
+  const _pc = document.getElementById('posContent');
+  const _savedScroll = _pc ? _pc.scrollTop : 0;
   document.getElementById('mainContent').innerHTML='<div class="loading-bar">Caricamento...</div>';
   const mese=parseInt(document.getElementById('meseSelect').value);
   const anno=parseInt(document.getElementById('annoSelect').value);
@@ -7278,11 +7495,12 @@ const [pos, bud, prog] = await Promise.all([
     });
     budgetData = {};
     bud.forEach(b => { budgetData[b.nave_id+'_'+b.mese+'_'+b.anno+'_'+b.reparto_id] = b.quantita; });
- renderPosizionamento(mese, anno);
+ renderPosizionamento(mese, anno, _savedScroll);
     loadMessaggi();
     aggiornaBottoneTD();
     buildNotifAmm();
     buildTDUrgentiPanel();
+  sbSyncBadges();
   } catch(e) {
     document.getElementById('mainContent').innerHTML='<div class="empty-state">Errore caricamento dati.</div>';
     console.error(e);
@@ -7333,7 +7551,9 @@ function calcEta(dataNascita) {
   return eta;
 }
 
-function renderPosizionamento(mese, anno) {
+function renderPosizionamento(mese, anno, _savedScroll) {
+  const _pc = document.getElementById('posContent');
+  const _sy = (_savedScroll !== undefined) ? _savedScroll : (_pc ? _pc.scrollTop : 0);
   const el=document.getElementById('mainContent');
   if(!posizionamento||posizionamento.length===0){
     el.innerHTML='<div class="empty-state">Nessun personale nel posizionamento.<br>Usa "+ aggiungi personale" per iniziare.</div>';
@@ -7401,6 +7621,7 @@ const W=['18%','13%','11%','7%','4%','6%','10%','18%','9%','22%'];
     html+='</div>';
   });
   el.innerHTML=html||'<div class="empty-state">Nessun personale nel posizionamento.</div>';
+  requestAnimationFrame(() => requestAnimationFrame(() => { if(_pc) _pc.scrollTop = _sy; }));
 }
 
 function getBollinoClass(p) {
@@ -7433,7 +7654,8 @@ function renderRow(p,isConf,W) {
     } else if(p.amm_visione_at) {
       flag = '<span class="bollino-flag verde" title="Preso visione">✓</span>';
     }
-    const bollino = '<span class="bollino-wrap"><span class="bollino-td '+bcls+'" onclick="openModalBollino('+p.id+')"></span>'+flag+tooltip+'</span>';
+    const bollinoClickable = bcls !== 'attesa';
+    const bollino = '<span class="bollino-wrap"><span class="bollino-td '+bcls+'"'+(bollinoClickable?' onclick="openModalBollino('+p.id+')"':' style="cursor:default;"')+'></span>'+flag+tooltip+'</span>';
     contr='<span class="td-badge">TD '+fmtDate(p.data_scadenza_td)+'</span> '+bollino;
   }
   const note=p.note?'<span style="font-size:10px;color:#92400e;font-style:italic">'+p.note+'</span>':'';
@@ -7613,6 +7835,17 @@ async function loadERendiDisponibili() {
   try {
     const data = await sbGet('pn_disponibili?nave_id=eq.'+utente.nave_id+'&order=data_disponibilita.asc&select=*');
     window._dispData = data || [];
+    // Carico le note da pn_posizionamento per i dipendenti disponibili
+    if(data && data.length > 0) {
+      const dipIds = data.map(r=>r.dipendente_id).filter(Boolean);
+      if(dipIds.length > 0) {
+        try {
+          const noteData = await sbGet('pn_posizionamento?nave_id=eq.'+utente.nave_id+'&dipendente_id=in.('+dipIds.join(',')+')'+'&select=dipendente_id,note');
+          window._dispNote = {};
+          (noteData||[]).forEach(n => { if(n.note) window._dispNote[n.dipendente_id] = n.note; });
+        } catch(e) { window._dispNote = {}; }
+      }
+    } else { window._dispNote = {}; }
     renderDisponibiliPanel();
     // Timestamp
     if(data && data.length > 0 && data[0].saved_at) {
@@ -7666,13 +7899,17 @@ function renderDisponibiliPanel() {
       const qual = r.qualifica || '';
       const data = r.data_disponibilita ? fmtD(r.data_disponibilita) : '—';
       const id = r.id;
-      html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border);">'
-        + '<div style="flex:1;min-width:0;">'
-        + '<div style="font-size:12px;font-weight:500;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+nome+'</div>'
-        + '<div style="font-size:11px;color:var(--muted);">'+qual+'</div>'
+      const nota = (window._dispNote && r.dipendente_id && window._dispNote[r.dipendente_id]) || '';
+      const notaHtml = nota
+        ? '<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:2px;">'+escHtml(nota)+'</div>'
+        : '<div style="font-size:11px;color:#bbb;margin-top:2px;">—</div>';
+      html += '<div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--border);">'
+        + '<div style="min-width:0;">'
+        + '<div style="font-size:12px;font-weight:500;color:var(--navy);">'+escHtml(nome)+' <span style="font-weight:400;color:var(--muted);">— '+escHtml(qual)+'</span></div>'
+        + notaHtml
         + '</div>'
+        + '<span style="font-size:11px;font-weight:500;color:#27500A;background:#EAF3DE;padding:2px 8px;border-radius:20px;white-space:nowrap;">dal '+data+'</span>'
         + '<div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">'
-        + '<span style="font-size:11px;font-weight:500;color:#27500A;background:#EAF3DE;padding:2px 7px;border-radius:20px;white-space:nowrap;">dal '+data+'</span>'
         + '<button class="disp-btn-edit" data-id="'+id+'" title="Modifica" style="background:none;border:none;cursor:pointer;color:#185FA5;padding:2px;font-size:12px;line-height:1;">&#9999;&#65039;</button>'
         + '<button class="disp-btn-del" data-id="'+id+'" data-nome="'+nome.replace(/"/g,'&quot;')+'" title="Elimina" style="background:none;border:none;cursor:pointer;color:#A32D2D;padding:2px;font-size:12px;line-height:1;">&#128465;&#65039;</button>'
         + '<button class="disp-btn-sposta" data-id="'+id+'" data-dipid="'+(r.dipendente_id||'')+'" data-nome="'+nome.replace(/"/g,'&quot;')+'" data-reparto="'+(r.reparto||'').replace(/"/g,'&quot;')+'" title="Imbarca nel posizionamento" style="background:none;border:none;cursor:pointer;color:#27500A;padding:2px;font-size:13px;line-height:1;font-weight:bold;">&#8594;</button>'
@@ -7855,6 +8092,7 @@ async function stampaPDFDisponibili() {
 
       dips.forEach(r => {
         if(y > 270) { doc.addPage(); y = 15; }
+        const notaPdf = (window._dispNote && r.dipendente_id && window._dispNote[r.dipendente_id]) || '';
         doc.setTextColor(20,20,80);
         doc.setFontSize(9);
         doc.setFont('helvetica','bold');
@@ -7863,12 +8101,21 @@ async function stampaPDFDisponibili() {
         doc.setFontSize(8);
         doc.setFont('helvetica','normal');
         doc.text(r.qualifica||'', 12, y+4);
+        if(notaPdf) {
+          doc.setTextColor(100,100,100);
+          doc.setFontSize(7);
+          doc.setFont('helvetica','italic');
+          const notaLines = doc.splitTextToSize(notaPdf, 120);
+          doc.text(notaLines, 12, y+8);
+        }
         doc.setTextColor(...green);
         doc.setFont('helvetica','bold');
+        doc.setFontSize(8);
         doc.text('dal '+(r.data_disponibilita?fmtD(r.data_disponibilita):'—'), 198, y+1, {align:'right'});
         doc.setDrawColor(220,220,220);
-        doc.line(10,y+7,200,y+7);
-        y += 10;
+        const rowH = notaPdf ? 14 : 10;
+        doc.line(10,y+rowH-2,200,y+rowH-2);
+        y += rowH;
       });
       y += 3;
     });
@@ -9702,6 +9949,7 @@ async function loadMessaggi() {
 }
 
 function aggiornaBottoneMsg() {
+  if(typeof sbSyncBadges==="function") sbSyncBadges();
   const btn = document.getElementById('btnMsg');
   const nonLetti = messaggi.filter(m => !m.letto).length;
   if(nonLetti > 0) {
@@ -9730,11 +9978,14 @@ function openModalMsg() {
   document.getElementById('newMsgArea').classList.remove('show');
   document.getElementById('newMsgText').value = '';
   document.getElementById('newMsgNaveRow').style.display = 'none';
+  document.getElementById('replyMsgArea').style.display = 'none';
+  document.getElementById('replyMsgText').value = '';
   document.getElementById('modalMsg').classList.add('show');
 }
 
 function closeModalMsg() {
   document.getElementById('modalMsg').classList.remove('show');
+  document.getElementById('replyMsgArea').style.display = 'none';
   const nonLetti = messaggi.filter(m => !m.letto).length;
   if(nonLetti === 0) document.getElementById('msgAlertBanner').style.display = 'none';
 }
@@ -9752,31 +10003,54 @@ function renderMsgList() {
     list.innerHTML = '<div class="msg-empty">Nessun messaggio per questo mese.</div>';
     return;
   }
-  list.innerHTML = messaggi.map(m => {
+  // Separa messaggi principali da risposte
+  const msgsRoot    = messaggi.filter(m => !m.parent_id && m.tipo !== 'risposta');
+  const msgsRisposte = messaggi.filter(m => m.tipo === 'risposta');
+
+  function fmtMsg(m) {
     const data = m.created_at ? new Date(m.created_at) : null;
     const dataStr = data ? data.getDate().toString().padStart(2,'0')+'/'+(data.getMonth()+1).toString().padStart(2,'0')+'/'+data.getFullYear()+' '+data.getHours().toString().padStart(2,'0')+':'+data.getMinutes().toString().padStart(2,'0') : '—';
     const cls = m.letto ? 'read' : 'unread';
+    const isRisposta = m.tipo === 'risposta';
+    const style = isRisposta ? ' style="margin-left:16px;border-left:3px solid #185fa5;background:#f0f6ff;"' : '';
+    const tsStr = m.letto_il ? fmtDateTime(m.letto_il) : '';
+
+    // Figli (risposte a questo messaggio)
+    const figli = msgsRisposte.filter(r => r.parent_id === m.id);
+    const figliHtml = figli.map(r => fmtMsg(r)).join('');
+
     if(isRW) {
-      // Admin/semiadmin: vede stato lettura con timestamp
-      const tsStr = m.letto_il ? fmtDateTime(m.letto_il) : '';
-      return '<div class="msg-item '+cls+'" id="msgitem-'+m.id+'">'
-        +'<div class="msg-meta"><span class="msg-author">'+escHtml(m.autore||'Admin')+'</span><span class="msg-date">'+dataStr+'</span></div>'
+      // Admin/semiadmin
+      const labelTipo = isRisposta ? '<span style="font-size:10px;color:#185fa5;font-weight:600;">&#8617; Risposta commissario</span> ' : '';
+      return '<div class="msg-item '+cls+'"'+style+' id="msgitem-'+m.id+'">'
+        +'<div class="msg-meta">'+labelTipo+'<span class="msg-author">'+escHtml(m.autore||'Admin')+'</span><span class="msg-date">'+dataStr+'</span></div>'
         +'<div class="msg-text">'+escHtml(m.testo)+'</div>'
         +'<div class="msg-footer"><span></span>'
-        +(m.letto ? '<div style="text-align:right"><span class="badge-letto">&#10003; Letto dal commissario</span>'+(tsStr?'<div class="msg-timestamp">'+tsStr+'</div>':'')+'</div>' : '<span class="badge-nonletto">Non letto</span>')
-        +'</div></div>';
+        +(m.letto ? '<div style="text-align:right"><span class="badge-letto">&#10003; Letto</span>'+(tsStr?'<div class="msg-timestamp">'+tsStr+'</div>':'')+'</div>' : '<span class="badge-nonletto">Non letto</span>')
+        +'</div></div>'
+        + figliHtml;
     } else {
-      // Commissario: checkbox per segnare come letto con timestamp
+      // Commissario: può rispondere solo ai messaggi root, non alle risposte
       const tsStr = m.letto_il ? fmtDateTime(m.letto_il) : '';
-      return '<div class="msg-item '+cls+'" id="msgitem-'+m.id+'">'
+      const btnRispondi = (!isRisposta && m.nave_singola !== false)
+        ? '<button onclick="showReplyMsg('+m.id+')" style="font-size:11px;padding:2px 8px;border-radius:5px;border:1px solid #185fa5;background:none;color:#185fa5;cursor:pointer;">&#8617; Rispondi</button>'
+        : '';
+      return '<div class="msg-item '+cls+'"'+style+' id="msgitem-'+m.id+'">'
         +'<div class="msg-meta"><span class="msg-author">'+escHtml(m.autore||'Admin')+'</span><span class="msg-date">'+dataStr+'</span></div>'
         +'<div class="msg-text">'+escHtml(m.testo)+'</div>'
         +'<div class="msg-footer">'
-        +'<label class="msg-check"><input type="checkbox" '+(m.letto?'checked':'')+' onchange="segnaLetto('+m.id+', this.checked)"> '+(m.letto?'Letto':'Segna come letto')+'</label>'
-        +(m.letto ? '<div style="text-align:right"><span class="badge-letto">Letto</span>'+(tsStr?'<div class="msg-timestamp">'+tsStr+'</div>':'')+'</div>' : '<span class="badge-nonletto">Non letto</span>')
-        +'</div></div>';
+        +(!isRisposta ? '<label class="msg-check"><input type="checkbox" '+(m.letto?'checked':'')+' onchange="segnaLetto('+m.id+', this.checked)"> '+(m.letto?'Letto':'Segna come letto')+'</label>' : '<span></span>')
+        +'<div style="display:flex;align-items:center;gap:6px;">'
+        +(m.letto ? '<span class="badge-letto">Letto</span>'+(tsStr?'<div class="msg-timestamp">'+tsStr+'</div>':'') : '<span class="badge-nonletto">Non letto</span>')
+        +btnRispondi
+        +'</div></div></div>'
+        + figliHtml;
     }
-  }).join('');
+  }
+
+  list.innerHTML = msgsRoot.length === 0
+    ? '<div class="msg-empty">Nessun messaggio per questo mese.</div>'
+    : msgsRoot.map(m => fmtMsg(m)).join('');
 }
 
 async function segnaLetto(id, letto) {
@@ -9797,12 +10071,26 @@ function showNewMsg() {
   const naveRow = document.getElementById('newMsgNaveRow');
   const naveSel = document.getElementById('newMsgNave');
   if(isMultiNave) {
-    naveSel.innerHTML = '<option value="ALL">📢 Tutte le navi</option>' + navi.map(n => '<option value="'+n.id+'">'+n.nome+'</option>').join('');
+    // Gruppi fissi + navi singole; default = nave corrente se disponibile
+    const mobyNavi = navi.filter(n => n.compagnia === 'MOBY');
+    const cinNavi  = navi.filter(n => n.compagnia === 'CIN');
+    let opts = '<option value="ALL">📢 Tutte le navi</option>';
+    opts += '<option value="MOBY">🔵 Solo navi Moby</option>';
+    opts += '<option value="CIN">🟡 Solo navi CIN</option>';
+    opts += '<optgroup label="── Navi Moby ──">' + mobyNavi.map(n => '<option value="'+n.id+'">'+n.nome+'</option>').join('') + '</optgroup>';
+    opts += '<optgroup label="── Navi CIN ──">'  + cinNavi.map(n  => '<option value="'+n.id+'">'+n.nome+'</option>').join('') + '</optgroup>';
+    naveSel.innerHTML = opts;
+    // Pre-seleziona la nave corrente dell'utente
+    if(utente.nave_id) {
+      const optNave = naveSel.querySelector('option[value="'+utente.nave_id+'"]');
+      if(optNave) optNave.selected = true;
+    }
     naveRow.style.display = 'block';
   } else {
     naveRow.style.display = 'none';
   }
   document.getElementById('newMsgArea').classList.add('show');
+  document.getElementById('replyMsgArea').style.display = 'none';
   document.getElementById('newMsgText').focus();
 }
 
@@ -9820,12 +10108,17 @@ async function inviaMessaggio() {
 const naveVal = isMultiNave ? document.getElementById('newMsgNave').value : String(utente.nave_id);
   if(!naveVal) { showToast('Seleziona una nave', 'error'); return; }
   try {
-    if(naveVal === 'ALL') {
-      for(const n of navi) {
-        await sbPost('pn_messaggi', { nave_id: n.id, mese, anno, testo, autore: utente.nome, letto: false });
+    let naviTarget = [];
+    if(naveVal === 'ALL')  naviTarget = navi;
+    else if(naveVal === 'MOBY') naviTarget = navi.filter(n => n.compagnia === 'MOBY');
+    else if(naveVal === 'CIN')  naviTarget = navi.filter(n => n.compagnia === 'CIN');
+    const isSingola = naviTarget.length === 0; // true solo se destinatario è nave singola
+    if(naviTarget.length > 0) {
+      for(const n of naviTarget) {
+        await sbPost('pn_messaggi', { nave_id: n.id, mese, anno, testo, autore: utente.nome, letto: false, tipo: 'messaggio', nave_singola: false });
       }
     } else {
-      await sbPost('pn_messaggi', { nave_id: parseInt(naveVal), mese, anno, testo, autore: utente.nome, letto: false });
+      await sbPost('pn_messaggi', { nave_id: parseInt(naveVal), mese, anno, testo, autore: utente.nome, letto: false, tipo: 'messaggio', nave_singola: true });
     }
     messaggi = await sbGet('pn_messaggi?nave_id=eq.'+utente.nave_id+'&mese=eq.'+mese+'&anno=eq.'+anno+'&order=created_at.desc');
     hideNewMsg();
@@ -9833,6 +10126,98 @@ const naveVal = isMultiNave ? document.getElementById('newMsgNave').value : Stri
     aggiornaBottoneMsg();
     showToast('Messaggio inviato', 'success');
   } catch(e) { showToast('Errore invio: '+e.message, 'error'); }
+}
+
+// ═══════════════════════════════════════════
+// RISPOSTA COMMISSARIO
+// ═══════════════════════════════════════════
+function showReplyMsg(msgId) {
+  document.getElementById('replyMsgId').value = msgId;
+  document.getElementById('replyMsgText').value = '';
+  document.getElementById('replyMsgArea').style.display = 'block';
+  document.getElementById('newMsgArea').classList.remove('show');
+  document.getElementById('replyMsgText').focus();
+  // Scroll alla fine del modal body
+  const body = document.getElementById('msgList');
+  body.scrollTop = body.scrollHeight;
+}
+
+function hideReplyMsg() {
+  document.getElementById('replyMsgArea').style.display = 'none';
+  document.getElementById('replyMsgText').value = '';
+}
+
+async function inviaRisposta() {
+  const testo = document.getElementById('replyMsgText').value.trim();
+  const parentId = parseInt(document.getElementById('replyMsgId').value);
+  if(!testo) { showToast('Scrivi una risposta', 'error'); return; }
+  const mese = parseInt(document.getElementById('meseSelect').value);
+  const anno = parseInt(document.getElementById('annoSelect').value);
+  try {
+    await sbPost('pn_messaggi', {
+      nave_id: utente.nave_id,
+      mese, anno,
+      testo,
+      autore: utente.nome,
+      letto: false,
+      tipo: 'risposta',
+      parent_id: parentId
+    });
+    messaggi = await sbGet('pn_messaggi?nave_id=eq.'+utente.nave_id+'&mese=eq.'+mese+'&anno=eq.'+anno+'&order=created_at.desc');
+    hideReplyMsg();
+    renderMsgList();
+    aggiornaBottoneMsg();
+    showToast('Risposta inviata', 'success');
+  } catch(e) { showToast('Errore invio risposta: '+e.message, 'error'); }
+}
+
+
+// ═══ SIDEBAR ═══
+function sbToggleInlineStats(id, el) {
+  const panel = document.getElementById(id);
+  const arrow = el.querySelector('.sb-sub-arrow');
+  if(!panel) return;
+  const open = panel.style.display === 'none' || panel.style.display === '';
+  panel.style.display = open ? 'block' : 'none';
+  if(arrow) arrow.classList.toggle('open', open);
+}
+function sbToggleCat(el) {
+  const arrow = el.querySelector('.sb-cat-arrow');
+  const ch = el.nextElementSibling;
+  if(!ch) return;
+  const open = ch.classList.toggle('open');
+  if(arrow) arrow.classList.toggle('open', open);
+}
+function sbToggleSub(el) {
+  const arrow = el.querySelector('.sb-sub-arrow');
+  const ch = el.nextElementSibling;
+  if(!ch) return;
+  const open = ch.classList.toggle('open');
+  if(arrow) arrow.classList.toggle('open', open);
+}
+function sbOpenAmmFlag() { /* inline sidebar */ }
+function sbSyncBadges() {
+  const isRW = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+  // TD badge
+  const tdCount = window._tdUrgentiCount || 0;
+  const tdBadge = document.getElementById('sbTDBadge');
+  if(tdBadge){ tdBadge.textContent = tdCount; tdBadge.style.display = tdCount > 0 ? '' : 'none'; }
+  // Messaggi badge
+  const nonLetti = (window.messaggi||[]).filter(m=>!m.letto && m.tipo!=='risposta').length;
+  const msgBadge = document.getElementById('sbMsgBadge');
+  if(msgBadge){ msgBadge.textContent = nonLetti; msgBadge.style.display = nonLetti > 0 ? '' : 'none'; }
+  // Excel e Prog solo admin
+  const sbExcel = document.getElementById('sbExcel');
+  const sbProg = document.getElementById('sbProg');
+  if(sbExcel) sbExcel.style.display = isRW ? '' : 'none';
+  if(sbProg) sbProg.style.display = isRW ? '' : 'none';
+  // AMM category solo admin/semiadmin
+  const sbCatAmm = document.getElementById('sbCatAmm');
+  const sbChildrenAmm = document.getElementById('sbChildrenAmm');
+  if(!isRW){
+    if(sbCatAmm) sbCatAmm.style.display='none';
+    if(sbChildrenAmm) sbChildrenAmm.style.display='none';
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -10451,7 +10836,7 @@ function updateStatsLeft(bordoCamera, bordoCucina, bC, cC, buC, bCu, cCu, buCu) 
   document.getElementById('slGGCu').textContent = mgCu||'—';
   document.getElementById('slEtaCu').textContent = meCu||'—';
 
-  document.getElementById('statsLeftWrap').classList.add('show');
+  
 }
 
 function buildTDUrgentiPanel() {
@@ -10482,25 +10867,32 @@ function buildTDUrgentiPanel() {
       const totUrgenti = Object.values(urgenti).reduce((a,b)=>a+b,0);
       const totVisione = Object.values(visione).reduce((a,b)=>a+b,0);
       // Cascade A
-      document.getElementById('cascadeBadgeUrgenti').textContent = totUrgenti;
-      const rowsUrgenti = naviOrd.filter(n => (urgenti[n.id]||0) > 0).map(n => {
-        const c = urgenti[n.id];
-        return '<div class="cascade-row"><span class="cascade-nome">'+escHtml(n.nome)+'</span><span class="cascade-count red">'+c+'</span></div>';
-      });
-      document.getElementById('cascadeBodyUrgenti').innerHTML = rowsUrgenti.length
-        ? rowsUrgenti.join('')
-        : '<div style="font-size:11px;color:var(--muted);padding:8px 10px;font-style:italic;">Nessuna nave con TD urgenti</div>';
-      // Cascade B
-      document.getElementById('cascadeBadgeVisione').textContent = totVisione;
-      const rowsVisione = naviOrd.filter(n => (visione[n.id]||0) > 0).map(n => {
-        const c = visione[n.id];
-        return '<div class="cascade-row"><span class="cascade-nome">'+escHtml(n.nome)+'</span><span class="cascade-count orange">'+c+'</span></div>';
-      });
-      document.getElementById('cascadeBodyVisione').innerHTML = rowsVisione.length
-        ? rowsVisione.join('')
-        : '<div style="font-size:11px;color:var(--muted);padding:8px 10px;font-style:italic;">Nessuna nave con flag ✗</div>';
-      // Mostra il wrapper — entrambe aperte (non hanno classe 'closed')
-      document.getElementById('cascadeAmmWrap').classList.add('show');
+      // Sidebar: TD urgenti inline
+      window._tdUrgentiCount = totUrgenti;
+      const sbTDBadge = document.getElementById('sbTDBadge');
+      if(sbTDBadge){ sbTDBadge.textContent = totUrgenti; sbTDBadge.style.display = totUrgenti > 0 ? '' : 'none'; }
+      const sbTDList = document.getElementById('sbTDList');
+      if(sbTDList) {
+        const rowsTD = naviOrd.filter(n => (urgenti[n.id]||0) > 0).map(n =>
+          '<div class="sb-notif-row"><span class="sb-notif-nave">'+escHtml(n.nome)+'</span><span class="sb-notif-num">'+urgenti[n.id]+'</span></div>'
+        );
+        sbTDList.innerHTML = rowsTD.length
+          ? rowsTD.join('')
+          : '<div class="sb-notif-empty">Nessuna nave con TD urgenti</div>';
+      }
+      // Sidebar: Presa visione AMM inline
+      window._ammFlagCount = totVisione;
+      const sbAmmBadge = document.getElementById('sbAmmBadge');
+      if(sbAmmBadge){ sbAmmBadge.textContent = totVisione; sbAmmBadge.style.display = totVisione > 0 ? '' : 'none'; }
+      const sbAmmList = document.getElementById('sbAmmList');
+      if(sbAmmList) {
+        const rowsAmm = naviOrd.filter(n => (visione[n.id]||0) > 0).map(n =>
+          '<div class="sb-notif-row"><span class="sb-notif-nave">'+escHtml(n.nome)+'</span><span class="sb-notif-num">'+visione[n.id]+'</span></div>'
+        );
+        sbAmmList.innerHTML = rowsAmm.length
+          ? rowsAmm.join('')
+          : '<div class="sb-notif-empty">Nessuna nave con flag ✗</div>';
+      }
     }).catch(() => {});
 }
 let snapshotData = [];
@@ -11679,62 +12071,10 @@ var firmaUtente = utente ? (utente.nome || utente.username || 'Ufficio Armamento
 </script>
 
 <!-- PANNELLO CASCADE AMM -->
-<div class="cascade-amm-wrap" id="cascadeAmmWrap">
-  <!-- Cascade A: TD Urgenti -->
-  <div class="cascade-box" id="cascadeUrgenti">
-    <div class="cascade-head urgenti" onclick="toggleCascade('cascadeUrgenti')">
-      <div class="cascade-head-left">
-        <span class="cascade-title">🔴 TD urgenti per nave</span>
-        <span class="cascade-badge" id="cascadeBadgeUrgenti">0</span>
-      </div>
-      <span class="cascade-arrow">▲</span>
-    </div>
-    <div class="cascade-body" id="cascadeBodyUrgenti"></div>
-  </div>
-  <!-- Cascade B: Presa visione ✗ -->
-  <div class="cascade-box" id="cascadeVisione">
-    <div class="cascade-head visione" onclick="toggleCascade('cascadeVisione')">
-      <div class="cascade-head-left">
-        <span class="cascade-title">✗ Presa visione AMM</span>
-        <span class="cascade-badge" id="cascadeBadgeVisione">0</span>
-      </div>
-      <span class="cascade-arrow">▲</span>
-    </div>
-    <div class="cascade-body" id="cascadeBodyVisione"></div>
-  </div>
-</div>
+
 
 <!-- PANNELLO STATS SINISTRA -->
-<div class="stats-left-wrap" id="statsLeftWrap">
-  <div class="stats-box closed" id="statsBoxCamera">
-    <div class="stats-box-head camera" onclick="toggleStatsBox('statsBoxCamera')">
-      <span class="stats-box-title">📷 Camera</span>
-      <span class="stats-box-arrow">▲</span>
-    </div>
-    <div class="stats-box-body">
-      <div class="stats-box-row"><span class="stats-box-lbl">Bordo</span><span class="stats-box-val" id="slBordoC">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Confermati</span><span class="stats-box-val ok" id="slConfC">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Budget</span><span class="stats-box-val" id="slBudgetC">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Copertura</span><span class="stats-box-val" id="slCopC">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Media GG</span><span class="stats-box-val" id="slGGC">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Età media</span><span class="stats-box-val" id="slEtaC">—</span></div>
-    </div>
-  </div>
-  <div class="stats-box closed" id="statsBoxCucina">
-    <div class="stats-box-head cucina" onclick="toggleStatsBox('statsBoxCucina')">
-      <span class="stats-box-title">🍳 Cucina</span>
-      <span class="stats-box-arrow">▲</span>
-    </div>
-    <div class="stats-box-body">
-      <div class="stats-box-row"><span class="stats-box-lbl">Bordo</span><span class="stats-box-val" id="slBordoCu">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Confermati</span><span class="stats-box-val ok" id="slConfCu">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Budget</span><span class="stats-box-val" id="slBudgetCu">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Copertura</span><span class="stats-box-val" id="slCopCu">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Media GG</span><span class="stats-box-val" id="slGGCu">—</span></div>
-      <div class="stats-box-row"><span class="stats-box-lbl">Età media</span><span class="stats-box-val" id="slEtaCu">—</span></div>
-    </div>
-</div>
-</div>
+
 
 <!-- PANNELLO APPUNTI POPUP (v35a1 — due tab AMM / COMM) -->
 <div id="appuntiOverlay" onclick="toggleAppuntiPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:290;"></div>
@@ -11837,7 +12177,7 @@ var firmaUtente = utente ? (utente.nome || utente.username || 'Ufficio Armamento
 </div>
 
 <div id="disponibiliOverlay" onclick="toggleDisponibiliPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:290;"></div>
-<div id="disponibiliPanelPop" style="display:none;position:fixed;top:136px;left:16px;width:390px;height:500px;min-height:200px;max-height:calc(100vh - 155px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:visible;resize:vertical;">
+<div id="disponibiliPanelPop" style="display:none;position:fixed;top:136px;left:50%;transform:translateX(-50%);width:580px;min-height:200px;max-height:calc(100vh - 155px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:visible;resize:vertical;">
   <div style="background:linear-gradient(135deg,#185fa5,#0c447c);padding:10px 14px;display:flex;align-items:center;gap:8px;">
     <div style="flex:1;">
       <div style="font-size:12px;font-weight:600;color:#fff;">👥 Disponibili</div>
