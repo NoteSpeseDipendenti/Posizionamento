@@ -239,54 +239,54 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 /* PANNELLO STATS SINISTRA */
 .stats-left-wrap{display:none;flex-direction:column;gap:0;padding:0 6px;}
 .stats-left-wrap.show{display:flex;}
-.sb-inline-row{display:flex;justify-content:space-between;align-items:center;padding:3px 4px;border-bottom:0.5px solid rgba(255,255,255,.08);font-size:11px;}
+.sb-inline-row{display:flex;justify-content:space-between;align-items:center;padding:3px 4px;border-bottom:0.5px solid #dde2e7;font-size:11px;}
 .sb-inline-row:last-child{border-bottom:none;}
-.sb-inline-lbl{color:rgba(255,255,255,.5);}
-.sb-inline-val{font-weight:500;color:#fff;}
-.sb-inline-val.ok{color:#5DCAA5;}
+.sb-inline-lbl{color:#6b7682;}
+.sb-inline-val{font-weight:500;color:#1a2129;}
+.sb-inline-val.ok{color:#0F6E56;}
 /* TD e AMM inline nella sidebar */
 .sb-notif-row{display:flex;justify-content:space-between;align-items:center;padding:4px 8px 4px 14px;font-size:11px;}
-.sb-notif-nave{color:rgba(232,240,250,.75);font-size:11px;}
-.sb-notif-num{font-size:11px;font-weight:700;color:#FFD700;}
-.sb-notif-empty{font-size:10px;color:rgba(255,255,255,.35);padding:4px 14px;font-style:italic;}
+.sb-notif-nave{color:#333d47;font-size:11px;}
+.sb-notif-num{font-size:11px;font-weight:700;color:#0F6E56;}
+.sb-notif-empty{font-size:10px;color:#9aa3ab;padding:4px 14px;font-style:italic;}
 /* frecette sempre visibili, numeri a destra */
-.sb-item .sb-sub-arrow{opacity:1;color:rgba(255,255,255,.75);font-size:13px;font-weight:700;}
-.sb-item:hover .sb-sub-arrow{color:#fff;}
-.sb-sub-item .sb-sub-arrow{color:rgba(255,255,255,.6);font-size:12px;}
+.sb-item .sb-sub-arrow{opacity:1;color:#6b7682;font-size:13px;font-weight:700;}
+.sb-item:hover .sb-sub-arrow{color:#1a2129;}
+.sb-sub-item .sb-sub-arrow{color:#9aa3ab;font-size:12px;}
 .sb-badge{}
 /* tooltip sidebar */
 .sb-item[title]:hover::after,.sb-sub-item[title]:hover::after{
   content:attr(title);
   position:fixed;
   left:218px;
-  background:#1a2a3a;
-  color:#e8f0fa;
+  background:#1a2129;
+  color:#f4f6f8;
   font-size:11px;
   padding:5px 10px;
   border-radius:6px;
   white-space:nowrap;
   z-index:9999;
   pointer-events:none;
-  border:0.5px solid rgba(255,255,255,.15);
-  box-shadow:0 4px 12px rgba(0,0,0,.3);
+  border:0.5px solid rgba(255,255,255,.1);
+  box-shadow:0 4px 12px rgba(0,0,0,.18);
 }
-.stats-box{background:transparent;border:0.5px solid rgba(255,255,255,.15);border-radius:8px;overflow:hidden;}
-.stats-box-head{padding:7px 10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:0.5px solid rgba(255,255,255,.1);}
+.stats-box{background:#fff;border:0.5px solid #dde2e7;border-radius:8px;overflow:hidden;}
+.stats-box-head{padding:7px 10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;border-bottom:0.5px solid #dde2e7;}
 .stats-box-head.camera{background:transparent;}
 .stats-box-head.cucina{background:transparent;}
-.stats-box-title{font-size:11px;font-weight:500;color:rgba(255,255,255,.85);}
-.stats-box-arrow{font-size:10px;color:rgba(255,255,255,.4);transition:transform .2s;}
+.stats-box-title{font-size:11px;font-weight:500;color:#1a2129;}
+.stats-box-arrow{font-size:10px;color:#6b7682;transition:transform .2s;}
 .stats-box.closed .stats-box-arrow{transform:rotate(180deg);}
 .stats-box-body{padding:6px 10px;display:block;}
 #appuntiBox .stats-box-body{padding:8px;}
 #appuntiText{width:100%;min-height:80px;}
 .stats-box.closed .stats-box-body{display:none;}
-.stats-box-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid rgba(255,255,255,.08);font-size:11px;}
+.stats-box-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:0.5px solid #dde2e7;font-size:11px;}
 .stats-box-row:last-child{border-bottom:none;}
-.stats-box-lbl{color:rgba(255,255,255,.45);}
-.stats-box-val{font-weight:500;color:rgba(255,255,255,.85);}
-.stats-box-val.ok{color:#5DCAA5;}
-.stats-box-val.warn{color:#EF9F27;}
+.stats-box-lbl{color:#6b7682;}
+.stats-box-val{font-weight:500;color:#1a2129;}
+.stats-box-val.ok{color:#0F6E56;}
+.stats-box-val.warn{color:#854F0B;}
 
 /* PANNELLO NOTIFICHE AMM */
 .notif-amm-overlay{position:fixed;top:0;right:0;bottom:0;width:270px;z-index:155;transform:translateX(100%);transition:transform .25s ease;pointer-events:none;}
@@ -357,30 +357,30 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 
 /* ═══ SIDEBAR ═══ */
 .pos-with-sidebar{display:flex;flex:1;overflow:hidden;}
-.pos-sidebar{width:210px;background:#3d5370;border-right:1px solid #2a3d52;flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;padding-bottom:16px;}
+.pos-sidebar{width:210px;background:#e7ebee;border-right:0.5px solid #cdd4da;flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;padding-bottom:16px;}
 .pos-sidebar::-webkit-scrollbar{width:3px;}
-.pos-sidebar::-webkit-scrollbar-thumb{background:#2a3d52;border-radius:3px;}
+.pos-sidebar::-webkit-scrollbar-thumb{background:#c5ccd3;border-radius:3px;}
 .sb-cat{display:flex;align-items:center;gap:7px;padding:10px 12px 5px;cursor:pointer;user-select:none;}
 .sb-cat-icon{font-size:14px;color:rgba(255,255,255,.0);display:none;}
-.sb-cat-label{font-size:9px;font-weight:700;color:#fff;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:20px;}
-.sb-cat-arrow{font-size:11px;color:rgba(255,255,255,.4);transition:transform .18s;display:inline-block;margin-left:4px;}
+.sb-cat-label{font-size:9px;font-weight:700;color:#0F6E56;letter-spacing:.08em;text-transform:uppercase;background:#e1f5ee;padding:2px 8px;border-radius:20px;}
+.sb-cat-arrow{font-size:11px;color:#9aa3ab;transition:transform .18s;display:inline-block;margin-left:4px;}
 .sb-cat-arrow.open{transform:rotate(90deg);}
 .sb-children{display:none;padding-bottom:4px;}
 .sb-children.open{display:block;}
-.sb-item{display:flex;align-items:center;gap:8px;padding:7px 10px 7px 14px;font-size:11px;color:#e8f0fa;cursor:pointer;border-radius:7px;margin:1px 4px;transition:background .1s;white-space:nowrap;}
-.sb-item:hover{background:rgba(255,255,255,.08);}
-.sb-item i{font-size:15px;flex-shrink:0;color:rgba(255,255,255,.4);}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 10px 7px 14px;font-size:11px;color:#333d47;cursor:pointer;border-radius:7px;margin:1px 4px;transition:background .1s;white-space:nowrap;}
+.sb-item:hover{background:#fff;border:0.5px solid #dde2e7;}
+.sb-item i{font-size:15px;flex-shrink:0;color:#6b7682;}
 .sb-badge{margin-left:auto;font-size:10px;font-weight:700;padding:1px 6px;border-radius:20px;}
-.sb-badge.red{background:rgba(255,200,0,.2);color:#FFD700;font-weight:700;}
-.sb-badge.orange{background:rgba(255,200,0,.2);color:#FFD700;font-weight:700;}
-.sb-badge.blue{background:rgba(255,200,0,.2);color:#FFD700;font-weight:700;}
+.sb-badge.red{background:#fcebeb;color:#A32D2D;font-weight:700;}
+.sb-badge.orange{background:#faeeda;color:#854F0B;font-weight:700;}
+.sb-badge.blue{background:#e1f5ee;color:#0F6E56;font-weight:700;}
 .sb-sub-children{display:none;padding-bottom:2px;}
 .sb-sub-children.open{display:block;}
-.sb-sub-item{display:flex;align-items:center;gap:7px;padding:5px 10px 5px 24px;font-size:11px;color:rgba(232,240,250,.65);cursor:pointer;border-radius:6px;margin:1px 4px;transition:background .1s;}
-.sb-sub-item:hover{background:rgba(255,255,255,.08);color:#fff;}
-.sb-sub-item i{font-size:13px;flex-shrink:0;color:rgba(255,255,255,.35);}
-.sb-divider{height:1px;background:rgba(255,255,255,.1);margin:6px 12px;}
-.sb-sub-arrow{font-size:12px;color:rgba(255,255,255,.3);margin-left:auto;transition:transform .18s;display:inline-block;}
+.sb-sub-item{display:flex;align-items:center;gap:7px;padding:5px 10px 5px 24px;font-size:11px;color:#5b6570;cursor:pointer;border-radius:6px;margin:1px 4px;transition:background .1s;}
+.sb-sub-item:hover{background:#fff;color:#1a2129;}
+.sb-sub-item i{font-size:13px;flex-shrink:0;color:#9aa3ab;}
+.sb-divider{height:1px;background:#dde2e7;margin:6px 12px;}
+.sb-sub-arrow{font-size:12px;color:#c5ccd3;margin-left:auto;transition:transform .18s;display:inline-block;}
 .sb-sub-arrow.open{transform:rotate(90deg);}
 /* pos-content ora è dentro pos-with-sidebar, deve scrollare da solo */
 
@@ -404,6 +404,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sa
 .crew-table td{padding:3px 8px;border-bottom:1px solid #f1f5f9;vertical-align:middle;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .crew-table td.col-contr{overflow:visible;text-overflow:clip;white-space:nowrap;}
 .crew-table td.col-nome{text-align:left;}
+.crew-table td.col-note{white-space:normal;text-overflow:clip;overflow:visible;text-align:left;line-height:1.4;}
 .crew-table tbody tr:last-child td{border-bottom:none;}
 .crew-table tbody tr:hover td{background:#f8fafc;}
 .nome-cell{font-weight:500;font-size:11px;display:block;}
@@ -835,6 +836,9 @@ if(new URLSearchParams(window.location.search).get('al')) {
     <div class="sb-children open">
       <div class="sb-item" title="Data disponibilità per prossimo imbarco" onclick="toggleDisponibiliPanel()">
         <i class="ti ti-user-check" aria-hidden="true"></i> Disponibili
+      </div>
+      <div class="sb-item" title="Storico note archiviate" onclick="openNoteStorico()">
+        <i class="ti ti-notes" aria-hidden="true"></i> Note
       </div>
     </div>
     <div class="sb-divider"></div>
@@ -1309,7 +1313,8 @@ if(new URLSearchParams(window.location.search).get('al')) {
     <div class="mform-row full">
       <div class="mform-group">
         <label class="mform-label">Note</label>
-        <input type="text" class="mform-control" id="noteInput" placeholder="Note libere..."/>
+        <input type="text" class="mform-control" id="noteInput" placeholder="Note libere..." maxlength="120" oninput="document.getElementById('noteInputCount').textContent=120-this.value.length"/>
+        <div style="font-size:10px;color:var(--muted);text-align:right;margin-top:2px;"><span id="noteInputCount">120</span> caratteri rimasti</div>
       </div>
     </div>
     <div class="mform-row" id="rowDisponibilita" style="display:none">
@@ -1798,7 +1803,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
   <div class="modal" style="max-width:580px;max-height:88vh;display:flex;flex-direction:column;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0;">
       <div class="modal-title" style="margin-bottom:0;">&#9432; Guida rapida</div>
-      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v1.6 · 22/06/2026</span>
+      <span style="font-size:11px;padding:2px 10px;border-radius:20px;background:#e8eef5;color:var(--navy);font-weight:600;">v1.6 · 23/06/2026</span>
     </div>
     <div style="display:flex;gap:6px;margin-bottom:12px;flex-shrink:0;">
       <button id="helpTabGuida" onclick="switchHelpTab('guida')" style="font-size:12px;padding:5px 14px;border-radius:6px;border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-family:inherit;font-weight:500;">Guida</button>
@@ -1808,15 +1813,19 @@ if(new URLSearchParams(window.location.search).get('al')) {
 
       <!-- TAB GUIDA -->
 <div id="helpViewGuida">
-        <!-- v1.6 · 22/06/2026 -->
+        <!-- v1.6 · 23/06/2026 -->
         <div class="nov-item nov-blue open">
           <div class="nov-head" onclick="this.closest('.nov-item').classList.toggle('open')">
-            <span class="nov-title">&#127381; Novità v1.6 · 22/06/2026</span>
+            <span class="nov-title">&#127381; Novità v1.6 · 23/06/2026</span>
             <span class="nov-arrow">&#9660;</span>
           </div>
           <div class="nov-body">
             <ul style="padding-left:16px;display:flex;flex-direction:column;gap:4px;color:#1e40af;font-size:12px;">
               <li><strong>&#8617; Risposta ai messaggi</strong> — ora puoi rispondere direttamente ai messaggi che l'ufficio ti invia sulla tua nave. Apri il pannello Messaggi, clicca <strong>Rispondi</strong> sotto al messaggio e scrivi la tua risposta. Non è possibile rispondere ai messaggi inviati in invio multiplo (a tutte le navi o a un gruppo).</li>
+              <li><strong>&#128197; Sbarco confermato</strong> — accanto alla matricola, sotto il nome, puoi impostare la data di sbarco confermata cliccando su <em>"data sbarco"</em>. Una volta inserita, comparirà come <em>"Sbarco DD/MM"</em> in verde, modificabile o eliminabile in qualsiasi momento.</li>
+              <li><strong>&#10007;/&#10003; Lettura note</strong> — ogni nota ora ha un flag accanto: <strong>&#10007; rosso</strong> = nota da leggere, <strong>&#10003; verde</strong> = nota letta. Cliccandolo si archivia automaticamente una copia della nota (senza cancellarla dalla riga) nella nuova sezione <strong>Personale → Note</strong>. Se la nota viene modificata di nuovo, il flag torna a &#10007;.</li>
+              <li><strong>&#128221; Note</strong> — nuova voce in sidebar (Personale → Note) con l'elenco di tutte le note archiviate, raggruppate per reparto: nome, qualifica, testo e data. L'eliminazione delle singole voci è riservata all'AMM; tutti possono esportare l'elenco in PDF.</li>
+              <li><strong>&#128203; Note più leggibili</strong> — le note lunghe ora vanno a capo invece di troncarsi, con un limite di 120 caratteri.</li>
             </ul>
           </div>
         </div>
@@ -2054,6 +2063,35 @@ if(new URLSearchParams(window.location.search).get('al')) {
     <div class="bollino-actions">
       <button class="btn-cancel" onclick="closeModalBollino()">Annulla</button>
       <button class="btn-save" id="btnSaveBollino" onclick="saveBollino()">Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE DATA SBARCO CONFERMATO -->
+<div class="modal-bollino-overlay" id="modalSbarco">
+  <div class="modal-bollino">
+    <div class="modal-bollino-title">Conferma sbarco</div>
+    <div class="modal-bollino-sub" id="sbarcoSub">—</div>
+    <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;">Data sbarco confermata</div>
+    <input type="date" id="sbarcoData" class="bollino-nota" style="height:auto;padding:6px 8px;font-size:12px;margin-bottom:12px;"/>
+    <div class="bollino-actions">
+      <button class="btn-cancel" id="btnDelSbarco" onclick="deleteSbarco()" style="color:#A32D2D;border-color:#F09595;margin-right:auto;">Elimina</button>
+      <button class="btn-cancel" onclick="closeModalSbarco()">Annulla</button>
+      <button class="btn-save" onclick="saveSbarco()">Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE CONFERMA LETTURA NOTA -->
+<div class="modal-bollino-overlay" id="modalNotaLetta">
+  <div class="modal-bollino">
+    <div class="modal-bollino-title">Archiviare questa nota?</div>
+    <div class="modal-bollino-sub" id="notaLettaSub">—</div>
+    <div style="font-size:11px;font-style:italic;color:#92400e;background:#fff8eb;border:0.5px solid #faeeda;border-radius:8px;padding:8px 10px;margin-bottom:12px;" id="notaLettaTesto">—</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">La nota resta visibile sulla riga. Verrà salvata una copia nello storico Note (sidebar) e segnata come letta.</div>
+    <div class="bollino-actions">
+      <button class="btn-cancel" onclick="closeModalNotaLetta()">Annulla</button>
+      <button class="btn-save" onclick="confermaArchiviaNota()">Segna come letta</button>
     </div>
   </div>
 </div>
@@ -7634,6 +7672,13 @@ function getBollinoClass(p) {
   return (diff <= 23) ? 'urgente' : 'attesa';
 }
 
+function getNotaFlagClass(p) {
+  if(!p.note) return null;
+  if(!p.note_modifica_at) return null;
+  if(!p.note_letta_at) return 'davedere';
+  return (new Date(p.note_modifica_at) > new Date(p.note_letta_at)) ? 'davedere' : 'letta';
+}
+
 function renderRow(p,isConf,W) {
   const dip=p.pn_dipendenti;
   const nome=dip?dip.cognome_nome:'—', mat=dip?dip.matricola:'';
@@ -7658,16 +7703,27 @@ function renderRow(p,isConf,W) {
     const bollino = '<span class="bollino-wrap"><span class="bollino-td '+bcls+'"'+(bollinoClickable?' onclick="openModalBollino('+p.id+')"':' style="cursor:default;"')+'></span>'+flag+tooltip+'</span>';
     contr='<span class="td-badge">TD '+fmtDate(p.data_scadenza_td)+'</span> '+bollino;
   }
-  const note=p.note?'<span style="font-size:10px;color:#92400e;font-style:italic">'+p.note+'</span>':'';
+  const notaFlagCls = getNotaFlagClass(p);
+  const notaFlag = window._readOnly ? '' : (notaFlagCls === 'davedere'
+    ? ' <span style="cursor:pointer;color:#A32D2D;font-weight:600;" onclick="confirmNotaLetta('+p.id+')" title="Nota da leggere — clicca per archiviare e segnare come letta">&#10007;</span>'
+    : (notaFlagCls === 'letta'
+        ? ' <span style="cursor:pointer;color:#0F6E56;font-weight:600;" onclick="confirmNotaLetta('+p.id+')" title="Nota letta">&#10003;</span>'
+        : ''));
+  const note=p.note?'<span style="font-size:10px;color:#92400e;font-style:italic">'+p.note+'</span>'+notaFlag:'';
+  const sbarcoTag = window._readOnly
+    ? (p.data_sbarco_confermato ? ' <span style="display:inline-flex;align-items:center;gap:3px;background:#E1F5EE;color:#085041;border:0.5px solid #9FE1CB;font-size:10px;font-weight:500;padding:1px 7px;border-radius:20px;">Sbarco '+fmtDate(p.data_sbarco_confermato)+'</span>' : '')
+    : (p.data_sbarco_confermato
+        ? ' <span style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;background:#E1F5EE;color:#085041;border:0.5px solid #9FE1CB;font-size:10px;font-weight:500;padding:1px 7px;border-radius:20px;" onclick="openModalSbarco('+p.id+')" title="Modifica data sbarco confermato">Sbarco '+fmtDate(p.data_sbarco_confermato)+'</span>'
+        : ' <span style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;background:var(--bg);color:var(--muted);border:0.5px dashed #c5ccd3;font-size:10px;padding:1px 7px;border-radius:20px;" onclick="openModalSbarco('+p.id+')" title="Imposta data sbarco confermato">data sbarco</span>');
   const rc=isConf?' class="conf-row"':'';
   const plusBtn=isConf?'<button class="icon-btn plus" onclick="promuoviABordo('+p.id+')" title="Metti a bordo"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M2 6h8"/></svg></button>':'';
   const rapp = dip && dip.tipo_rapporto ? '<span style="font-size:10px;color:var(--muted)">'+dip.tipo_rapporto+'</span>' : '—';
   return '<tr'+rc+'>'
-    +'<td class="col-nome" style="width:'+W[0]+'"><span class="nome-cell" style="cursor:pointer;color:var(--navy);" onclick="openStoricoDip('+p.id+')" title="Storico imbarchi">'+nome+'</span><span class="mat">#'+mat+'</span></td>'
+    +'<td class="col-nome" style="width:'+W[0]+'"><span class="nome-cell" style="cursor:pointer;color:var(--navy);" onclick="openStoricoDip('+p.id+')" title="Storico imbarchi">'+nome+'</span><span class="mat">#'+mat+sbarcoTag+'</span></td>'
     +'<td style="width:'+W[1]+'">'+qual+'</td><td style="width:'+W[2]+'">'+mans+'</td>'
     +'<td style="width:'+W[3]+'">'+dataImb+'</td><td style="width:'+W[4]+'">'+gg+'</td>'
     +'<td style="width:'+W[5]+'">'+rapp+'</td>'
-    +'<td class="col-contr" style="width:'+W[6]+'">'+contr+'</td><td style="width:'+W[7]+'">'+note+'</td>'
+    +'<td class="col-contr" style="width:'+W[6]+'">'+contr+'</td><td class="col-note" style="width:'+W[7]+'">'+note+'</td>'
     +'<td style="width:'+W[8]+'">'
     +(window._readOnly ? '' : plusBtn)
     +(window._readOnly ? '' : '<button class="icon-btn move" onclick="openModalSposta('+p.id+')" title="Sposta reparto"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6h8M6 3l3 3-3 3"/></svg></button>')
@@ -7784,7 +7840,7 @@ function openModalAddPos(){
   document.getElementById('selReparto').value='';document.getElementById('selMansione').value='';
   document.getElementById('dataImbarco').value='';document.getElementById('tipoContratto').value='TI';
   document.getElementById('dataScadTD').value='';document.getElementById('selStato').value='bordo';
-  document.getElementById('noteInput').value='';document.getElementById('rowScadTD').style.display='none';document.getElementById('rowDisponibilita').style.display='none';document.getElementById('dataDisponibilita').value='';
+  document.getElementById('noteInput').value='';document.getElementById('noteInputCount').textContent='120';document.getElementById('rowScadTD').style.display='none';document.getElementById('rowDisponibilita').style.display='none';document.getElementById('dataDisponibilita').value='';
   document.getElementById('modalPos').classList.add('show');
 }
 
@@ -7803,6 +7859,7 @@ function openModalEditPos(id){
   document.getElementById('dataScadTD').value=p.data_scadenza_td||'';
   document.getElementById('selStato').value=p.stato;
   document.getElementById('noteInput').value=p.note||'';
+  document.getElementById('noteInputCount').textContent=120-(p.note||'').length;
   document.getElementById('rowDisponibilita').style.display='grid';
   document.getElementById('dataDisponibilita').value=p.data_disponibilita||'';
   toggleTD();
@@ -8147,6 +8204,7 @@ async function confermaSpostaDisp(stato) {
   // Apri modal inserimento precompilato
   editPosId = null;
   document.getElementById('noteInput').value = '';
+  document.getElementById('noteInputCount').textContent = '120';
   document.getElementById('rowScadTD').style.display = 'none';
   document.getElementById('rowDisponibilita').style.display = 'none';
   document.getElementById('dataDisponibilita').value = '';
@@ -8214,7 +8272,10 @@ async function savePos(){
   if(tipoC==='TD'&&!scadTD){showToast('Inserisci la scadenza TD','error');return;}
   const dataDisp=document.getElementById('dataDisponibilita').value;
  const dataDispFinal = dataDisp || null;
+ const pEsistente = editPosId ? posizionamento.find(x => x.id === editPosId) : null;
+ const noteCambiata = !pEsistente || (pEsistente.note||'') !== (note||'');
  const body={nave_id:utente.nave_id,dipendente_id:parseInt(dipId),reparto_id:parseInt(repartoId),mansione_id:parseInt(mansioneId),data_imbarco:dataImb,tipo_contratto:tipoC,data_scadenza_td:tipoC==='TD'?scadTD:null,stato,note:note||null,data_disponibilita:editPosId?dataDispFinal:null};
+ if(noteCambiata && note) body.note_modifica_at = new Date().toISOString();
   const btn=document.getElementById('btnSavePos');
   btn.disabled=true;btn.textContent='Salvataggio...';
   try{
@@ -9188,6 +9249,221 @@ async function saveBollinoLetto() {
   finally { btn.disabled = false; btn.textContent = '✓ Segna come letto'; }
 }
 
+let sbarcoTargetId = null;
+function openModalSbarco(posId) {
+  const p = posizionamento.find(x => x.id === posId);
+  if(!p) return;
+  sbarcoTargetId = posId;
+  const dip = p.pn_dipendenti;
+  document.getElementById('sbarcoSub').textContent = dip ? dip.cognome_nome+' #'+dip.matricola : '—';
+  document.getElementById('sbarcoData').value = p.data_sbarco_confermato || '';
+  document.getElementById('btnDelSbarco').style.display = p.data_sbarco_confermato ? 'inline-block' : 'none';
+  document.getElementById('modalSbarco').classList.add('show');
+}
+function closeModalSbarco() {
+  document.getElementById('modalSbarco').classList.remove('show');
+  sbarcoTargetId = null;
+}
+async function saveSbarco() {
+  if(!sbarcoTargetId) return;
+  const data = document.getElementById('sbarcoData').value;
+  if(!data) { showToast('Inserisci una data', 'error'); return; }
+  try {
+    await sbPatch('pn_posizionamento', sbarcoTargetId, { data_sbarco_confermato: data });
+    const idx = posizionamento.findIndex(x => x.id === sbarcoTargetId);
+    if(idx >= 0) posizionamento[idx].data_sbarco_confermato = data;
+    closeModalSbarco();
+    const mese = parseInt(document.getElementById('meseSelect').value);
+    const anno = parseInt(document.getElementById('annoSelect').value);
+    renderPosizionamento(mese, anno);
+    showToast('Data sbarco salvata', 'success');
+  } catch(e) { showToast('Errore: '+e.message, 'error'); }
+}
+async function deleteSbarco() {
+  if(!sbarcoTargetId) return;
+  if(!confirm('Rimuovere la data di sbarco confermato?')) return;
+  try {
+    await sbPatch('pn_posizionamento', sbarcoTargetId, { data_sbarco_confermato: null });
+    const idx = posizionamento.findIndex(x => x.id === sbarcoTargetId);
+    if(idx >= 0) posizionamento[idx].data_sbarco_confermato = null;
+    closeModalSbarco();
+    const mese = parseInt(document.getElementById('meseSelect').value);
+    const anno = parseInt(document.getElementById('annoSelect').value);
+    renderPosizionamento(mese, anno);
+    showToast('Data sbarco rimossa', 'success');
+  } catch(e) { showToast('Errore: '+e.message, 'error'); }
+}
+
+let notaLettaTargetId = null;
+function confirmNotaLetta(posId) {
+  const p = posizionamento.find(x => x.id === posId);
+  if(!p) return;
+  notaLettaTargetId = posId;
+  const dip = p.pn_dipendenti;
+  document.getElementById('notaLettaSub').textContent = dip ? dip.cognome_nome+' #'+dip.matricola : '—';
+  document.getElementById('notaLettaTesto').textContent = p.note || '—';
+  document.getElementById('modalNotaLetta').classList.add('show');
+}
+function closeModalNotaLetta() {
+  document.getElementById('modalNotaLetta').classList.remove('show');
+  notaLettaTargetId = null;
+}
+async function confermaArchiviaNota() {
+  if(!notaLettaTargetId) return;
+  const p = posizionamento.find(x => x.id === notaLettaTargetId);
+  if(!p) return;
+  try {
+    const now = new Date().toISOString();
+    const dip = p.pn_dipendenti;
+    await sbPost('pn_note_storico', {
+      nave_id: utente.nave_id,
+      dipendente_id: p.dipendente_id,
+      cognome_nome: dip ? dip.cognome_nome : '—',
+      qualifica: dip && dip.pn_qualifiche ? dip.pn_qualifiche.nome : '—',
+      reparto: p.pn_reparti ? p.pn_reparti.nome : '—',
+      nota: p.note || '',
+      archiviata_at: now
+    });
+    await sbPatch('pn_posizionamento', notaLettaTargetId, { note_letta_at: now });
+    const idx = posizionamento.findIndex(x => x.id === notaLettaTargetId);
+    if(idx >= 0) posizionamento[idx].note_letta_at = now;
+    closeModalNotaLetta();
+    const mese = parseInt(document.getElementById('meseSelect').value);
+    const anno = parseInt(document.getElementById('annoSelect').value);
+    renderPosizionamento(mese, anno);
+    showToast('Nota archiviata e segnata come letta', 'success');
+  } catch(e) { showToast('Errore: '+e.message, 'error'); }
+}
+
+window._noteStoricoData = [];
+async function openNoteStorico() {
+  document.getElementById('noteStoricoPanelNave').textContent = utente.nave_nome || '—';
+  document.getElementById('noteStoricoPanelPop').style.display = 'flex';
+  await loadNoteStorico();
+}
+function closeNoteStorico() {
+  document.getElementById('noteStoricoPanelPop').style.display = 'none';
+}
+async function loadNoteStorico() {
+  document.getElementById('noteStoricoBody').innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#888;">Caricamento...</div>';
+  try {
+    const data = await sbGet('pn_note_storico?nave_id=eq.'+utente.nave_id+'&order=archiviata_at.desc&select=*');
+    window._noteStoricoData = data || [];
+    renderNoteStorico();
+  } catch(e) {
+    document.getElementById('noteStoricoBody').innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#A32D2D;">Errore nel caricamento</div>';
+  }
+}
+function renderNoteStorico() {
+  const data = window._noteStoricoData || [];
+  document.getElementById('noteStoricoCount').textContent = data.length + ' note archiviate';
+  if(data.length === 0) {
+    document.getElementById('noteStoricoBody').innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#888;">Nessuna nota archiviata.</div>';
+    return;
+  }
+  const isAmmFull = utente && utente.ruolo === 'admin';
+
+  // Raggruppa per reparto
+  const byReparto = {};
+  data.forEach(r => {
+    const rep = r.reparto || 'Altro';
+    if(!byReparto[rep]) byReparto[rep] = [];
+    byReparto[rep].push(r);
+  });
+
+  // Ordina reparti come in pn_reparti (stesso criterio del pannello Disponibili)
+  const ordineRep = typeof reparti !== 'undefined' ? reparti.map(r=>r.nome) : [];
+  const gruppi = Object.keys(byReparto).sort((a,b) => {
+    const ia = ordineRep.indexOf(a); const ib = ordineRep.indexOf(b);
+    if(ia===-1&&ib===-1) return a.localeCompare(b);
+    if(ia===-1) return 1; if(ib===-1) return -1;
+    return ia-ib;
+  });
+
+  let html = '';
+  gruppi.forEach(rep => {
+    const note = byReparto[rep];
+    html += '<div style="padding:6px 12px 2px;">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--border);padding-bottom:3px;margin-bottom:4px;">'
+      + '<span style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">'+escHtml(rep)+'</span>'
+      + '<span style="font-size:10px;background:#E6F1FB;color:#0C447C;padding:1px 7px;border-radius:20px;font-weight:500;">'+note.length+'</span>'
+      + '</div>';
+    note.forEach(r => {
+      const d = new Date(r.archiviata_at);
+      const dataFmt = d.getDate().toString().padStart(2,'0')+'/'+(d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getFullYear();
+      const delBtn = isAmmFull
+        ? '<span onclick="cancellaNotaStorico('+r.id+')" title="Elimina" style="cursor:pointer;color:#A32D2D;font-size:12px;">&#128465; Elimina</span>'
+        : '';
+      html += '<div style="padding:9px 0;border-bottom:0.5px solid var(--border);">'
+        + '<div style="display:flex;justify-content:space-between;align-items:baseline;">'
+        + '<span style="font-size:12px;font-weight:600;color:var(--text);">'+escHtml(r.cognome_nome||'—')+'</span>'
+        + '<span style="font-size:10px;color:var(--muted);">'+dataFmt+'</span>'
+        + '</div>'
+        + '<div style="font-size:10px;color:var(--muted);margin-bottom:4px;">'+escHtml(r.qualifica||'—')+'</div>'
+        + '<div style="font-size:11px;color:#92400e;font-style:italic;flex:1;">'+escHtml(r.nota||'')+'</div>'
+        + (delBtn ? '<div style="text-align:right;margin-top:4px;">'+delBtn+'</div>' : '')
+        + '</div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('noteStoricoBody').innerHTML = html;
+}
+async function cancellaNotaStorico(id) {
+  if(!(utente && utente.ruolo === 'admin')) { showToast('Solo AMM può eliminare le note archiviate', 'error'); return; }
+  if(!confirm('Eliminare definitivamente questa nota archiviata?')) return;
+  try {
+    await sbDelete('pn_note_storico', id);
+    window._noteStoricoData = (window._noteStoricoData||[]).filter(r => r.id !== id);
+    renderNoteStorico();
+    showToast('Nota eliminata', 'success');
+  } catch(e) { showToast('Errore: '+e.message, 'error'); }
+}
+async function stampaPDFNoteStorico() {
+  const data = window._noteStoricoData || [];
+  if(data.length === 0) { showToast('Nessuna nota da esportare', 'error'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  const navy = [12,68,124];
+  const muted = [120,120,120];
+  const today = new Date();
+  const todayFmt = today.getDate().toString().padStart(2,'0')+'/'+(today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getFullYear();
+  doc.setFillColor(...navy);
+  doc.rect(0,0,210,18,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(12);
+  doc.setFont('helvetica','bold');
+  doc.text('Note \u2014 '+(utente.nave_nome||'\u2014'), 12, 12);
+  doc.setFontSize(8);
+  doc.setFont('helvetica','normal');
+  doc.text('Stampato il '+todayFmt, 198, 12, {align:'right'});
+  let y = 26;
+  data.forEach(r => {
+    if(y > 265) { doc.addPage(); y = 15; }
+    const d = new Date(r.archiviata_at);
+    const dataFmt = d.getDate().toString().padStart(2,'0')+'/'+(d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getFullYear();
+    doc.setTextColor(20,20,80);
+    doc.setFontSize(9);
+    doc.setFont('helvetica','bold');
+    doc.text(r.cognome_nome||'—', 12, y);
+    doc.setTextColor(...muted);
+    doc.setFontSize(8);
+    doc.setFont('helvetica','normal');
+    doc.text((r.qualifica||'—')+' · '+(r.reparto||'—'), 12, y+4.5);
+    doc.text(dataFmt, 198, y, {align:'right'});
+    doc.setTextColor(146,64,14);
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica','italic');
+    const lines = doc.splitTextToSize(r.nota||'', 186);
+    doc.text(lines, 12, y+9);
+    y += 9 + (lines.length*4) + 4;
+    doc.setDrawColor(230,230,230);
+    doc.line(12,y-2,198,y-2);
+  });
+  doc.save('Note_'+(utente.nave_nome||'nave')+'_'+todayFmt.replace(/\//g,'-')+'.pdf');
+}
+
+
+
 function openModalMsgFromAlert() {
   document.getElementById('msgAlertBanner').style.display = 'none';
   openModalMsg();
@@ -9951,7 +10227,7 @@ async function loadMessaggi() {
 function aggiornaBottoneMsg() {
   if(typeof sbSyncBadges==="function") sbSyncBadges();
   const btn = document.getElementById('btnMsg');
-  const nonLetti = messaggi.filter(m => !m.letto).length;
+  const nonLetti = messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
   if(nonLetti > 0) {
     btn.classList.add('has-unread');
     btn.innerHTML = '<span class="msg-dot"></span>Messaggi ('+nonLetti+')';
@@ -9986,7 +10262,7 @@ function openModalMsg() {
 function closeModalMsg() {
   document.getElementById('modalMsg').classList.remove('show');
   document.getElementById('replyMsgArea').style.display = 'none';
-  const nonLetti = messaggi.filter(m => !m.letto).length;
+  const nonLetti = messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
   if(nonLetti === 0) document.getElementById('msgAlertBanner').style.display = 'none';
 }
 
@@ -9994,7 +10270,7 @@ function renderMsgList() {
   const mese = parseInt(document.getElementById('meseSelect').value);
   const anno = parseInt(document.getElementById('annoSelect').value);
   const mesiNomi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-  const nonLetti = messaggi.filter(m => !m.letto).length;
+  const nonLetti = messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
   document.getElementById('msgSub').textContent = mesiNomi[mese]+' '+anno+' · '+messaggi.length+' messaggi'+(nonLetti > 0 ? ', '+nonLetti+' non letti' : '');
 
   const isRW = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
@@ -10041,7 +10317,7 @@ function renderMsgList() {
         +'<div class="msg-footer">'
         +(!isRisposta ? '<label class="msg-check"><input type="checkbox" '+(m.letto?'checked':'')+' onchange="segnaLetto('+m.id+', this.checked)"> '+(m.letto?'Letto':'Segna come letto')+'</label>' : '<span></span>')
         +'<div style="display:flex;align-items:center;gap:6px;">'
-        +(m.letto ? '<span class="badge-letto">Letto</span>'+(tsStr?'<div class="msg-timestamp">'+tsStr+'</div>':'') : '<span class="badge-nonletto">Non letto</span>')
+        +(isRisposta ? '' : (m.letto ? '<span class="badge-letto">Letto</span>'+(tsStr?'<div class="msg-timestamp">'+tsStr+'</div>':'') : '<span class="badge-nonletto">Non letto</span>'))
         +btnRispondi
         +'</div></div></div>'
         + figliHtml;
@@ -12220,6 +12496,26 @@ var firmaUtente = utente ? (utente.nome || utente.username || 'Ufficio Armamento
     <div style="margin-left:auto;display:flex;gap:6px;">
       <button id="btnDispAdd" onclick="openDispAddForm()" style="display:none;font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#185FA5;border:1px solid #185FA5;cursor:pointer;">＋</button>
       <button onclick="stampaPDFDisponibili()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#A32D2D;border:1px solid #A32D2D;cursor:pointer;">📄 PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- PANNELLO NOTE ARCHIVIATE -->
+<div id="noteStoricoPanelPop" style="display:none;position:fixed;top:136px;left:50%;transform:translateX(-50%);width:580px;min-height:200px;max-height:calc(100vh - 155px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:visible;resize:vertical;">
+  <div style="background:linear-gradient(135deg,#185fa5,#0c447c);padding:10px 14px;display:flex;align-items:center;gap:8px;">
+    <div style="flex:1;">
+      <div style="font-size:12px;font-weight:600;color:#fff;">&#128221; Note</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.75);" id="noteStoricoPanelNave">—</div>
+    </div>
+    <button onclick="closeNoteStorico()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.8);font-size:16px;line-height:1;">✕</button>
+  </div>
+  <div style="overflow-y:auto;flex:1;padding:0 0 4px;" id="noteStoricoBody">
+    <div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">Caricamento...</div>
+  </div>
+  <div style="padding:7px 10px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:var(--bg);flex-shrink:0;">
+    <span style="font-size:9px;color:var(--muted);font-style:italic;" id="noteStoricoCount"></span>
+    <div style="margin-left:auto;display:flex;gap:6px;">
+      <button onclick="stampaPDFNoteStorico()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#A32D2D;border:1px solid #A32D2D;cursor:pointer;">📄 PDF</button>
     </div>
   </div>
 </div>
