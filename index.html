@@ -840,6 +840,9 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <div class="sb-item" title="Storico note archiviate" onclick="openNoteStorico()">
         <i class="ti ti-notes" aria-hidden="true"></i> Note
       </div>
+      <div class="sb-item" title="Elenco delle date di sbarco confermate" onclick="openConfermeSbarco()">
+        <i class="ti ti-calendar-check" aria-hidden="true"></i> Conferme Sbarco
+      </div>
     </div>
     <div class="sb-divider"></div>
     <!-- 3. FUNZIONI -->
@@ -1080,6 +1083,9 @@ if(new URLSearchParams(window.location.search).get('al')) {
         <button class="nav-item" id="anav-qualifiche" onclick="showAPage('qualifiche')">
           <svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h8"/></svg>Qualifiche
         </button>
+        <button class="nav-item" id="anav-ordineqm" onclick="showAPage('ordineqm')">
+          <svg viewBox="0 0 16 16"><path d="M3 4h6M3 8h10M3 12h4"/><path d="M12 11l2 2-2 2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ordine Qualifica/Mansione
+        </button>
       </div>
     </div>
     <div class="admin-main">
@@ -1220,6 +1226,15 @@ if(new URLSearchParams(window.location.search).get('al')) {
             <tbody id="tbodyQualifiche"></tbody>
           </table>
         </div>
+      </div>
+      <div class="apage" id="apage-ordineqm">
+        <div class="page-title">Ordine Qualifica/Mansione</div>
+        <div class="page-sub">Definisce in che ordine appaiono le righe del personale nelle tabelle, reparto per reparto. Le combinazioni qualifica+mansione realmente in uso sono rilevate automaticamente dal personale registrato; trascina le righe per riordinarle.</div>
+        <div style="margin-bottom:10px;">
+          <span style="font-size:11px;color:var(--muted);margin-right:10px;" id="countOrdineQM">—</span>
+          <button class="btn-new" onclick="ricaricaOrdineQM()">&#8635; Aggiorna combinazioni</button>
+        </div>
+        <div id="ordineQMBody"></div>
       </div>
       <div class="apage" id="apage-progcategorie">
         <div class="page-title">Categorie Programmazione</div>
@@ -1825,6 +1840,8 @@ if(new URLSearchParams(window.location.search).get('al')) {
               <li><strong>&#128197; Sbarco confermato</strong> — accanto alla matricola, sotto il nome, puoi impostare la data di sbarco confermata cliccando su <em>"data sbarco"</em>. Una volta inserita, comparirà come <em>"Sbarco DD/MM"</em> in verde, modificabile o eliminabile in qualsiasi momento.</li>
               <li><strong>&#10007;/&#10003; Lettura note</strong> — ogni nota ora ha un flag accanto: <strong>&#10007; rosso</strong> = nota da leggere, <strong>&#10003; verde</strong> = nota letta. Cliccandolo si archivia automaticamente una copia della nota (senza cancellarla dalla riga) nella nuova sezione <strong>Personale → Note</strong>. Se la nota viene modificata di nuovo, il flag torna a &#10007;.</li>
               <li><strong>&#128221; Note</strong> — nuova voce in sidebar (Personale → Note) con l'elenco di tutte le note archiviate, raggruppate per reparto: nome, qualifica, testo e data. L'eliminazione delle singole voci è riservata all'AMM; tutti possono esportare l'elenco in PDF.</li>
+              <li><strong>&#128197; Conferme Sbarco</strong> — nuova voce in sidebar (Personale → Conferme Sbarco) con l'elenco di chi ha una data di sbarco confermata, raggruppato per reparto: nome, qualifica e data. Esportabile in PDF.</li>
+              <li><strong>&#128202; Ordine Qualifica/Mansione</strong> — nuova voce in sidebar (AMM → Tabelle → Ordine Qualifica/Mansione, solo per Admin/Semi-Admin) per definire in che ordine appaiono le righe del personale nelle tabelle, reparto per reparto. Le combinazioni qualifica+mansione realmente in uso vengono rilevate automaticamente; si riordinano trascinando le righe, il salvataggio è immediato.</li>
               <li><strong>&#128203; Note più leggibili</strong> — le note lunghe ora vanno a capo invece di troncarsi, con un limite di 120 caratteri.</li>
             </ul>
           </div>
@@ -2051,6 +2068,16 @@ if(new URLSearchParams(window.location.search).get('al')) {
     <div id="bollinoLettoWrap" style="display:none;margin-bottom:12px;">
       <button id="btnBollinoLetto" onclick="saveBollinoLetto()" style="width:100%;padding:8px;border-radius:8px;border:1.5px solid #1D9E75;background:#e1f5ee;color:#0F6E56;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">&#10003; Segna come letto</button>
     </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:7px;">Numero rinnovo</div>
+      <div style="display:flex;gap:7px;">
+        <div id="rinBox1" onclick="selRinBox(1)" style="flex:1;border:1.5px solid var(--border);border-radius:9px;padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;"><span class="rin-num" style="font-size:17px;font-weight:500;color:var(--text);">1</span></div>
+        <div id="rinBox2" onclick="selRinBox(2)" style="flex:1;border:1.5px solid var(--border);border-radius:9px;padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;"><span class="rin-num" style="font-size:17px;font-weight:500;color:var(--text);">2</span></div>
+        <div id="rinBox3" onclick="selRinBox(3)" style="flex:1;border:1.5px solid var(--border);border-radius:9px;padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;"><span class="rin-num" style="font-size:17px;font-weight:500;color:var(--text);">3</span></div>
+        <div id="rinBox4" onclick="selRinBox(4)" style="flex:1;border:1.5px solid var(--border);border-radius:9px;padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;"><span class="rin-num" style="font-size:17px;font-weight:500;color:var(--text);">4</span></div>
+        <div id="rinBox5" onclick="selRinBox(5)" style="flex:1;border:1.5px solid var(--border);border-radius:9px;padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;"><span class="rin-num" style="font-size:17px;font-weight:500;color:var(--text);">5</span></div>
+      </div>
+    </div>
     <div id="bollinoDispWrap" style="margin-bottom:12px;">
       <div style="font-size:10px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:4px;margin-bottom:8px;">Disponibilità</div>
       <div id="bollinoDispOverlay" style="position:relative;">
@@ -2176,10 +2203,8 @@ let editPosId=null, promuoviId=null, deleteTarget=null, editCommId=null, editLoo
 const MESI = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
 const ORDINE_REPARTI = ['Hotel Management','Ristorante','Self/Bistrot','Bar','Cabine','Saletta/Riposteria','Squadra Ecologica','Squadra Ecologica Notturna','Cucina'];
 const REPARTI_CUCINA = ['Cucina'];
-const ORDINE_CAMERA = ['Capo Commissario','1.Commissario','2.Commissario','3.Commissario','Assistente Commissario','Assistente D’Ufficio',"Assistente D'Ufficio",'1.Cameriere','Cameriere','Garzone Di Camera','Piccolo Di Camera','Hk Utility'];
-const ORDINE_CUCINA_Q = ['Capo Cuoco','Cuoco Equipaggio','Dispensiere Equipaggio','1.Cuoco','2.Cuoco','3.Cuoco','Garzone Di Cucina','Piccolo Di Cucina','Macellaio','Pasticcere','Panettiere','Cambusiere'];
-const ORDINE_MANSIONI_CAMERA = ['Commissario','Assistente','Ufficiali','1° Cameriere','Ristorante','Saletta','Self Service','Bar Notturno','Cabine Letti','Cabine Bagni','Cabine Aspirapolvere','Notturno Ufficio','Ripostiere','Squadra Ecologica','Bar Sport'];
-const ORDINE_MANSIONI_CUCINA = ['Capo Cuoco','Cucina Calda','Cucina Fredda','Cucina Pagliaccia','Cuoco Equipaggio','Cambusiere','Panettiere','Bar Sport'];
+// Ordinamento qualifica/mansione per reparto: caricato da pn_ordine_qualifica_mansione (vedi loadLookups)
+let _ordineQMMap = {}; // key "repId|qualNome|mansNome" -> ordine
 
 // ═══════════════════════════════════════════
 // SCREEN NAV
@@ -7197,12 +7222,16 @@ async function doLogin() {
 }
 
 async function loadLookups() {
-  [navi, reparti, mansioni, qualifiche] = await Promise.all([
+  let ordineQMRaw = [];
+  [navi, reparti, mansioni, qualifiche, ordineQMRaw] = await Promise.all([
     sbGet('pn_navi?select=*&order=nome'),
     sbGet('pn_reparti?order=ordine.asc.nullsfirst,nome'),
     sbGet('pn_mansioni?order=ordine.asc.nullsfirst,nome'),
-    sbGet('pn_qualifiche?order=ordine.asc.nullsfirst,nome')
+    sbGet('pn_qualifiche?order=ordine.asc.nullsfirst,nome'),
+    sbGet('pn_ordine_qualifica_mansione?select=reparto_id,qualifica_nome,mansione_nome,ordine').catch(()=>[])
   ]);
+  _ordineQMMap = {};
+  (ordineQMRaw||[]).forEach(r => { _ordineQMMap[r.reparto_id+'|'+normStr(r.qualifica_nome)+'|'+normStr(r.mansione_nome)] = r.ordine; });
 }
 
 function startApp() {
@@ -7248,6 +7277,8 @@ if(utente.ruolo==='commissario') {
     badge.style.display = 'inline-block';
   }
 
+  // Reset esplicito: evita che sessioni precedenti (semiadmin/basso) lascino _readOnly=true
+  window._readOnly = false;
   // Applica modalità sola lettura per livello=basso
   if(utente.ruolo === 'semiadmin' && utente.livello === 'basso') applyReadOnly();
 
@@ -7547,35 +7578,19 @@ const [pos, bud, prog] = await Promise.all([
 
 function normStr(s) { return (s||'').toLowerCase().replace(/[‘’′']/g,"'").trim(); }
 
-function getOrdine(nomeReparto, nomeQualifica, nomeMansione) {
-  if(REPARTI_CUCINA.includes(nomeReparto)) {
-    const mNorm = normStr(nomeMansione);
-    const qNorm = normStr(nomeQualifica);
-    let idx = ORDINE_CUCINA_Q.findIndex(v => normStr(v) === mNorm);
-    if(idx >= 0) return idx;
-    idx = ORDINE_CUCINA_Q.findIndex(v => normStr(v) === qNorm);
-    if(idx >= 0) return idx;
-    idx = ORDINE_MANSIONI_CUCINA.findIndex(v => normStr(v) === mNorm);
-    return idx >= 0 ? idx : 999;
-  }
-  const ord = ORDINE_CAMERA;
-  const qNorm = normStr(nomeQualifica);
-  const mNorm = normStr(nomeMansione);
-  let idx = ord.findIndex(q => normStr(q) === qNorm);
-  if(idx >= 0) return idx;
-  // fallback mansione
-  idx = ORDINE_MANSIONI_CAMERA.findIndex(q => normStr(q) === mNorm);
-  return idx >= 0 ? idx : 999;
+function getOrdine(repId, nomeQualifica, nomeMansione) {
+  const key = repId+'|'+normStr(nomeQualifica)+'|'+normStr(nomeMansione);
+  const ord = _ordineQMMap[key];
+  return (ord !== undefined && ord !== null) ? ord : 999;
 }
 
 function sortPersonale(lista) {
   return lista.sort((a,b)=>{
-    const rA=a.pn_reparti?a.pn_reparti.nome:'', rB=b.pn_reparti?b.pn_reparti.nome:'';
     const qA=a.pn_dipendenti&&a.pn_dipendenti.pn_qualifiche?a.pn_dipendenti.pn_qualifiche.nome:'';
     const qB=b.pn_dipendenti&&b.pn_dipendenti.pn_qualifiche?b.pn_dipendenti.pn_qualifiche.nome:'';
     const mA=a.pn_mansioni?a.pn_mansioni.nome:'';
     const mB=b.pn_mansioni?b.pn_mansioni.nome:'';
-    const oA=getOrdine(rA,qA,mA),oB=getOrdine(rB,qB,mB);
+    const oA=getOrdine(a.reparto_id,qA,mA),oB=getOrdine(b.reparto_id,qB,mB);
     if(oA!==oB)return oA-oB;
     return (a.pn_dipendenti?a.pn_dipendenti.cognome_nome:'').localeCompare(b.pn_dipendenti?b.pn_dipendenti.cognome_nome:'','it');
   });
@@ -7700,8 +7715,9 @@ function renderRow(p,isConf,W) {
       flag = '<span class="bollino-flag verde" title="Preso visione">✓</span>';
     }
     const bollinoClickable = bcls !== 'attesa';
+    const rinTag = p.td_num_rinnovo ? '<span style="font-size:10px;font-weight:600;background:#1a2e4a;color:#fff;border-radius:5px;padding:1px 5px;margin-left:3px;">R'+p.td_num_rinnovo+'</span>' : '';
     const bollino = '<span class="bollino-wrap"><span class="bollino-td '+bcls+'"'+(bollinoClickable?' onclick="openModalBollino('+p.id+')"':' style="cursor:default;"')+'></span>'+flag+tooltip+'</span>';
-    contr='<span class="td-badge">TD '+fmtDate(p.data_scadenza_td)+'</span> '+bollino;
+    contr='<span class="td-badge">TD '+fmtDate(p.data_scadenza_td)+'</span> '+bollino+rinTag;
   }
   const notaFlagCls = getNotaFlagClass(p);
   const notaFlag = window._readOnly ? '' : (notaFlagCls === 'davedere'
@@ -7711,9 +7727,9 @@ function renderRow(p,isConf,W) {
         : ''));
   const note=p.note?'<span style="font-size:10px;color:#92400e;font-style:italic">'+p.note+'</span>'+notaFlag:'';
   const sbarcoTag = window._readOnly
-    ? (p.data_sbarco_confermato ? ' <span style="display:inline-flex;align-items:center;gap:3px;background:#E1F5EE;color:#085041;border:0.5px solid #9FE1CB;font-size:10px;font-weight:500;padding:1px 7px;border-radius:20px;">Sbarco '+fmtDate(p.data_sbarco_confermato)+'</span>' : '')
+    ? (p.data_sbarco_confermato ? ' <span style="display:inline-flex;align-items:center;gap:3px;background:#085041;color:#fff;font-size:10px;font-weight:500;padding:1px 7px;border-radius:20px;">Sbarco '+fmtDate(p.data_sbarco_confermato)+'</span>' : '')
     : (p.data_sbarco_confermato
-        ? ' <span style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;background:#E1F5EE;color:#085041;border:0.5px solid #9FE1CB;font-size:10px;font-weight:500;padding:1px 7px;border-radius:20px;" onclick="openModalSbarco('+p.id+')" title="Modifica data sbarco confermato">Sbarco '+fmtDate(p.data_sbarco_confermato)+'</span>'
+        ? ' <span style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;background:#085041;color:#fff;font-size:10px;font-weight:500;padding:1px 7px;border-radius:20px;" onclick="openModalSbarco('+p.id+')" title="Modifica data sbarco confermato">Sbarco '+fmtDate(p.data_sbarco_confermato)+'</span>'
         : ' <span style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;background:var(--bg);color:var(--muted);border:0.5px dashed #c5ccd3;font-size:10px;padding:1px 7px;border-radius:20px;" onclick="openModalSbarco('+p.id+')" title="Imposta data sbarco confermato">data sbarco</span>');
   const rc=isConf?' class="conf-row"':'';
   const plusBtn=isConf?'<button class="icon-btn plus" onclick="promuoviABordo('+p.id+')" title="Metti a bordo"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v8M2 6h8"/></svg></button>':'';
@@ -8374,6 +8390,7 @@ function showAPage(name){
   }
   if(name==='progcategorie') loadProgCategorie();
   if(name==='progdipendenti'){ loadProgCategorie(); loadProgDipendenti(); }
+  if(name==='ordineqm') loadOrdineQM();
 }
 
 // ─── Commissari ───
@@ -9134,6 +9151,7 @@ function closeTDPanel() {
 // ─── Bollino TD ───
 let bollinoTargetId = null;
 let bollinoScelta = null;
+let bollinoNumRinnovo = null;
 
 function openModalBollino(posId) {
   const p = posizionamento.find(x => x.id === posId);
@@ -9155,12 +9173,37 @@ function openModalBollino(posId) {
   document.getElementById('bollinoDispMask').style.display = haProg ? 'block' : 'none';
   document.getElementById('bollinoDispHint').textContent = haProg ? '🔄 Già programmato — vedi colonna Programmazione' : 'La data apparirà nella colonna Programmazione';
   document.getElementById('bollinoDisponibilita').disabled = haProg;
+  bollinoNumRinnovo = p.td_num_rinnovo || null;
+  [1,2,3,4,5].forEach(i => {
+    const el = document.getElementById('rinBox'+i);
+    if(!el) return;
+    if(i === bollinoNumRinnovo) {
+      el.style.background = '#1a2e4a'; el.style.borderColor = '#1a2e4a';
+      el.querySelector('.rin-num').style.color = '#fff';
+    } else {
+      el.style.background = ''; el.style.borderColor = ''; el.querySelector('.rin-num').style.color = '';
+    }
+  });
   document.getElementById('modalBollino').classList.add('show');
 }
 
 function selBollino(scelta) {
   bollinoScelta = scelta;
   aggiornaSceltaBollino(scelta);
+}
+
+function selRinBox(n) {
+  bollinoNumRinnovo = (bollinoNumRinnovo === n) ? null : n;
+  [1,2,3,4,5].forEach(i => {
+    const el = document.getElementById('rinBox'+i);
+    if(!el) return;
+    const num = el.querySelector('.rin-num');
+    if(i === bollinoNumRinnovo) {
+      el.style.background = '#1a2e4a'; el.style.borderColor = '#1a2e4a'; num.style.color = '#fff';
+    } else {
+      el.style.background = ''; el.style.borderColor = ''; num.style.color = '';
+    }
+  });
 }
 
 function aggiornaSceltaBollino(scelta) {
@@ -9174,6 +9217,7 @@ function closeModalBollino() {
   document.getElementById('modalBollino').classList.remove('show');
   bollinoTargetId = null;
   bollinoScelta = null;
+  bollinoNumRinnovo = null;
 }
 
 function checkHaProgrammazione(p) {
@@ -9197,7 +9241,8 @@ async function saveBollino() {
     const dataDisp = document.getElementById('bollinoDisponibilita').value;
     const p = posizionamento.find(x => x.id === bollinoTargetId);
     const haProg = checkHaProgrammazione(p);
-    const patchBody = { td_comunicazione: bollinoScelta, td_nota: nota || null, comm_modifica_at: now };
+    const numRin = bollinoNumRinnovo || null;
+    const patchBody = { td_comunicazione: bollinoScelta, td_nota: nota || null, comm_modifica_at: now, td_num_rinnovo: numRin };
     if(!haProg) patchBody.data_disponibilita = dataDisp || null;
     await sbPatch('pn_posizionamento', bollinoTargetId, patchBody);
     // Sync pn_disponibili
@@ -9220,7 +9265,7 @@ async function saveBollino() {
     }
     // Aggiorna localmente
     const idx = posizionamento.findIndex(x => x.id === bollinoTargetId);
-    if(idx >= 0) { posizionamento[idx].td_comunicazione = bollinoScelta; posizionamento[idx].td_nota = nota || null; posizionamento[idx].comm_modifica_at = now; if(!haProg) posizionamento[idx].data_disponibilita = dataDisp || null; }
+    if(idx >= 0) { posizionamento[idx].td_comunicazione = bollinoScelta; posizionamento[idx].td_nota = nota || null; posizionamento[idx].comm_modifica_at = now; posizionamento[idx].td_num_rinnovo = numRin; if(!haProg) posizionamento[idx].data_disponibilita = dataDisp || null; }
     closeModalBollino();
     const mese = parseInt(document.getElementById('meseSelect').value);
     const anno = parseInt(document.getElementById('annoSelect').value);
@@ -9418,56 +9463,357 @@ async function cancellaNotaStorico(id) {
     showToast('Nota eliminata', 'success');
   } catch(e) { showToast('Errore: '+e.message, 'error'); }
 }
-async function stampaPDFNoteStorico() {
+function stampaPDFNoteStorico() {
   const data = window._noteStoricoData || [];
   if(data.length === 0) { showToast('Nessuna nota da esportare', 'error'); return; }
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
-  const navy = [12,68,124];
-  const muted = [120,120,120];
-  const today = new Date();
-  const todayFmt = today.getDate().toString().padStart(2,'0')+'/'+(today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getFullYear();
-  doc.setFillColor(...navy);
-  doc.rect(0,0,210,18,'F');
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(12);
-  doc.setFont('helvetica','bold');
-  doc.text('Note \u2014 '+(utente.nave_nome||'\u2014'), 12, 12);
-  doc.setFontSize(8);
-  doc.setFont('helvetica','normal');
-  doc.text('Stampato il '+todayFmt, 198, 12, {align:'right'});
-  let y = 26;
-  data.forEach(r => {
-    if(y > 265) { doc.addPage(); y = 15; }
-    const d = new Date(r.archiviata_at);
-    const dataFmt = d.getDate().toString().padStart(2,'0')+'/'+(d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getFullYear();
-    doc.setTextColor(20,20,80);
-    doc.setFontSize(9);
+
+  function doStampa() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const navy = [12,68,124];
+    const muted = [120,120,120];
+    const today = new Date();
+    const todayFmt = today.getDate().toString().padStart(2,'0')+'/'+(today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getFullYear();
+    doc.setFillColor(...navy);
+    doc.rect(0,0,210,18,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(12);
     doc.setFont('helvetica','bold');
-    doc.text(r.cognome_nome||'—', 12, y);
-    doc.setTextColor(...muted);
+    doc.text('Note \u2014 '+(utente.nave_nome||'\u2014'), 12, 12);
     doc.setFontSize(8);
     doc.setFont('helvetica','normal');
-    doc.text((r.qualifica||'—')+' · '+(r.reparto||'—'), 12, y+4.5);
-    doc.text(dataFmt, 198, y, {align:'right'});
-    doc.setTextColor(146,64,14);
-    doc.setFontSize(8.5);
-    doc.setFont('helvetica','italic');
-    const lines = doc.splitTextToSize(r.nota||'', 186);
-    doc.text(lines, 12, y+9);
-    y += 9 + (lines.length*4) + 4;
-    doc.setDrawColor(230,230,230);
-    doc.line(12,y-2,198,y-2);
-  });
-  doc.save('Note_'+(utente.nave_nome||'nave')+'_'+todayFmt.replace(/\//g,'-')+'.pdf');
+    doc.text('Stampato il '+todayFmt, 198, 12, {align:'right'});
+    let y = 26;
+
+    // Raggruppa per reparto, stesso ordine del pannello a video
+    const byReparto = {};
+    data.forEach(r => {
+      const rep = r.reparto || 'Altro';
+      if(!byReparto[rep]) byReparto[rep] = [];
+      byReparto[rep].push(r);
+    });
+    const ordineRep = typeof reparti !== 'undefined' ? reparti.map(r=>r.nome) : [];
+    const gruppi = Object.keys(byReparto).sort((a,b) => {
+      const ia = ordineRep.indexOf(a); const ib = ordineRep.indexOf(b);
+      if(ia===-1&&ib===-1) return a.localeCompare(b);
+      if(ia===-1) return 1; if(ib===-1) return -1;
+      return ia-ib;
+    });
+
+    gruppi.forEach(rep => {
+      if(y > 270) { doc.addPage(); y = 15; }
+      doc.setFillColor(231,235,238);
+      doc.rect(12,y-4,186,6,'F');
+      doc.setTextColor(15,42,74);
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica','bold');
+      doc.text(rep.toUpperCase(), 14, y);
+      y += 7;
+      byReparto[rep].forEach(r => {
+        if(y > 270) { doc.addPage(); y = 15; }
+        const d = new Date(r.archiviata_at);
+        const dataFmt = d.getDate().toString().padStart(2,'0')+'/'+(d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getFullYear();
+        doc.setTextColor(20,20,80);
+        doc.setFontSize(9);
+        doc.setFont('helvetica','bold');
+        doc.text(r.cognome_nome||'—', 12, y);
+        doc.setTextColor(...muted);
+        doc.setFontSize(8);
+        doc.setFont('helvetica','normal');
+        doc.text(r.qualifica||'—', 12, y+4.5);
+        doc.text(dataFmt, 198, y, {align:'right'});
+        doc.setTextColor(146,64,14);
+        doc.setFontSize(8.5);
+        doc.setFont('helvetica','italic');
+        const lines = doc.splitTextToSize(r.nota||'', 186);
+        doc.text(lines, 12, y+9);
+        y += 9 + (lines.length*4) + 4;
+        doc.setDrawColor(230,230,230);
+        doc.line(12,y-2,198,y-2);
+      });
+      y += 3;
+    });
+    doc.save('Note_'+(utente.nave_nome||'nave')+'_'+todayFmt.replace(/\//g,'-')+'.pdf');
+    showToast('PDF esportato', 'success');
+  }
+
+  if(window.jspdf && window.jspdf.jsPDF) { doStampa(); }
+  else {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s.onload = doStampa;
+    s.onerror = function(){ showToast('Errore caricamento libreria PDF', 'error'); };
+    document.head.appendChild(s);
+  }
 }
 
+function _confermeSbarcoGet() {
+  return (posizionamento || []).filter(p => p.data_sbarco_confermato);
+}
 
+function openConfermeSbarco() {
+  document.getElementById('confermeSbarcoPanelNave').textContent = utente.nave_nome || '—';
+  document.getElementById('confermeSbarcoPanelPop').style.display = 'flex';
+  renderConfermeSbarco();
+}
+function closeConfermeSbarco() {
+  document.getElementById('confermeSbarcoPanelPop').style.display = 'none';
+}
+
+function _confermeSbarcoGruppi() {
+  const data = _confermeSbarcoGet();
+  const byReparto = {};
+  data.forEach(p => {
+    const rep = p.pn_reparti ? p.pn_reparti.nome : 'Altro';
+    if(!byReparto[rep]) byReparto[rep] = [];
+    byReparto[rep].push(p);
+  });
+  const ordineRep = typeof reparti !== 'undefined' ? reparti.map(r=>r.nome) : [];
+  const gruppi = Object.keys(byReparto).sort((a,b) => {
+    const ia = ordineRep.indexOf(a); const ib = ordineRep.indexOf(b);
+    if(ia===-1&&ib===-1) return a.localeCompare(b);
+    if(ia===-1) return 1; if(ib===-1) return -1;
+    return ia-ib;
+  });
+  gruppi.forEach(rep => {
+    byReparto[rep].sort((a,b) => new Date(a.data_sbarco_confermato) - new Date(b.data_sbarco_confermato));
+  });
+  return { gruppi, byReparto, totale: data.length };
+}
+
+function renderConfermeSbarco() {
+  const { gruppi, byReparto, totale } = _confermeSbarcoGruppi();
+  document.getElementById('confermeSbarcoCount').textContent = totale + ' conferme sbarco';
+  if(totale === 0) {
+    document.getElementById('confermeSbarcoBody').innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:#888;">Nessuna data sbarco confermata.</div>';
+    return;
+  }
+  let html = '';
+  gruppi.forEach(rep => {
+    const righe = byReparto[rep];
+    html += '<div style="padding:6px 12px 2px;">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--border);padding-bottom:3px;margin-bottom:4px;">'
+      + '<span style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">'+escHtml(rep)+'</span>'
+      + '<span style="font-size:10px;background:#E6F1FB;color:#0C447C;padding:1px 7px;border-radius:20px;font-weight:500;">'+righe.length+'</span>'
+      + '</div>';
+    righe.forEach(p => {
+      const dip = p.pn_dipendenti;
+      const nome = dip ? dip.cognome_nome : '—';
+      const qual = dip && dip.pn_qualifiche ? dip.pn_qualifiche.nome : '—';
+      html += '<div style="padding:7px 0;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;">'
+        + '<div>'
+        + '<div style="font-size:12px;font-weight:600;color:var(--text);">'+escHtml(nome)+'</div>'
+        + '<div style="font-size:10px;color:var(--muted);">'+escHtml(qual)+'</div>'
+        + '</div>'
+        + '<span style="display:inline-flex;align-items:center;gap:3px;background:#085041;color:#fff;font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px;">'+fmtDate(p.data_sbarco_confermato)+'</span>'
+        + '</div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('confermeSbarcoBody').innerHTML = html;
+}
+
+function stampaPDFConfermeSbarco() {
+  const { gruppi, byReparto, totale } = _confermeSbarcoGruppi();
+  if(totale === 0) { showToast('Nessuna conferma sbarco da esportare', 'error'); return; }
+
+  function doStampa() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+    const navy = [12,68,124];
+    const muted = [120,120,120];
+    const today = new Date();
+    const todayFmt = today.getDate().toString().padStart(2,'0')+'/'+(today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getFullYear();
+    doc.setFillColor(...navy);
+    doc.rect(0,0,210,18,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica','bold');
+    doc.text('Conferme Sbarco \u2014 '+(utente.nave_nome||'\u2014'), 12, 12);
+    doc.setFontSize(8);
+    doc.setFont('helvetica','normal');
+    doc.text('Stampato il '+todayFmt, 198, 12, {align:'right'});
+    let y = 26;
+
+    gruppi.forEach(rep => {
+      if(y > 270) { doc.addPage(); y = 15; }
+      doc.setFillColor(231,235,238);
+      doc.rect(12,y-4,186,6,'F');
+      doc.setTextColor(15,42,74);
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica','bold');
+      doc.text(rep.toUpperCase(), 14, y);
+      y += 7;
+      byReparto[rep].forEach(p => {
+        if(y > 275) { doc.addPage(); y = 15; }
+        const dip = p.pn_dipendenti;
+        const nome = dip ? dip.cognome_nome : '—';
+        const qual = dip && dip.pn_qualifiche ? dip.pn_qualifiche.nome : '—';
+        doc.setTextColor(20,20,80);
+        doc.setFontSize(9);
+        doc.setFont('helvetica','bold');
+        doc.text(nome, 12, y);
+        doc.setTextColor(...muted);
+        doc.setFontSize(8);
+        doc.setFont('helvetica','normal');
+        doc.text(qual, 12, y+4.5);
+        doc.setTextColor(8,80,65);
+        doc.setFont('helvetica','bold');
+        doc.text(fmtDate(p.data_sbarco_confermato), 198, y, {align:'right'});
+        y += 9;
+        doc.setDrawColor(230,230,230);
+        doc.line(12,y-2,198,y-2);
+      });
+      y += 3;
+    });
+    doc.save('Conferme_Sbarco_'+(utente.nave_nome||'nave')+'_'+todayFmt.replace(/\//g,'-')+'.pdf');
+    showToast('PDF esportato', 'success');
+  }
+
+  if(window.jspdf && window.jspdf.jsPDF) { doStampa(); }
+  else {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    s.onload = doStampa;
+    s.onerror = function(){ showToast('Errore caricamento libreria PDF', 'error'); };
+    document.head.appendChild(s);
+  }
+}
+
+let ordineQM = [];
+
+async function loadOrdineQM() {
+  try {
+    const data = await sbGet('pn_ordine_qualifica_mansione?order=reparto_nome,ordine.asc.nullslast');
+    ordineQM = data || [];
+    if(ordineQM.length === 0) {
+      await sincronizzaCombinazioniQM();
+    } else {
+      await aggiungiCombinazioniMancantiQM();
+    }
+    renderOrdineQM();
+  } catch(e) {
+    document.getElementById('ordineQMBody').innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-style:italic">Errore nel caricamento</div>';
+  }
+}
+
+async function ricaricaOrdineQM() {
+  showToast('Ricerca nuove combinazioni...', 'success');
+  await aggiungiCombinazioniMancantiQM();
+  renderOrdineQM();
+}
+
+// Scansiona TUTTE le navi (serve query dedicata, non filtrata per nave_id come il resto dell'app)
+async function _scansionaCombinazioniReali() {
+  const data = await sbGet('pn_posizionamento?select=reparto_id,pn_reparti(id,nome),pn_dipendenti(pn_qualifiche(id,nome)),pn_mansioni(id,nome)');
+  const combo = {};
+  (data || []).forEach(p => {
+    if(!p.pn_reparti || !p.pn_mansioni) return;
+    const repId = p.pn_reparti.id, repNome = p.pn_reparti.nome;
+    const qualId = p.pn_dipendenti && p.pn_dipendenti.pn_qualifiche ? p.pn_dipendenti.pn_qualifiche.id : null;
+    const qualNome = p.pn_dipendenti && p.pn_dipendenti.pn_qualifiche ? p.pn_dipendenti.pn_qualifiche.nome : '—';
+    const mansId = p.pn_mansioni.id, mansNome = p.pn_mansioni.nome;
+    const key = repId+'|'+qualNome+'|'+mansNome;
+    if(!combo[key]) combo[key] = { reparto_id: repId, reparto_nome: repNome, qualifica_id: qualId, qualifica_nome: qualNome, mansione_id: mansId, mansione_nome: mansNome };
+  });
+  return Object.values(combo);
+}
+
+async function sincronizzaCombinazioniQM() {
+  const combo = await _scansionaCombinazioniReali();
+  combo.sort((a,b) => a.reparto_nome.localeCompare(b.reparto_nome,'it') || a.qualifica_nome.localeCompare(b.qualifica_nome,'it'));
+  const byRep = {};
+  combo.forEach(c => { if(!byRep[c.reparto_id]) byRep[c.reparto_id]=0; c.ordine = byRep[c.reparto_id]++; });
+  if(combo.length === 0) { ordineQM = []; return; }
+  try {
+    await fetch(SB_URL+'/rest/v1/pn_ordine_qualifica_mansione', {
+      method:'POST', headers:{...H,'Prefer':'resolution=merge-duplicates,return=minimal'}, body:JSON.stringify(combo)
+    });
+    ordineQM = await sbGet('pn_ordine_qualifica_mansione?order=reparto_nome,ordine.asc.nullslast');
+  } catch(e) { showToast('Errore sincronizzazione: '+e.message, 'error'); }
+}
+
+async function aggiungiCombinazioniMancantiQM() {
+  const combo = await _scansionaCombinazioniReali();
+  const esistenti = new Set(ordineQM.map(r => r.reparto_id+'|'+r.qualifica_nome+'|'+r.mansione_nome));
+  const nuove = combo.filter(c => !esistenti.has(c.reparto_id+'|'+c.qualifica_nome+'|'+c.mansione_nome));
+  if(nuove.length === 0) { showToast('Nessuna nuova combinazione trovata', 'success'); return; }
+  nuove.forEach(c => {
+    const maxOrd = ordineQM.filter(r => r.reparto_id === c.reparto_id).reduce((m,r) => Math.max(m, r.ordine||0), -1);
+    c.ordine = maxOrd + 1 + nuove.filter(n2 => n2.reparto_id === c.reparto_id && nuove.indexOf(n2) < nuove.indexOf(c)).length;
+  });
+  try {
+    await fetch(SB_URL+'/rest/v1/pn_ordine_qualifica_mansione', {
+      method:'POST', headers:{...H,'Prefer':'resolution=merge-duplicates,return=minimal'}, body:JSON.stringify(nuove)
+    });
+    ordineQM = await sbGet('pn_ordine_qualifica_mansione?order=reparto_nome,ordine.asc.nullslast');
+    showToast(nuove.length+' nuova/e combinazione/i aggiunta/e in fondo', 'success');
+  } catch(e) { showToast('Errore aggiornamento combinazioni: '+e.message, 'error'); }
+}
+
+function renderOrdineQM() {
+  const container = document.getElementById('ordineQMBody');
+  document.getElementById('countOrdineQM').textContent = ordineQM.length + ' combinazioni';
+  if(ordineQM.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);font-style:italic">Nessuna combinazione trovata.</div>';
+    return;
+  }
+  const byRep = {};
+  ordineQM.forEach(r => { if(!byRep[r.reparto_nome]) byRep[r.reparto_nome]=[]; byRep[r.reparto_nome].push(r); });
+  Object.values(byRep).forEach(list => list.sort((a,b) => (a.ordine||0)-(b.ordine||0)));
+  const gruppi = Object.keys(byRep).sort((a,b) => a.localeCompare(b,'it'));
+
+  container.innerHTML = gruppi.map(rep => {
+    const righe = byRep[rep];
+    const rows = righe.map((row,i) => '<tr draggable="true" data-id="'+row.id+'" data-rep="'+row.reparto_id+'">'
+      + '<td class="drag-handle" title="Trascina">&#9776;</td>'
+      + '<td style="width:30px;color:var(--muted);font-size:11px;">'+(i+1)+'</td>'
+      + '<td><strong>'+escHtml(row.qualifica_nome)+'</strong></td>'
+      + '<td>'+escHtml(row.mansione_nome)+'</td>'
+      + '</tr>').join('');
+    return '<div class="table-card" style="max-width:560px;margin-bottom:14px;">'
+      + '<div class="table-toolbar"><span class="table-toolbar-title">'+escHtml(rep)+'</span><span style="font-size:11px;color:var(--muted)">'+righe.length+'</span></div>'
+      + '<table class="admin-table"><thead><tr><th style="width:30px"></th><th style="width:30px">#</th><th>Qualifica</th><th>Mansione</th></tr></thead>'
+      + '<tbody id="tbodyOrdineQM-'+row_safe(rep)+'">'+rows+'</tbody></table></div>';
+  }).join('');
+
+  gruppi.forEach(rep => initDragDropOrdineQM(document.getElementById('tbodyOrdineQM-'+row_safe(rep))));
+}
+
+function row_safe(s) { return String(s).replace(/[^a-zA-Z0-9]/g,'_'); }
+
+let dragSrcRowQM = null;
+function initDragDropOrdineQM(tbody) {
+  if(!tbody) return;
+  tbody.querySelectorAll('tr[draggable="true"]').forEach(row => {
+    row.addEventListener('dragstart', e => { dragSrcRowQM = row; row.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+    row.addEventListener('dragend', e => { row.classList.remove('dragging'); tbody.querySelectorAll('tr').forEach(r=>r.classList.remove('drag-over')); });
+    row.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect='move'; tbody.querySelectorAll('tr').forEach(r=>r.classList.remove('drag-over')); row.classList.add('drag-over'); });
+    row.addEventListener('drop', e => {
+      e.preventDefault();
+      if(dragSrcRowQM===row || !dragSrcRowQM) return;
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const srcIdx = rows.indexOf(dragSrcRowQM), tgtIdx = rows.indexOf(row);
+      if(srcIdx<tgtIdx) tbody.insertBefore(dragSrcRowQM, row.nextSibling);
+      else tbody.insertBefore(dragSrcRowQM, row);
+      row.classList.remove('drag-over');
+      const newOrder = Array.from(tbody.querySelectorAll('tr[data-id]')).map(r=>parseInt(r.dataset.id));
+      tbody.querySelectorAll('tr[data-id]').forEach((r,i) => { r.children[1].textContent = (i+1); });
+      Promise.all(newOrder.map((id,idx) => {
+        const r = ordineQM.find(x=>x.id===id);
+        if(r) { r.ordine = idx; _ordineQMMap[r.reparto_id+'|'+normStr(r.qualifica_nome)+'|'+normStr(r.mansione_nome)] = idx; }
+        return fetch(SB_URL+'/rest/v1/pn_ordine_qualifica_mansione?id=eq.'+id, {method:'PATCH',headers:H,body:JSON.stringify({ordine:idx})});
+      })).then(()=>showToast('Ordine salvato — già attivo in Posizionamento','success')).catch(()=>showToast('Errore salvataggio ordine','error'));
+    });
+  });
+}
 
 function openModalMsgFromAlert() {
   document.getElementById('msgAlertBanner').style.display = 'none';
   openModalMsg();
 }
+
+
 
 function renderTDPanel() {
   const oggi = new Date();
@@ -10227,7 +10573,8 @@ async function loadMessaggi() {
 function aggiornaBottoneMsg() {
   if(typeof sbSyncBadges==="function") sbSyncBadges();
   const btn = document.getElementById('btnMsg');
-  const nonLetti = messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
+  const isRWBtn = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+  const nonLetti = isRWBtn ? messaggi.filter(m => !m.letto).length : messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
   if(nonLetti > 0) {
     btn.classList.add('has-unread');
     btn.innerHTML = '<span class="msg-dot"></span>Messaggi ('+nonLetti+')';
@@ -10262,7 +10609,8 @@ function openModalMsg() {
 function closeModalMsg() {
   document.getElementById('modalMsg').classList.remove('show');
   document.getElementById('replyMsgArea').style.display = 'none';
-  const nonLetti = messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
+  const isRWClose = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+  const nonLetti = isRWClose ? messaggi.filter(m => !m.letto).length : messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
   if(nonLetti === 0) document.getElementById('msgAlertBanner').style.display = 'none';
 }
 
@@ -10270,7 +10618,8 @@ function renderMsgList() {
   const mese = parseInt(document.getElementById('meseSelect').value);
   const anno = parseInt(document.getElementById('annoSelect').value);
   const mesiNomi = ['','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-  const nonLetti = messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
+  const isRWSub = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
+  const nonLetti = isRWSub ? messaggi.filter(m => !m.letto).length : messaggi.filter(m => !m.letto && m.tipo !== 'risposta').length;
   document.getElementById('msgSub').textContent = mesiNomi[mese]+' '+anno+' · '+messaggi.length+' messaggi'+(nonLetti > 0 ? ', '+nonLetti+' non letti' : '');
 
   const isRW = utente.ruolo === 'admin' || utente.ruolo === 'semiadmin';
@@ -10302,7 +10651,7 @@ function renderMsgList() {
         +'<div class="msg-meta">'+labelTipo+'<span class="msg-author">'+escHtml(m.autore||'Admin')+'</span><span class="msg-date">'+dataStr+'</span></div>'
         +'<div class="msg-text">'+escHtml(m.testo)+'</div>'
         +'<div class="msg-footer"><span></span>'
-        +(m.letto ? '<div style="text-align:right"><span class="badge-letto">&#10003; Letto</span>'+(tsStr?'<div class="msg-timestamp">'+tsStr+'</div>':'')+'</div>' : '<span class="badge-nonletto">Non letto</span>')
+        +(m.letto ? '<div style="text-align:right"><span class="badge-letto">&#10003; Letto</span>'+(tsStr?'<div class="msg-timestamp">'+tsStr+'</div>':'')+'</div>' : '<span class="badge-nonletto" style="cursor:pointer;" onclick="segnaLetto('+m.id+', true)" title="Clicca per segnare come letto">Non letto</span>')
         +'</div></div>'
         + figliHtml;
     } else {
@@ -10479,7 +10828,7 @@ function sbSyncBadges() {
   const tdBadge = document.getElementById('sbTDBadge');
   if(tdBadge){ tdBadge.textContent = tdCount; tdBadge.style.display = tdCount > 0 ? '' : 'none'; }
   // Messaggi badge
-  const nonLetti = (window.messaggi||[]).filter(m=>!m.letto && m.tipo!=='risposta').length;
+  const nonLetti = isRW ? (messaggi||[]).filter(m=>!m.letto).length : (messaggi||[]).filter(m=>!m.letto && m.tipo!=='risposta').length;
   const msgBadge = document.getElementById('sbMsgBadge');
   if(msgBadge){ msgBadge.textContent = nonLetti; msgBadge.style.display = nonLetti > 0 ? '' : 'none'; }
   // Excel e Prog solo admin
@@ -11611,9 +11960,10 @@ function generaPDFSnapshot() {
     });
    function sortSnap(lista) {
       return lista.sort((a,b)=>{
-        const rA=a.pn_reparti?a.pn_reparti.nome:'', rB=b.pn_reparti?b.pn_reparti.nome:'';
         const mA=a.pn_mansioni?a.pn_mansioni.nome:'', mB=b.pn_mansioni?b.pn_mansioni.nome:'';
-        const oA=getOrdine(rA,'',mA), oB=getOrdine(rB,'',mB);
+        const qA=a.pn_dipendenti&&a.pn_dipendenti.pn_qualifiche?a.pn_dipendenti.pn_qualifiche.nome:'';
+        const qB=b.pn_dipendenti&&b.pn_dipendenti.pn_qualifiche?b.pn_dipendenti.pn_qualifiche.nome:'';
+        const oA=getOrdine(a.reparto_id,qA,mA), oB=getOrdine(b.reparto_id,qB,mB);
         if(oA!==oB) return oA-oB;
         return (a.pn_dipendenti?a.pn_dipendenti.cognome_nome:'').localeCompare(b.pn_dipendenti?b.pn_dipendenti.cognome_nome:'','it');
       });
@@ -12516,6 +12866,25 @@ var firmaUtente = utente ? (utente.nome || utente.username || 'Ufficio Armamento
     <span style="font-size:9px;color:var(--muted);font-style:italic;" id="noteStoricoCount"></span>
     <div style="margin-left:auto;display:flex;gap:6px;">
       <button onclick="stampaPDFNoteStorico()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#A32D2D;border:1px solid #A32D2D;cursor:pointer;">📄 PDF</button>
+    </div>
+  </div>
+</div>
+
+<div id="confermeSbarcoPanelPop" style="display:none;position:fixed;top:136px;left:50%;transform:translateX(-50%);width:580px;min-height:200px;max-height:calc(100vh - 155px);background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:visible;resize:vertical;">
+  <div style="background:linear-gradient(135deg,#185fa5,#0c447c);padding:10px 14px;display:flex;align-items:center;gap:8px;">
+    <div style="flex:1;">
+      <div style="font-size:12px;font-weight:600;color:#fff;">&#128197; Conferme Sbarco</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.75);" id="confermeSbarcoPanelNave">—</div>
+    </div>
+    <button onclick="closeConfermeSbarco()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.8);font-size:16px;line-height:1;">✕</button>
+  </div>
+  <div style="overflow-y:auto;flex:1;padding:0 0 4px;" id="confermeSbarcoBody">
+    <div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">Caricamento...</div>
+  </div>
+  <div style="padding:7px 10px;border-top:1px solid var(--border);display:flex;gap:6px;align-items:center;background:var(--bg);flex-shrink:0;">
+    <span style="font-size:9px;color:var(--muted);font-style:italic;" id="confermeSbarcoCount"></span>
+    <div style="margin-left:auto;display:flex;gap:6px;">
+      <button onclick="stampaPDFConfermeSbarco()" style="font-family:var(--font);font-size:10px;padding:3px 8px;border-radius:4px;background:transparent;color:#A32D2D;border:1px solid #A32D2D;cursor:pointer;">📄 PDF</button>
     </div>
   </div>
 </div>
