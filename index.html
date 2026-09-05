@@ -908,6 +908,9 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <div class="sb-item" id="sbPdfRiepilogo" title="Stampa PDF riepilogo di tutte le navi" onclick="esportaMenuClick('riepilogo')">
         <i class="ti ti-file-analytics" aria-hidden="true"></i> PDF Riepilogo navi
       </div>
+      <div class="sb-item" id="sbRiepilogoDisp" style="display:none" title="Riepilogo disponibili di tutte le navi" onclick="showScreen('riepilogoDisp')">
+        <i class="ti ti-user-check" aria-hidden="true"></i> Riepilogo Disponibili
+      </div>
     </div>
     <div class="sb-divider"></div>
     <!-- 5. AMM -->
@@ -1027,6 +1030,51 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <div id="progCascadeRightBody">
         <div style="font-size:11px;color:var(--muted);padding:8px 14px;font-style:italic;">Seleziona una mansione</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIEPILOGO DISPONIBILI AMM -->
+<div class="screen" id="screenRiepilogoDisp">
+  <div class="topbar" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span class="brand">Riepilogo Disponibili</span>
+      <!-- TAB -->
+      <div style="display:flex;gap:4px;">
+        <button id="rdTabDisp" onclick="rdSetTab('disp')" style="font-family:var(--font);font-size:11px;padding:5px 14px;border-radius:6px;border:1.5px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-weight:500;">Disponibili</button>
+        <button id="rdTabBl" onclick="rdSetTab('bl')" style="font-family:var(--font);font-size:11px;padding:5px 14px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;font-weight:500;">🚫 Black List</button>
+      </div>
+      <!-- FILTRI (solo tab Disponibili) -->
+      <div id="rdFiltri" style="display:flex;gap:6px;">
+        <button id="rdFiltTutte" onclick="rdSetFiltro('tutte')" style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-weight:500;">Tutte</button>
+        <button id="rdFiltMoby"  onclick="rdSetFiltro('MOBY')"  style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;font-weight:500;">Moby</button>
+        <button id="rdFiltCin"   onclick="rdSetFiltro('CIN')"   style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;font-weight:500;">CIN</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <span id="rdUltimoAgg" style="font-size:10px;color:var(--muted);"></span>
+      <div id="rdExportBtns">
+        <button onclick="rdExportPdf()" style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid #c0392b;background:#fdeeee;color:#c0392b;cursor:pointer;font-weight:500;">📄 PDF</button>
+        <button onclick="rdExportExcel()" style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid #1a6b2e;background:#eafaf1;color:#1a6b2e;cursor:pointer;font-weight:500;margin-left:6px;">📊 Excel</button>
+      </div>
+      <button onclick="showScreen('pos')" style="font-family:var(--font);font-size:11px;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;">✕ Chiudi</button>
+    </div>
+  </div>
+  <div style="padding:18px 20px;overflow-y:auto;height:calc(100vh - 56px);">
+    <div id="rdBody" style="max-width:900px;margin:0 auto;"></div>
+  </div>
+</div>
+
+<!-- MODALE BLACKLIST -->
+<div id="modalBlacklist" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:420px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.18);">
+    <div style="font-size:14px;font-weight:600;color:#1a2e4a;margin-bottom:4px;">Aggiungi a Black List</div>
+    <div id="blModalSubtitle" style="font-size:11px;color:var(--muted);margin-bottom:18px;"></div>
+    <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;">Motivazione</div>
+    <textarea id="blModalNota" style="width:100%;height:90px;resize:none;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:12px;font-family:var(--font);outline:none;box-sizing:border-box;" placeholder="Inserisci una nota..."></textarea>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;">
+      <button onclick="closeModalBlacklist()" style="font-family:var(--font);font-size:12px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;">Annulla</button>
+      <button onclick="saveBlacklist()" style="font-family:var(--font);font-size:12px;padding:7px 16px;border-radius:8px;border:none;background:#1a2e4a;color:#fff;cursor:pointer;font-weight:500;">Salva</button>
     </div>
   </div>
 </div>
@@ -2088,6 +2136,7 @@ if(new URLSearchParams(window.location.search).get('al')) {
       </div>
     </div>
     <div class="bollino-actions">
+      <button id="btnAzzeraBollino" onclick="azzeraBollino()" style="display:none;margin-right:auto;font-family:inherit;font-size:11px;padding:5px 10px;border-radius:7px;border:1px solid #c0392b;background:transparent;color:#c0392b;cursor:pointer;">↩ Azzera</button>
       <button class="btn-cancel" onclick="closeModalBollino()">Annulla</button>
       <button class="btn-save" id="btnSaveBollino" onclick="saveBollino()">Salva</button>
     </div>
@@ -6761,6 +6810,328 @@ function selDipDaDisponibili(id, nome) {
   closeDisponibiliPopup();
 }
 
+// ═══════════════════════════════════════════
+// RIEPILOGO DISPONIBILI AMM
+// ═══════════════════════════════════════════
+let _rdDati = [];
+let _rdFiltro = 'tutte';
+let _rdBlacklist = [];
+let _rdTabAttiva = 'disp';
+let _blModalTarget = null;
+
+function rdSetTab(tab) {
+  _rdTabAttiva = tab;
+  const isDisp = tab === 'disp';
+  document.getElementById('rdTabDisp').style.background = isDisp ? 'var(--navy)' : '#fff';
+  document.getElementById('rdTabDisp').style.color = isDisp ? '#fff' : '#333';
+  document.getElementById('rdTabDisp').style.borderColor = isDisp ? 'var(--navy)' : 'var(--border)';
+  document.getElementById('rdTabBl').style.background = !isDisp ? 'var(--navy)' : '#fff';
+  document.getElementById('rdTabBl').style.color = !isDisp ? '#fff' : '#333';
+  document.getElementById('rdTabBl').style.borderColor = !isDisp ? 'var(--navy)' : 'var(--border)';
+  document.getElementById('rdFiltri').style.display = isDisp ? 'flex' : 'none';
+  document.getElementById('rdExportBtns').style.display = isDisp ? '' : 'none';
+  if(isDisp) rdRender(); else rdRenderBlacklist();
+}
+
+function rdSetFiltro(f) {
+  _rdFiltro = f;
+  ['tutte','MOBY','CIN'].forEach(k => {
+    const id = 'rdFilt' + (k==='tutte'?'Tutte':k==='MOBY'?'Moby':'Cin');
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(k===f){ el.style.background='var(--navy)'; el.style.color='#fff'; el.style.borderColor='var(--navy)'; }
+    else { el.style.background='#fff'; el.style.color='#333'; el.style.borderColor='var(--border)'; }
+  });
+  rdRender();
+}
+
+let _rdRepartiOrdine = []; // array di nomi in ordine corretto
+
+async function rdLoad() {
+  document.getElementById('rdBody').innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px;">Caricamento...</div>';
+  try {
+    const [dispRaw, naviRaw, repartiRaw, blRaw] = await Promise.all([
+      sbGet('pn_disponibili?select=*&order=data_disponibilita.asc'),
+      sbGet('pn_navi?select=id,nome,compagnia'),
+      sbGet('pn_reparti?select=id,nome,ordine&order=ordine.asc'),
+      sbGet('pn_blacklist?select=*&order=created_at.desc')
+    ]);
+    const naviMap = {};
+    (naviRaw||[]).forEach(n => { naviMap[n.id] = n; });
+    _rdRepartiOrdine = (repartiRaw||[]).map(r => r.nome);
+    _rdBlacklist = blRaw || [];
+    _rdDati = (dispRaw||[]).map(r => ({ ...r, _nave: naviMap[r.nave_id] || null })).filter(r => r._nave);
+    const now = new Date();
+    document.getElementById('rdUltimoAgg').textContent = 'Aggiornato: ' + now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    rdRender();
+  } catch(e) {
+    console.error('rdLoad error', e);
+    document.getElementById('rdBody').innerHTML = '<div style="padding:40px;text-align:center;color:#c0392b;font-size:13px;">Errore caricamento dati</div>';
+  }
+}
+
+function rdRender() {
+  const righe = _rdFiltro === 'tutte'
+    ? _rdDati
+    : _rdDati.filter(r => r._nave.compagnia === _rdFiltro);
+
+  if(!righe.length) {
+    document.getElementById('rdBody').innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px;">Nessun disponibile trovato</div>';
+    return;
+  }
+
+  // Raggruppa per reparto
+  const byReparto = {};
+  righe.forEach(r => {
+    const rep = r.reparto || 'Altro';
+    if(!byReparto[rep]) byReparto[rep] = [];
+    byReparto[rep].push(r);
+  });
+
+  const reparti = Object.keys(byReparto).sort((a,b)=>{ const ia=_rdRepartiOrdine.indexOf(a); const ib=_rdRepartiOrdine.indexOf(b); return (ia===-1?99:ia)-(ib===-1?99:ib); });
+  let html = '';
+
+  reparti.forEach(rep => {
+    const list = byReparto[rep].sort((a,b) => new Date(a.data_disponibilita) - new Date(b.data_disponibilita));
+    html += `<div style="margin-bottom:22px;">
+      <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.8px;border-bottom:2px solid var(--navy);padding-bottom:5px;margin-bottom:8px;">${escHtml(rep)} <span style="font-weight:400;color:var(--muted);font-size:10px;">(${list.length})</span></div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr style="background:#f4f6f8;">
+            <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Nominativo</th>
+            <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Qualifica</th>
+            <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Nave</th>
+            <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Compagnia</th>
+            <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Disponibile dal</th>
+            <th style="padding:6px 10px;text-align:center;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">BL</th>
+          </tr>
+        </thead>
+        <tbody>`;
+    list.forEach((r, i) => {
+      const nome = r.cognome_nome || '—';
+      const qual = r.qualifica || '—';
+      const nave = r._nave.nome || '—';
+      const comp = r._nave.compagnia || '—';
+      const dataDisp = r.data_disponibilita ? fmtDate(r.data_disponibilita) : '—';
+      const isBlack = _rdBlacklist.some(b => b.cognome_nome === r.cognome_nome);
+      const bg = i % 2 === 0 ? '#fff' : '#f9fafc';
+      const nomeCell = isBlack
+        ? `<span style="font-weight:500;">${escHtml(nome)}</span> <span title="In Black List" style="font-size:11px;">🚫</span>`
+        : `<span style="font-weight:500;">${escHtml(nome)}</span>`;
+      const nomeEsc = (r.cognome_nome||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+      const chkHtml = isBlack
+        ? `<input type="checkbox" checked disabled style="cursor:not-allowed;accent-color:#c0392b;" title="Già in Black List">`
+        : `<input type="checkbox" class="rd-bl-check" data-nome="${(r.cognome_nome||'').replace(/"/g,'&quot;')}" data-data="${r.data_disponibilita||''}" style="cursor:pointer;accent-color:#1a2e4a;">`;
+      html += `<tr style="background:${bg};">
+        <td style="padding:7px 10px;border-bottom:0.5px solid #eee;">${nomeCell}</td>
+        <td style="padding:7px 10px;border-bottom:0.5px solid #eee;color:var(--muted);">${escHtml(qual)}</td>
+        <td style="padding:7px 10px;border-bottom:0.5px solid #eee;">${escHtml(nave)}</td>
+        <td style="padding:7px 10px;border-bottom:0.5px solid #eee;"><span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:${comp==='MOBY'?'#e8f4fd':'#fef9e7'};color:${comp==='MOBY'?'#1a5f8a':'#7d6008'};">${escHtml(comp)}</span></td>
+        <td style="padding:7px 10px;border-bottom:0.5px solid #eee;"><span style="font-size:11px;font-weight:500;color:#27500A;background:#EAF3DE;padding:3px 9px;border-radius:20px;">📅 ${escHtml(dataDisp)}</span></td>
+        <td style="padding:7px 10px;border-bottom:0.5px solid #eee;text-align:center;">${chkHtml}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  });
+
+  document.getElementById('rdBody').innerHTML = html;
+
+  document.getElementById('rdBody').onclick = function(e) {
+    const chk = e.target.closest('.rd-bl-check');
+    if(!chk || !chk.checked) return;
+    chk.checked = false;
+    openModalBlacklist(chk.dataset.nome, chk.dataset.data, chk);
+  };
+}
+
+async function rdExportExcel() {
+  const righe = _rdFiltro === 'tutte' ? _rdDati : _rdDati.filter(r => r._nave.compagnia === _rdFiltro);
+  if(!righe.length) { showToast('Nessun dato da esportare','error'); return; }
+
+  function doExport() {
+    const rows = [['Nominativo','Qualifica','Reparto','Nave','Compagnia','Disponibile dal']];
+    const byReparto = {};
+    righe.forEach(r => {
+      const rep = r.reparto || 'Altro';
+      if(!byReparto[rep]) byReparto[rep] = [];
+      byReparto[rep].push(r);
+    });
+    Object.keys(byReparto).sort((a,b)=>{ const ia=_rdRepartiOrdine.indexOf(a); const ib=_rdRepartiOrdine.indexOf(b); return (ia===-1?99:ia)-(ib===-1?99:ib); }).forEach(rep => {
+      byReparto[rep].sort((a,b)=>new Date(a.data_disponibilita)-new Date(b.data_disponibilita)).forEach(r => {
+        rows.push([
+          r.cognome_nome||'',
+          r.qualifica||'',
+          r.reparto||'',
+          r._nave.nome||'',
+          r._nave.compagnia||'',
+          r.data_disponibilita ? fmtDate(r.data_disponibilita) : ''
+        ]);
+      });
+    });
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols'] = [28,22,18,18,12,16].map(w=>({wch:w}));
+    XLSX.utils.book_append_sheet(wb, ws, 'Disponibili');
+    const filtLabel = _rdFiltro==='tutte'?'Tutte':_rdFiltro;
+    XLSX.writeFile(wb, 'RiepilogoDisponibili_'+filtLabel+'_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  }
+
+  if(typeof XLSX !== 'undefined') { doExport(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  s.onload = doExport;
+  document.head.appendChild(s);
+}
+
+async function rdExportPdf() {
+  const righe = _rdFiltro === 'tutte' ? _rdDati : _rdDati.filter(r => r._nave.compagnia === _rdFiltro);
+  if(!righe.length) { showToast('Nessun dato da esportare','error'); return; }
+
+  function doExport() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+    const filtLabel = _rdFiltro==='tutte'?'Tutte le navi':_rdFiltro;
+    doc.setFontSize(14); doc.setFont(undefined,'bold');
+    doc.text('Riepilogo Disponibili — '+filtLabel, 14, 16);
+    doc.setFontSize(9); doc.setFont(undefined,'normal');
+    doc.text('Stampato il '+new Date().toLocaleDateString('it-IT')+' alle '+new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}), 14, 22);
+
+    const byReparto = {};
+    righe.forEach(r => {
+      const rep = r.reparto || 'Altro';
+      if(!byReparto[rep]) byReparto[rep] = [];
+      byReparto[rep].push(r);
+    });
+
+    let yOff = 28;
+    Object.keys(byReparto).sort((a,b)=>{ const ia=_rdRepartiOrdine.indexOf(a); const ib=_rdRepartiOrdine.indexOf(b); return (ia===-1?99:ia)-(ib===-1?99:ib); }).forEach(rep => {
+      const list = byReparto[rep].sort((a,b)=>new Date(a.data_disponibilita)-new Date(b.data_disponibilita));
+      doc.autoTable({
+        startY: yOff,
+        head: [[rep.toUpperCase()+' ('+list.length+')','Qualifica','Nave','Compagnia','Disponibile dal']],
+        body: list.map(r=>[
+          r.cognome_nome||'',
+          r.qualifica||'',
+          r._nave.nome||'',
+          r._nave.compagnia||'',
+          r.data_disponibilita ? fmtDate(r.data_disponibilita) : '—'
+        ]),
+        styles:{ fontSize:9, cellPadding:3 },
+        headStyles:{ fillColor:[26,46,74], textColor:255, fontStyle:'bold', fontSize:9 },
+        alternateRowStyles:{ fillColor:[249,250,252] },
+        columnStyles:{ 0:{cellWidth:60}, 1:{cellWidth:45}, 2:{cellWidth:40}, 3:{cellWidth:25}, 4:{cellWidth:35} },
+        margin:{ left:14, right:14 }
+      });
+      yOff = doc.lastAutoTable.finalY + 8;
+      if(yOff > 185) { doc.addPage(); yOff = 14; }
+    });
+
+    const filtFile = _rdFiltro==='tutte'?'Tutte':_rdFiltro;
+    doc.save('RiepilogoDisponibili_'+filtFile+'_'+new Date().toISOString().slice(0,10)+'.pdf');
+  }
+
+  if(typeof window.jspdf !== 'undefined' && typeof window.jspdf.jsPDF !== 'undefined') { doExport(); return; }
+  const s1 = document.createElement('script');
+  s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s1.onload = () => {
+    const s2 = document.createElement('script');
+    s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js';
+    s2.onload = doExport;
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+}
+
+// ── BLACKLIST ──────────────────────────────────────
+function openModalBlacklist(nome, dataDisp, chkEl) {
+  _blModalTarget = { nome, dataDisp, chkEl };
+  const fmt = dataDisp ? fmtDate(dataDisp) : '—';
+  document.getElementById('blModalSubtitle').textContent = nome + ' — Disponibile dal ' + fmt;
+  document.getElementById('blModalNota').value = '';
+  const m = document.getElementById('modalBlacklist');
+  m.style.display = 'flex';
+  // Se annulla, deseleziona il checkbox
+  setTimeout(() => document.getElementById('blModalNota').focus(), 100);
+}
+
+function closeModalBlacklist() {
+  document.getElementById('modalBlacklist').style.display = 'none';
+  if(_blModalTarget && _blModalTarget.chkEl) _blModalTarget.chkEl.checked = false;
+  _blModalTarget = null;
+}
+
+async function saveBlacklist() {
+  if(!_blModalTarget) return;
+  const nota = document.getElementById('blModalNota').value.trim();
+  const body = {
+    cognome_nome: _blModalTarget.nome,
+    data_disponibilita: _blModalTarget.dataDisp || null,
+    nota: nota || null,
+    created_by: utente ? utente.nome : '',
+    created_at: new Date().toISOString()
+  };
+  try {
+    await sbPost('pn_blacklist', body);
+    _rdBlacklist.unshift(body);
+    document.getElementById('modalBlacklist').style.display = 'none';
+    _blModalTarget = null;
+    showToast('Aggiunto alla Black List', 'success');
+    rdRender();
+  } catch(e) {
+    showToast('Errore salvataggio', 'error');
+  }
+}
+
+async function deleteBlacklist(id) {
+  if(!confirm('Rimuovere dalla Black List?')) return;
+  try {
+    await sbDelete('pn_blacklist', id);
+    _rdBlacklist = _rdBlacklist.filter(b => b.id !== id);
+    showToast('Rimosso dalla Black List', '');
+    rdRenderBlacklist();
+    rdRender();
+  } catch(e) {
+    showToast('Errore eliminazione', 'error');
+  }
+}
+
+function rdRenderBlacklist() {
+  const body = document.getElementById('rdBody');
+  if(!_rdBlacklist.length) {
+    body.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);font-size:13px;">Nessun dipendente in Black List</div>';
+    return;
+  }
+  let html = `<div style="margin-bottom:10px;font-size:11px;color:var(--muted);">Totale: <strong>${_rdBlacklist.length}</strong> dipendenti</div>
+  <table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <thead>
+      <tr style="background:#f4f6f8;">
+        <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Nominativo</th>
+        <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Disponibile dal</th>
+        <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Nota</th>
+        <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Inserito da</th>
+        <th style="padding:6px 10px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);">Data</th>
+        <th style="padding:6px 6px;border-bottom:1px solid var(--border);"></th>
+      </tr>
+    </thead><tbody>`;
+  _rdBlacklist.forEach((b, i) => {
+    const bg = i % 2 === 0 ? '#fff' : '#f9fafc';
+    const dataDisp = b.data_disponibilita ? fmtDate(b.data_disponibilita) : '—';
+    const createdAt = b.created_at ? new Date(b.created_at).toLocaleDateString('it-IT') : '—';
+    html += `<tr style="background:${bg};">
+      <td style="padding:7px 10px;border-bottom:0.5px solid #eee;font-weight:500;">🚫 ${escHtml(b.cognome_nome||'—')}</td>
+      <td style="padding:7px 10px;border-bottom:0.5px solid #eee;">${escHtml(dataDisp)}</td>
+      <td style="padding:7px 10px;border-bottom:0.5px solid #eee;color:var(--muted);font-style:${b.nota?'normal':'italic'}">${escHtml(b.nota||'—')}</td>
+      <td style="padding:7px 10px;border-bottom:0.5px solid #eee;color:var(--muted);">${escHtml(b.created_by||'—')}</td>
+      <td style="padding:7px 10px;border-bottom:0.5px solid #eee;color:var(--muted);">${createdAt}</td>
+      <td style="padding:7px 6px;border-bottom:0.5px solid #eee;text-align:center;">
+        ${b.id ? `<button onclick="deleteBlacklist(${b.id})" title="Rimuovi" style="background:none;border:none;cursor:pointer;color:#c0392b;font-size:15px;padding:2px 4px;">🗑️</button>` : ''}
+      </td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  body.innerHTML = html;
+}
+
 async function deleteProgPeriodo(id, silent=false) {
   if(!silent && !confirm('Eliminare questo periodo?')) return;
   await sbDelete('pn_programmazione',id);
@@ -7141,6 +7512,7 @@ function showScreen(name) {
   }
   if(name==='admin') initAdmin();
   if(name==='prog') initProg();
+  if(name==='riepilogoDisp') rdLoad();
 }
 
 // ═══════════════════════════════════════════
@@ -7933,68 +8305,87 @@ async function loadERendiDisponibili() {
   }
 }
 
+let _dispVista = 'reparti';
+function dispSetVista(v) {
+  _dispVista = v;
+  const btnRep = document.getElementById('btnDispVistaRep');
+  const btnData = document.getElementById('btnDispVistaData');
+  if(btnRep) { btnRep.style.background = v==='reparti' ? 'var(--navy)' : 'transparent'; btnRep.style.color = v==='reparti' ? '#fff' : 'var(--muted)'; }
+  if(btnData) { btnData.style.background = v==='data' ? 'var(--navy)' : 'transparent'; btnData.style.color = v==='data' ? '#fff' : 'var(--muted)'; }
+  renderDisponibiliPanel();
+}
+
 function renderDisponibiliPanel() {
   const data = window._dispData || [];
+  const countEl = document.getElementById('dispPanelCount');
+  if(countEl) countEl.textContent = data.length ? data.length + ' disponibili' : '';
   if(data.length === 0) {
     document.getElementById('disponibiliBody').innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">Nessun disponibile trovato</div>';
     return;
   }
 
-  // Raggruppa per reparto
-  const byReparto = {};
-  data.forEach(r => {
-    const rep = r.reparto || 'Altro';
-    if(!byReparto[rep]) byReparto[rep] = [];
-    byReparto[rep].push(r);
-  });
-
-  // Ordina reparti come in pn_reparti
-  const ordineRep = typeof reparti !== 'undefined' ? reparti.map(r=>r.nome) : [];
-  const gruppi = Object.keys(byReparto).sort((a,b) => {
-    const ia = ordineRep.indexOf(a); const ib = ordineRep.indexOf(b);
-    if(ia===-1&&ib===-1) return a.localeCompare(b);
-    if(ia===-1) return 1; if(ib===-1) return -1;
-    return ia-ib;
-  });
-
   const fmtD = d => { const p=d.split('-'); return p[2]+'/'+p[1]; };
+  const makeActions = r => ''
+    + '<button class="disp-btn-edit" data-id="'+r.id+'" title="Modifica" style="background:none;border:none;cursor:pointer;color:#185FA5;padding:2px;font-size:12px;line-height:1;">&#9999;&#65039;</button>'
+    + '<button class="disp-btn-del" data-id="'+r.id+'" data-nome="'+(r.cognome_nome||'').replace(/"/g,'&quot;')+'" title="Elimina" style="background:none;border:none;cursor:pointer;color:#A32D2D;padding:2px;font-size:12px;line-height:1;">&#128465;&#65039;</button>'
+    + '<button class="disp-btn-sposta" data-id="'+r.id+'" data-dipid="'+(r.dipendente_id||'')+'" data-nome="'+(r.cognome_nome||'').replace(/"/g,'&quot;')+'" data-reparto="'+(r.reparto||'').replace(/"/g,'&quot;')+'" title="Imbarca nel posizionamento" style="background:none;border:none;cursor:pointer;color:#27500A;padding:2px;font-size:13px;line-height:1;font-weight:bold;">&#8594;</button>';
+
   let html = '';
 
-  gruppi.forEach(rep => {
-    const dips = byReparto[rep].sort((a,b) => new Date(a.data_disponibilita)-new Date(b.data_disponibilita));
-    html += '<div style="padding:6px 12px 2px;">'
-      + '<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--border);padding-bottom:3px;margin-bottom:4px;">'
-      + '<span style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">'+rep+'</span>'
-      + '<span style="font-size:10px;background:#E6F1FB;color:#0C447C;padding:1px 7px;border-radius:20px;font-weight:500;">'+dips.length+'</span>'
-      + '</div>';
-    dips.forEach(r => {
+  if(_dispVista === 'data') {
+    const list = [...data].sort((a,b) => new Date(a.data_disponibilita)-new Date(b.data_disponibilita));
+    list.forEach(r => {
       const nome = r.cognome_nome || '—';
       const qual = r.qualifica || '';
-      const data = r.data_disponibilita ? fmtD(r.data_disponibilita) : '—';
-      const id = r.id;
+      const rep = r.reparto || '';
+      const dataStr = r.data_disponibilita ? fmtD(r.data_disponibilita) : '—';
       const nota = (window._dispNote && r.dipendente_id && window._dispNote[r.dipendente_id]) || '';
-      const notaHtml = nota
-        ? '<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:2px;">'+escHtml(nota)+'</div>'
-        : '<div style="font-size:11px;color:#bbb;margin-top:2px;">—</div>';
-      html += '<div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--border);">'
+      html += '<div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:6px 12px;border-bottom:0.5px solid var(--border);">'
         + '<div style="min-width:0;">'
         + '<div style="font-size:12px;font-weight:500;color:var(--navy);">'+escHtml(nome)+' <span style="font-weight:400;color:var(--muted);">— '+escHtml(qual)+'</span></div>'
-        + notaHtml
+        + (nota ? '<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:1px;">'+escHtml(nota)+'</div>' : '')
+        + (rep ? '<span style="display:inline-block;margin-top:3px;font-size:10px;font-weight:500;color:#0C447C;background:#E6F1FB;padding:1px 7px;border-radius:20px;">'+escHtml(rep)+'</span>' : '')
         + '</div>'
-        + '<span style="font-size:11px;font-weight:500;color:#27500A;background:#EAF3DE;padding:2px 8px;border-radius:20px;white-space:nowrap;">dal '+data+'</span>'
-        + '<div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">'
-        + '<button class="disp-btn-edit" data-id="'+id+'" title="Modifica" style="background:none;border:none;cursor:pointer;color:#185FA5;padding:2px;font-size:12px;line-height:1;">&#9999;&#65039;</button>'
-        + '<button class="disp-btn-del" data-id="'+id+'" data-nome="'+nome.replace(/"/g,'&quot;')+'" title="Elimina" style="background:none;border:none;cursor:pointer;color:#A32D2D;padding:2px;font-size:12px;line-height:1;">&#128465;&#65039;</button>'
-        + '<button class="disp-btn-sposta" data-id="'+id+'" data-dipid="'+(r.dipendente_id||'')+'" data-nome="'+nome.replace(/"/g,'&quot;')+'" data-reparto="'+(r.reparto||'').replace(/"/g,'&quot;')+'" title="Imbarca nel posizionamento" style="background:none;border:none;cursor:pointer;color:#27500A;padding:2px;font-size:13px;line-height:1;font-weight:bold;">&#8594;</button>'
-        + '</div>'
+        + '<span style="font-size:11px;font-weight:500;color:#27500A;background:#EAF3DE;padding:2px 8px;border-radius:20px;white-space:nowrap;">dal '+dataStr+'</span>'
+        + '<div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">'+makeActions(r)+'</div>'
         + '</div>';
     });
-    html += '</div>';
-  });
+  } else {
+    const byReparto = {};
+    data.forEach(r => { const rep=r.reparto||'Altro'; if(!byReparto[rep]) byReparto[rep]=[]; byReparto[rep].push(r); });
+    const ordineRep = typeof reparti !== 'undefined' ? reparti.map(r=>r.nome) : [];
+    const gruppi = Object.keys(byReparto).sort((a,b) => {
+      const ia=ordineRep.indexOf(a); const ib=ordineRep.indexOf(b);
+      if(ia===-1&&ib===-1) return a.localeCompare(b);
+      if(ia===-1) return 1; if(ib===-1) return -1; return ia-ib;
+    });
+    gruppi.forEach(rep => {
+      const dips = byReparto[rep].sort((a,b) => new Date(a.data_disponibilita)-new Date(b.data_disponibilita));
+      html += '<div style="padding:6px 12px 2px;">'
+        + '<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid var(--border);padding-bottom:3px;margin-bottom:4px;">'
+        + '<span style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">'+rep+'</span>'
+        + '<span style="font-size:10px;background:#E6F1FB;color:#0C447C;padding:1px 7px;border-radius:20px;font-weight:500;">'+dips.length+'</span>'
+        + '</div>';
+      dips.forEach(r => {
+        const nome = r.cognome_nome || '—';
+        const qual = r.qualifica || '';
+        const dataStr = r.data_disponibilita ? fmtD(r.data_disponibilita) : '—';
+        const nota = (window._dispNote && r.dipendente_id && window._dispNote[r.dipendente_id]) || '';
+        html += '<div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:6px 0;border-bottom:0.5px solid var(--border);">'
+          + '<div style="min-width:0;">'
+          + '<div style="font-size:12px;font-weight:500;color:var(--navy);">'+escHtml(nome)+' <span style="font-weight:400;color:var(--muted);">— '+escHtml(qual)+'</span></div>'
+          + (nota ? '<div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:2px;">'+escHtml(nota)+'</div>' : '<div style="font-size:11px;color:#bbb;margin-top:2px;">—</div>')
+          + '</div>'
+          + '<span style="font-size:11px;font-weight:500;color:#27500A;background:#EAF3DE;padding:2px 8px;border-radius:20px;white-space:nowrap;">dal '+dataStr+'</span>'
+          + '<div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">'+makeActions(r)+'</div>'
+          + '</div>';
+      });
+      html += '</div>';
+    });
+  }
 
   document.getElementById('disponibiliBody').innerHTML = html;
 
-  // Event delegation
   document.getElementById('disponibiliBody').onclick = function(e) {
     const editBtn = e.target.closest('.disp-btn-edit');
     const delBtn = e.target.closest('.disp-btn-del');
@@ -9184,7 +9575,30 @@ function openModalBollino(posId) {
       el.style.background = ''; el.style.borderColor = ''; el.querySelector('.rin-num').style.color = '';
     }
   });
+  // Bottone Azzera — solo AMM, solo se già comunicato
+  const isAmmAzzera = utente && (utente.ruolo === 'admin' || utente.ruolo === 'semiadmin');
+  const giaComunicato = p.td_comunicazione === 'prolunga' || p.td_comunicazione === 'nonprolunga';
+  const btnAz = document.getElementById('btnAzzeraBollino');
+  if(btnAz) btnAz.style.display = (isAmmAzzera && giaComunicato) ? 'inline-block' : 'none';
   document.getElementById('modalBollino').classList.add('show');
+}
+
+async function azzeraBollino() {
+  if(!bollinoTargetId) return;
+  const btn = document.getElementById('btnAzzeraBollino');
+  btn.disabled = true; btn.textContent = '...';
+  try {
+    const patchBody = { td_comunicazione: null, td_nota: null, comm_modifica_at: new Date().toISOString() };
+    await sbPatch('pn_posizionamento', bollinoTargetId, patchBody);
+    const idx = posizionamento.findIndex(x => x.id === bollinoTargetId);
+    if(idx >= 0) { posizionamento[idx].td_comunicazione = null; posizionamento[idx].td_nota = null; }
+    closeModalBollino();
+    const mese = parseInt(document.getElementById('meseSelect').value);
+    const anno = parseInt(document.getElementById('annoSelect').value);
+    renderPosizionamento(mese, anno);
+    showToast('Comunicazione azzerata', 'success');
+  } catch(e) { showToast('Errore: ' + e.message, 'error'); }
+  finally { btn.disabled = false; btn.textContent = '↩ Azzera'; }
 }
 
 function selBollino(scelta) {
@@ -10836,6 +11250,8 @@ function sbSyncBadges() {
   const sbProg = document.getElementById('sbProg');
   if(sbExcel) sbExcel.style.display = isRW ? '' : 'none';
   if(sbProg) sbProg.style.display = isRW ? '' : 'none';
+  const sbRiepilogoDisp = document.getElementById('sbRiepilogoDisp');
+  if(sbRiepilogoDisp) sbRiepilogoDisp.style.display = isRW ? '' : 'none';
   // AMM category solo admin/semiadmin
   const sbCatAmm = document.getElementById('sbCatAmm');
   const sbChildrenAmm = document.getElementById('sbChildrenAmm');
@@ -12810,6 +13226,13 @@ var firmaUtente = utente ? (utente.nome || utente.username || 'Ufficio Armamento
       <div style="font-size:10px;color:rgba(255,255,255,.75);" id="disponibiliPanelNave">—</div>
     </div>
     <button onclick="toggleDisponibiliPanel()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.8);font-size:16px;line-height:1;">✕</button>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--border);background:#f7f8fb;flex-shrink:0;">
+    <div style="display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+      <button id="btnDispVistaRep" onclick="dispSetVista('reparti')" style="font-family:var(--font);font-size:10px;padding:3px 9px;border:none;cursor:pointer;background:var(--navy);color:#fff;font-weight:500;">≡ Reparti</button>
+      <button id="btnDispVistaData" onclick="dispSetVista('data')" style="font-family:var(--font);font-size:10px;padding:3px 9px;border:none;cursor:pointer;background:transparent;color:var(--muted);">📅 Per data</button>
+    </div>
+    <span id="dispPanelCount" style="font-size:10px;color:var(--muted);"></span>
   </div>
   <div style="overflow-y:auto;flex:1;padding:0 0 4px;" id="disponibiliBody">
     <div style="padding:20px;text-align:center;color:var(--muted);font-size:12px;">Caricamento...</div>
