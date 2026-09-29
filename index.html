@@ -890,6 +890,9 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <div class="sb-item" title="Filtra per qualifica, contratto o reparto" onclick="toggleFiltriPanel()">
         <i class="ti ti-filter" aria-hidden="true"></i> Filtri
       </div>
+      <div class="sb-item" title="Presenze a bordo il 25 dicembre del personale della nave" onclick="openPresenzeNatale()">
+        <i class="ti ti-christmas-tree" aria-hidden="true"></i> Presenze Natale
+      </div>
     </div>
     <div class="sb-divider"></div>
     <!-- 4. STAMPE -->
@@ -1444,6 +1447,19 @@ if(new URLSearchParams(window.location.search).get('al')) {
       <button class="btn-cancel" onclick="closePromuovi()">Annulla</button>
       <button class="btn-save" onclick="confirmPromuovi()">Conferma imbarco</button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL PRESENZE NATALE -->
+<div class="modal-overlay" id="modalPresNat" onclick="if(event.target===this)closePresenzeNatale()">
+  <div class="modal" style="max-width:640px;width:95%;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;">
+      <div class="modal-title" style="margin:0;">🎄 Presenze Natale <span id="presNatNave" style="font-size:12px;color:var(--muted);font-weight:500;"></span></div>
+      <button class="btn-cancel" onclick="closePresenzeNatale()">✕</button>
+    </div>
+    <input id="presNatCerca" oninput="renderPresenzeNatale()" placeholder="Cerca nome..." class="mform-control" style="margin-bottom:8px;">
+    <div id="presNatInfo" style="font-size:10px;color:var(--muted);margin-bottom:6px;"></div>
+    <div id="presNatBody" style="max-height:60vh;overflow-y:auto;"></div>
   </div>
 </div>
 
@@ -9076,6 +9092,52 @@ function applyAmmPermessi(){
     if(ammPuo('natali')) showScreen('natali'); else showScreen('pos');
   }
 }
+
+// ═══════════════════════════════════════════
+// PRESENZE NATALE (posizionamento nave)
+// ═══════════════════════════════════════════
+let _presNat = [];
+async function openPresenzeNatale(){
+  document.getElementById('modalPresNat').classList.add('show');
+  document.getElementById('presNatCerca').value='';
+  const nave = (typeof navi!=='undefined' && navi.find && navi.find(n=>n.id===utente.nave_id)) || null;
+  document.getElementById('presNatNave').textContent = (nave&&nave.nome) || utente.nave_nome || '';
+  const body=document.getElementById('presNatBody');
+  body.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:30px;">Caricamento...</div>';
+  try {
+    const visti=new Set(), pers=[];
+    (posizionamento||[]).forEach(p=>{ const d=p.pn_dipendenti; if(!d||!p.reparto_id||visti.has(d.id)) return; visti.add(d.id); pers.push(d); });
+    const norm=m=>String(m==null?'':m).trim().replace(/\.0+$/,'').replace(/^0+(?=\d)/,'');
+    const matr=[...new Set(pers.map(d=>norm(d.matricola)).filter(Boolean))];
+    const mapNat={}; let infoImp='';
+    for(let i=0;i<matr.length;i+=150){
+      const r=await sbGet(`pn_natali?matricola=in.(${matr.slice(i,i+150).map(encodeURIComponent).join(',')})&select=matricola,n_natali,anni,imported_at`);
+      r.forEach(x=>{ mapNat[norm(x.matricola)]=x; if(x.imported_at) infoImp=x.imported_at; });
+    }
+    _presNat = pers.map(d=>{ const n=mapNat[norm(d.matricola)];
+      return { nome:d.cognome_nome||'', qualifica:(d.pn_qualifiche&&d.pn_qualifiche.nome)||'', n: n?n.n_natali:null,
+               anni: n&&n.anni ? String(n.anni).split(',').filter(Boolean).join(', ') : '' }; })
+      .sort((a,b)=>a.nome.localeCompare(b.nome,'it'));
+    document.getElementById('presNatInfo').textContent = infoImp ? 'Dati aggiornati all\'import del '+new Date(infoImp).toLocaleDateString('it-IT') : 'Nessun import Natali disponibile';
+    renderPresenzeNatale();
+  } catch(e){ body.innerHTML='<div style="text-align:center;color:#c0392b;font-size:12px;padding:30px;">Errore: '+escHtml(e.message)+'</div>'; }
+}
+function renderPresenzeNatale(){
+  const q=(document.getElementById('presNatCerca').value||'').toLowerCase().trim();
+  const lista=_presNat.filter(p=>!q||p.nome.toLowerCase().includes(q));
+  const body=document.getElementById('presNatBody');
+  if(!lista.length){ body.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:30px;">Nessun nominativo.</div>'; return; }
+  body.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <thead><tr style="background:var(--navy);color:#fff;text-align:left;position:sticky;top:0;">
+      <th style="padding:7px 10px;">Nome</th><th style="padding:7px 10px;">Qualifica</th>
+      <th style="padding:7px 10px;text-align:center;">Presenze</th><th style="padding:7px 10px;">Anni</th></tr></thead>
+    <tbody>${lista.map((p,i)=>`<tr style="border-bottom:1px solid var(--border);${i%2?'background:#f7f9fb;':''}">
+      <td style="padding:6px 10px;font-weight:500;">${escHtml(p.nome)}</td>
+      <td style="padding:6px 10px;color:var(--muted);">${escHtml(p.qualifica)}</td>
+      <td style="padding:6px 10px;text-align:center;${p.n===0?'color:#c0392b;font-weight:600;':''}">${p.n==null?'—':p.n}</td>
+      <td style="padding:6px 10px;">${p.anni||'—'}</td></tr>`).join('')}</tbody></table>`;
+}
+function closePresenzeNatale(){ document.getElementById('modalPresNat').classList.remove('show'); }
 
 async function initAdmin(){
   try{
