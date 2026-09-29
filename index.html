@@ -1065,6 +1065,34 @@ if(new URLSearchParams(window.location.search).get('al')) {
   </div>
 </div>
 
+<!-- IMPORT NATALI AMM -->
+<div class="screen" id="screenNatali">
+  <div class="topbar" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <span class="brand">🎄 Import Natali</span>
+      <label style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-weight:500;">
+        📂 Carica CSV<input type="file" id="natFile" accept=".csv,.txt" style="display:none" onchange="natImport(this)">
+      </label>
+      <input id="natCerca" oninput="natRender()" placeholder="Cerca nome o matricola..." style="font-family:var(--font);font-size:11px;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);width:190px;">
+      <select id="natAnno" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);"><option value="">Tutti gli anni</option></select>
+      <select id="natZero" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);"><option value="">Tutti</option><option value="si">Con Natali</option><option value="zero">Solo a zero</option></select>
+      <select id="natStato" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);"><option value="">Tipo: tutti</option></select>
+      <select id="natComp" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);"><option value="">Compagnia: tutte</option></select>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <span id="natInfo" style="font-size:10px;color:var(--muted);"></span>
+      <button onclick="natExportPdf()" style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid #c0392b;background:#fdeeee;color:#c0392b;cursor:pointer;font-weight:500;">📄 PDF</button>
+      <button onclick="natExportExcel()" style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid #1a6b2e;background:#eafaf1;color:#1a6b2e;cursor:pointer;font-weight:500;">📊 Excel</button>
+      <button onclick="natChiudi()" style="font-family:var(--font);font-size:11px;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;">✕ Chiudi</button>
+    </div>
+  </div>
+  <div style="padding:18px 20px;overflow-y:auto;height:calc(100vh - 56px);">
+    <div id="natBody" style="max-width:900px;margin:0 auto;">
+      <div style="text-align:center;color:var(--muted);font-size:12px;padding:40px;">Carica il file CSV (separatore ;) con le colonne Tipo, Matr.az., Nome, Data imbarco, Data sbarco.</div>
+    </div>
+  </div>
+</div>
+
 <!-- MODALE BLACKLIST -->
 <div id="modalBlacklist" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;width:100%;max-width:420px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.18);">
@@ -1133,6 +1161,12 @@ if(new URLSearchParams(window.location.search).get('al')) {
         </button>
         <button class="nav-item" id="anav-ordineqm" onclick="showAPage('ordineqm')">
           <svg viewBox="0 0 16 16"><path d="M3 4h6M3 8h10M3 12h4"/><path d="M12 11l2 2-2 2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ordine Qualifica/Mansione
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Strumenti</div>
+        <button class="nav-item" id="anav-natali" onclick="showScreen('natali')">
+          <svg viewBox="0 0 16 16"><path d="M8 1l4 5H10l3 4H9.5l3 4h-9l3-4H3l3-4H4z" stroke-linejoin="round"/><path d="M8 14v1.5"/></svg>Import Natali
         </button>
       </div>
     </div>
@@ -1478,6 +1512,60 @@ if(new URLSearchParams(window.location.search).get('al')) {
           <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
             <input type="checkbox" class="chk-modulo" value="documenti" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
             Documenti
+          </label>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:10px;">
+        <div class="mform-label" style="margin-bottom:4px;">Voci Pannello AMM abilitate</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;">Nessuna spunta = nessun accesso al Pannello AMM</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="commissari" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Commissari
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="semiadmin" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Semi-Admin
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="budget" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Budget
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="account" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Il mio account
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="progcategorie" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Categorie prog.
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="progdipendenti" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Dipendenti prog.
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="navi" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Navi
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="reparti" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Reparti
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="mansioni" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Mansioni
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="qualifiche" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Qualifiche
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="ordineqm" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Ordine Qualifica/Mansione
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+            <input type="checkbox" class="chk-amm" value="natali" style="width:15px;height:15px;cursor:pointer;accent-color:var(--navy);">
+            Import Natali
           </label>
         </div>
       </div>
@@ -6811,6 +6899,191 @@ function selDipDaDisponibili(id, nome) {
 }
 
 // ═══════════════════════════════════════════
+// IMPORT NATALI AMM
+// ═══════════════════════════════════════════
+let _natRiep = [];
+const VMC_URL = 'https://rifezqqkbkxdxtexiyhb.supabase.co';
+const VMC_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZmV6cXFrYmt4ZHh0ZXhpeWhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwMzUwNzQsImV4cCI6MjA5MDYxMTA3NH0.ILFoQbwLJ4zM7ch2-0MhMzlLCTOL8frZRu61aMdeZdA';
+let _natAnag = null;
+let _natEsclusi = {nf:0, exOrg:0};
+function natNormMatr(m){ return String(m==null?'':m).trim().replace(/\.0+$/,'').replace(/^0+(?=\d)/,''); }
+async function natLoadAnag(){
+  if(_natAnag) return _natAnag;
+  const map = {}; const step = 1000; let off = 0;
+  while(true){
+    const r = await fetch(`${VMC_URL}/rest/v1/Dipendenti?select=Matricola_Aziendale,Qualifica,reparto,stato,compagnia&limit=${step}&offset=${off}`,
+      { headers:{ apikey:VMC_KEY, Authorization:'Bearer '+VMC_KEY } });
+    if(!r.ok) throw new Error('VMC Dipendenti: HTTP '+r.status+' '+(await r.text()).slice(0,150));
+    const rows = await r.json();
+    rows.forEach(d=>{ const k=natNormMatr(d.Matricola_Aziendale); if(k) map[k]=d; });
+    if(rows.length < step) break; off += step;
+  }
+  _natAnag = map; return map;
+}
+// Salvataggio: ogni import cancella la lista precedente e salva la nuova
+async function natSalva(info){
+  const del = await fetch(SB_URL+'/rest/v1/pn_natali?id=gt.0', {method:'DELETE', headers:H});
+  if(!del.ok) throw new Error('cancellazione: '+(await del.text()).slice(0,200));
+  const quando = new Date().toISOString(), chi = utente ? utente.nome : '';
+  const righe = _natRiep.map(p=>({ matricola:String(p.matricola), nome:p.nome, qualifica:p.qualifica||null,
+    reparto:p.reparto||null, stato:p.stato||null, compagnia:p.compagnia||null,
+    n_natali:p.anni.length, anni:p.anni.join(','), import_info:info, imported_at:quando, imported_by:chi }));
+  for(let i=0;i<righe.length;i+=500){
+    const r = await fetch(SB_URL+'/rest/v1/pn_natali', {method:'POST', headers:{...H, Prefer:'return=minimal'}, body:JSON.stringify(righe.slice(i,i+500))});
+    if(!r.ok) throw new Error('inserimento: '+(await r.text()).slice(0,200));
+  }
+}
+// Caricamento lista salvata (all'apertura della pagina / refresh)
+async function natCarica(){
+  const body=document.getElementById('natBody');
+  body.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:40px;">Caricamento lista salvata...</div>';
+  try {
+    let tutte=[], off=0;
+    while(true){
+      const r = await sbGet(`pn_natali?select=*&order=nome&limit=1000&offset=${off}`);
+      tutte = tutte.concat(r); if(r.length<1000) break; off+=1000;
+    }
+    if(!tutte.length){ _natRiep=[]; body.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:40px;">Nessuna lista salvata. Carica il file CSV (separatore ;) con le colonne Tipo, Matr.az., Nome, Data imbarco, Data sbarco.</div>'; document.getElementById('natInfo').textContent=''; return; }
+    _natRiep = tutte.map(x=>({ matricola:String(x.matricola), nome:x.nome, qualifica:x.qualifica||'—', reparto:x.reparto||'',
+      stato:x.stato||'', compagnia:x.compagnia||'', anni:(x.anni?String(x.anni).split(',').filter(Boolean).map(Number):[]) }));
+    const uniq=k=>[...new Set(_natRiep.map(p=>p[k]).filter(Boolean))].sort();
+    natFillSelect('natAnno','Tutti gli anni',[...new Set(_natRiep.flatMap(p=>p.anni))].sort());
+    natFillSelect('natStato','Tipo: tutti',uniq('stato'));
+    natFillSelect('natComp','Compagnia: tutte',uniq('compagnia'));
+    const t=tutte[0], d=t.imported_at?new Date(t.imported_at):null;
+    document.getElementById('natInfo').textContent = (t.import_info||'') + (d?` · importato il ${d.toLocaleDateString('it-IT')} ${d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}`:'') + (t.imported_by?` da ${t.imported_by}`:'');
+    natRender();
+  } catch(ex){ body.innerHTML='<div style="text-align:center;color:#c0392b;font-size:12px;padding:40px;">Errore caricamento lista salvata: '+ex.message+'</div>'; }
+}
+function natFillSelect(id, label, vals){
+  const el=document.getElementById(id), cur=el.value;
+  el.innerHTML = `<option value="">${label}</option>` + vals.map(v=>`<option value="${v}">${v}</option>`).join('');
+  if(vals.includes(cur)) el.value=cur;
+}
+function natParseData(v){
+  v = (v||'').trim(); if(!v) return null;
+  if(/^\d+(\.\d+)?$/.test(v)){ const d=new Date(Date.UTC(1899,11,30)); d.setUTCDate(d.getUTCDate()+Math.floor(+v)); return d; }
+  const m = v.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);
+  if(m){ let y=+m[3]; if(y<100) y+=2000; return new Date(Date.UTC(y,+m[2]-1,+m[1])); }
+  const d = new Date(v); return isNaN(d) ? null : new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+}
+function natFmt(d){ return String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear(); }
+function natImport(inp){
+  const f = inp.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = async e => {
+    try {
+      const txt = e.target.result.replace(/^\uFEFF/,'');
+      const righe = txt.split(/\r?\n/).filter(r=>r.trim());
+      const sep = righe[0].includes(';') ? ';' : ',';
+      const h = righe[0].split(sep).map(x=>x.trim().toLowerCase());
+      const iM=h.findIndex(x=>x.startsWith('matr')), iN=h.findIndex(x=>x==='nome'),
+            iI=h.findIndex(x=>x.includes('imbarco')), iS=h.findIndex(x=>x.includes('sbarco'));
+      if(iM<0||iN<0||iI<0||iS<0){ alert('Colonne non trovate. Servono: Matr.az., Nome, Data imbarco, Data sbarco'); return; }
+      const visti = new Set(), mappa = {};
+      let periodi=0, scartati=0;
+      for(let k=1;k<righe.length;k++){
+        const c = righe[k].split(sep);
+        const matr=(c[iM]||'').trim(), nome=(c[iN]||'').trim();
+        const di=natParseData(c[iI]), ds=natParseData(c[iS]);
+        if(matr && !mappa[matr]) mappa[matr]={matricola:matr,nome:nome,anni:new Set()};
+        if(!matr || !di || !ds || ds<di){ scartati++; continue; }
+        const key = matr+'|'+di.getTime()+'|'+ds.getTime();
+        if(visti.has(key)) continue; visti.add(key); periodi++;
+        for(let y=di.getUTCFullYear(); y<=ds.getUTCFullYear(); y++){
+          const nat = Date.UTC(y,11,25);
+          if(nat>=di.getTime() && nat<=ds.getTime()){
+            mappa[matr].anni.add(y);
+          }
+        }
+      }
+      _natRiep = Object.values(mappa).map(p=>({matricola:p.matricola,nome:p.nome,anni:[...p.anni].sort()}))
+        .sort((a,b)=>a.nome.localeCompare(b.nome));
+      _natEsclusi = {nf:0, exOrg:0};
+      document.getElementById('natBody').innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:40px;">Caricamento anagrafica VMC...</div>';
+      try {
+        const anag = await natLoadAnag();
+        let nf=0, exOrg=0;
+        _natRiep = _natRiep.filter(p=>{ const d=anag[natNormMatr(p.matricola)];
+          if(!d){ nf++; return false; }
+          const q=(d.Qualifica==null?'':String(d.Qualifica)).trim();
+          if(!q || q.toLowerCase()==='null'){ exOrg++; return false; }
+          p.qualifica=q; p.reparto=d.reparto||''; p.stato=d.stato||''; p.compagnia=d.compagnia||''; return true; });
+        _natEsclusi = {nf, exOrg};
+        const uniq=k=>[...new Set(_natRiep.map(p=>p[k]).filter(Boolean))].sort();
+        natFillSelect('natStato','Tipo: tutti',uniq('stato'));
+        natFillSelect('natComp','Compagnia: tutte',uniq('compagnia'));
+      } catch(ex){ alert('Impossibile leggere Dipendenti da VMC: '+ex.message); _natRiep.forEach(p=>{p.qualifica='—';}); }
+      const anni = [...new Set(_natRiep.flatMap(p=>p.anni))].sort();
+      document.getElementById('natAnno').innerHTML = '<option value="">Tutti gli anni</option>' + anni.map(a=>`<option value="${a}">${a}</option>`).join('');
+      const info = `${f.name} · ${periodi} periodi · ${scartati} righe ignorate`+(_natEsclusi.exOrg?` · ${_natEsclusi.exOrg} ex organico esclusi`:'')+(_natEsclusi.nf?` · ${_natEsclusi.nf} non in anagrafica VMC esclusi`:'');
+      document.getElementById('natInfo').textContent = info + ' · salvataggio...';
+      natRender();
+      try { await natSalva(info); document.getElementById('natInfo').textContent = info + ' · salvato'; showToast && showToast('Lista Natali salvata','success'); }
+      catch(ex){ document.getElementById('natInfo').textContent = info + ' · NON salvato'; alert('Errore salvataggio su Supabase: '+ex.message); }
+    } catch(err){ alert('Errore lettura CSV: '+err.message); }
+    inp.value='';
+  };
+  rd.readAsText(f,'UTF-8');
+}
+function natFiltrati(){
+  const q=(document.getElementById('natCerca').value||'').toLowerCase().trim();
+  const a=document.getElementById('natAnno').value;
+  const z=document.getElementById('natZero').value;
+  const st=document.getElementById('natStato').value, co=document.getElementById('natComp').value;
+  return _natRiep.filter(p=>(!q || p.nome.toLowerCase().includes(q) || p.matricola.includes(q)) && (!a || p.anni.includes(+a))
+    && (!z || (z==='zero' ? p.anni.length===0 : p.anni.length>0))
+    && (!st || p.stato===st) && (!co || p.compagnia===co));
+}
+function natRender(){
+  const body=document.getElementById('natBody');
+  if(!_natRiep.length){ body.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:40px;">Nessun dato valido trovato nel file.</div>'; return; }
+  const lista=natFiltrati();
+  const tot=lista.reduce((s,p)=>s+p.anni.length,0);
+  const nZero=lista.filter(p=>!p.anni.length).length;
+  body.innerHTML = `<div style="font-size:11px;color:var(--muted);margin-bottom:8px;">${lista.length} persone · ${lista.length-nZero} con Natali · ${nZero} a zero · ${tot} Natali</div>
+  <table style="width:100%;border-collapse:collapse;font-size:12px;background:#fff;">
+    <thead><tr style="background:var(--navy);color:#fff;text-align:left;">
+      <th style="padding:7px 10px;">Matricola</th><th style="padding:7px 10px;">Nome</th><th style="padding:7px 10px;">Qualifica</th>
+      <th style="padding:7px 10px;text-align:center;">N° Natali</th><th style="padding:7px 10px;">Anni</th></tr></thead>
+    <tbody>${lista.map((p,i)=>`<tr style="border-bottom:1px solid var(--border);${i%2?'background:#f7f9fb;':''}">
+      <td style="padding:6px 10px;">${p.matricola}</td><td style="padding:6px 10px;font-weight:500;">${p.nome}</td><td style="padding:6px 10px;${p.trovato===false?'color:var(--muted);':''}">${p.qualifica||'—'}</td>
+      <td style="padding:6px 10px;text-align:center;${p.anni.length?'':'color:#c0392b;font-weight:600;'}">${p.anni.length}</td><td style="padding:6px 10px;">${p.anni.join(', ')||'—'}</td></tr>`).join('')}</tbody>
+  </table>`;
+}
+function natExportExcel(){
+  const lista=natFiltrati(); if(!lista.length){ alert('Nessun dato da esportare'); return; }
+  const go=()=>{
+    const rows=[['Matricola','Nome','Qualifica','Tipo','Compagnia','N° Natali','Anni'], ...lista.map(p=>[+p.matricola||p.matricola,p.nome,p.qualifica||'',p.stato||'',p.compagnia||'',p.anni.length,p.anni.join(', ')||'—'])];
+    const wb=XLSX.utils.book_new(), ws=XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols']=[{wch:12},{wch:34},{wch:24},{wch:14},{wch:12},{wch:10},{wch:40}];
+    XLSX.utils.book_append_sheet(wb,ws,'Riepilogo');
+    XLSX.writeFile(wb,'Natali_a_bordo_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  };
+  if(typeof XLSX!=='undefined'){ go(); return; }
+  const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload=go; document.head.appendChild(s);
+}
+function natExportPdf(){
+  const lista=natFiltrati(); if(!lista.length){ alert('Nessun dato da esportare'); return; }
+  const a=document.getElementById('natAnno').value;
+  const go=()=>{
+    const { jsPDF } = window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const n=new Date();
+    doc.setFontSize(13); doc.text('Natali a bordo'+(a?' — '+a:''),14,16);
+    doc.setFontSize(8); doc.text('Generato il '+String(n.getDate()).padStart(2,'0')+'/'+String(n.getMonth()+1).padStart(2,'0')+'/'+n.getFullYear(),14,21);
+    doc.autoTable({startY:25,head:[['Matricola','Nome','Qualifica','Tipo','Comp.','N°','Anni']],
+      body:lista.map(p=>[p.matricola,p.nome,p.qualifica||'',p.stato||'',p.compagnia||'',p.anni.length,p.anni.join(', ')||'—']),
+      styles:{fontSize:8},headStyles:{fillColor:[26,46,74]}});
+    doc.save('Natali_a_bordo_'+new Date().toISOString().slice(0,10)+'.pdf');
+  };
+  if(window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API.autoTable){ go(); return; }
+  const s1=document.createElement('script'); s1.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s1.onload=()=>{ const s2=document.createElement('script'); s2.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'; s2.onload=go; document.head.appendChild(s2); };
+  document.head.appendChild(s1);
+}
+
+// ═══════════════════════════════════════════
 // RIEPILOGO DISPONIBILI AMM
 // ═══════════════════════════════════════════
 let _rdDati = [];
@@ -7510,7 +7783,9 @@ function showScreen(name) {
     }
     loadPosizionamento();
   }
-  if(name==='admin') initAdmin();
+  if(name==='admin'){ initAdmin(); applyAmmPermessi(); }
+  if(name==='natali' && !ammPuo('natali')){ showScreen('admin'); return; }
+  if(name==='natali') natCarica();
   if(name==='prog') initProg();
   if(name==='riepilogoDisp') rdLoad();
 }
@@ -7616,6 +7891,7 @@ function startApp() {
   document.getElementById('annoSelect').value = now.getFullYear();
   populateSelects();
 
+  if(utente.ruolo === 'semiadmin' && ammVociUtente().length) document.getElementById('btnAmm').style.display = 'inline-block';
   if(utente.ruolo === 'admin') {
 document.getElementById('btnAmm').style.display = 'inline-block';
     document.getElementById('btnProg').style.display = 'inline-block';}
@@ -8749,6 +9025,35 @@ async function confirmPromuovi(){
 // ═══════════════════════════════════════════
 // ADMIN
 // ═══════════════════════════════════════════
+// Permessi Pannello AMM per semi-admin (salvati in moduli come 'amm:<voce>')
+function ammVociUtente(){
+  if(!utente || utente.ruolo!=='semiadmin') return [];
+  let m=[]; try { m = Array.isArray(utente.moduli) ? utente.moduli : JSON.parse(utente.moduli||'[]'); } catch(e){ m=[]; }
+  return m.filter(x=>String(x).startsWith('amm:')).map(x=>String(x).slice(4));
+}
+function natChiudi(){
+  const altre = utente && (utente.ruolo==='admin' || ammVociUtente().some(v=>v!=='natali'));
+  showScreen(altre ? 'admin' : 'pos');
+}
+function ammPuo(voce){ return !!utente && (utente.ruolo==='admin' || ammVociUtente().includes(voce)); }
+function applyAmmPermessi(){
+  const items=[...document.querySelectorAll('#screenAdmin .nav-item[id^="anav-"]')];
+  items.forEach(b=>{ b.style.display = ammPuo(b.id.slice(5)) ? '' : 'none'; });
+  document.querySelectorAll('#screenAdmin .nav-section').forEach(sec=>{
+    const vis=[...sec.querySelectorAll('.nav-item')].some(b=>b.style.display!=='none');
+    sec.style.display = vis ? '' : 'none';
+  });
+  if(utente && utente.ruolo==='admin') return;
+  const cur=document.querySelector('#screenAdmin .nav-item.active');
+  if(cur && cur.style.display!=='none') return;
+  const first=items.find(b=>b.style.display!=='none' && document.getElementById('apage-'+b.id.slice(5)));
+  if(first) showAPage(first.id.slice(5));
+  else {
+    document.querySelectorAll('#screenAdmin .apage').forEach(p=>p.classList.remove('active'));
+    if(ammPuo('natali')) showScreen('natali'); else showScreen('pos');
+  }
+}
+
 async function initAdmin(){
   try{
     commissari=await sbGet('pn_utenti?ruolo=eq.commissario&select=*,pn_navi(id,nome)&order=nome');
@@ -8887,7 +9192,8 @@ function openModalUtente(tipo, id) {
       // Moduli
       let moduli = [];
       try { moduli = Array.isArray(u.moduli) ? u.moduli : JSON.parse(u.moduli||'[]'); } catch(e){ moduli=[]; }
-      if(!moduli.length) moduli = MODULI_LIST.map(m=>m.key);
+      document.querySelectorAll('.chk-amm').forEach(c=>{ c.checked = moduli.includes('amm:'+c.value); });
+      if(!moduli.filter(m=>!String(m).startsWith('amm:')).length) moduli = moduli.concat(MODULI_LIST.map(m=>m.key));
       document.querySelectorAll('.chk-modulo').forEach(c=>{ c.checked = moduli.includes(c.value); });
       // Livello
       const livello = u.livello || 'alto';
@@ -8900,6 +9206,7 @@ function openModalUtente(tipo, id) {
     // Default: tutto abilitato
     document.querySelectorAll('.chk-flotta').forEach(c=>{ c.checked=true; });
     document.querySelectorAll('.chk-modulo').forEach(c=>{ c.checked=true; });
+    document.querySelectorAll('.chk-amm').forEach(c=>{ c.checked=false; });
     document.getElementById('livelloAlto').checked = true;
   }
   document.getElementById('commNave').closest('.mform-group').style.display=tipo==='semiadmin'?'none':'block';
@@ -8970,7 +9277,8 @@ async function saveUtente(){
   const flottaChecked = [...document.querySelectorAll('.chk-flotta:checked')].map(c=>c.value);
   const flotta = flottaChecked.length===2 ? 'entrambe' : (flottaChecked[0]||'entrambe');
   // Moduli
-  const moduli = [...document.querySelectorAll('.chk-modulo:checked')].map(c=>c.value);
+  const moduli = [...document.querySelectorAll('.chk-modulo:checked')].map(c=>c.value)
+    .concat([...document.querySelectorAll('.chk-amm:checked')].map(c=>'amm:'+c.value));
   // Livello
   const livelloEl = document.querySelector('input[name="livello"]:checked');
   const livello = livelloEl ? livelloEl.value : 'alto';
