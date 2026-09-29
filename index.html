@@ -1067,26 +1067,29 @@ if(new URLSearchParams(window.location.search).get('al')) {
 
 <!-- IMPORT NATALI AMM -->
 <div class="screen" id="screenNatali">
-  <div class="topbar" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+  <div class="topbar" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap;">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;min-width:0;">
       <span class="brand">🎄 Import Natali</span>
       <label style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;font-weight:500;">
         📂 Carica CSV<input type="file" id="natFile" accept=".csv,.txt" style="display:none" onchange="natImport(this)">
       </label>
-      <input id="natCerca" oninput="natRender()" placeholder="Cerca nome o matricola..." style="font-family:var(--font);font-size:11px;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);width:190px;">
+      <input id="natCerca" oninput="natRender()" placeholder="Cerca nome o matricola..." style="font-family:var(--font);font-size:11px;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);width:170px;">
       <select id="natAnno" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);"><option value="">Tutti gli anni</option></select>
       <select id="natZero" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);"><option value="">Tutti</option><option value="si">Con Natali</option><option value="zero">Solo a zero</option></select>
       <select id="natStato" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);"><option value="">Tipo: tutti</option></select>
       <select id="natComp" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);"><option value="">Compagnia: tutte</option></select>
+      <select id="natQual" onchange="natRender()" style="font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:6px;border:1.5px solid var(--border);max-width:180px;"><option value="">Qualifica: tutte</option></select>
+      <button id="natBtnAlfa" onclick="natToggleSort('za')" title="Alterna A→Z / Z→A" style="font-family:var(--font);font-size:11px;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;">🔤 A→Z</button>
+      <button id="natBtnNat" onclick="natToggleSort('nat')" title="Ordina per N° Natali (secondo tocco: torna A→Z)" style="font-family:var(--font);font-size:11px;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;">🎄 N° Natali</button>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;">
-      <span id="natInfo" style="font-size:10px;color:var(--muted);"></span>
+    <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
       <button onclick="natExportPdf()" style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid #c0392b;background:#fdeeee;color:#c0392b;cursor:pointer;font-weight:500;">📄 PDF</button>
       <button onclick="natExportExcel()" style="font-family:var(--font);font-size:11px;padding:5px 12px;border-radius:6px;border:1.5px solid #1a6b2e;background:#eafaf1;color:#1a6b2e;cursor:pointer;font-weight:500;">📊 Excel</button>
       <button onclick="natChiudi()" style="font-family:var(--font);font-size:11px;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:#fff;color:#333;cursor:pointer;">✕ Chiudi</button>
     </div>
   </div>
-  <div style="padding:18px 20px;overflow-y:auto;height:calc(100vh - 56px);">
+  <div style="padding:10px 20px 18px;overflow-y:auto;height:calc(100vh - 56px);">
+    <div id="natInfo" style="font-size:10px;color:var(--muted);margin-bottom:8px;"></div>
     <div id="natBody" style="max-width:900px;margin:0 auto;">
       <div style="text-align:center;color:var(--muted);font-size:12px;padding:40px;">Carica il file CSV (separatore ;) con le colonne Tipo, Matr.az., Nome, Data imbarco, Data sbarco.</div>
     </div>
@@ -6905,6 +6908,7 @@ let _natRiep = [];
 const VMC_URL = 'https://rifezqqkbkxdxtexiyhb.supabase.co';
 const VMC_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpZmV6cXFrYmt4ZHh0ZXhpeWhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwMzUwNzQsImV4cCI6MjA5MDYxMTA3NH0.ILFoQbwLJ4zM7ch2-0MhMzlLCTOL8frZRu61aMdeZdA';
 let _natAnag = null;
+let _natSort = '';   // '' = A→Z (origine) · 'za' = Z→A · 'nat' = N° Natali desc
 let _natEsclusi = {nf:0, exOrg:0};
 function natNormMatr(m){ return String(m==null?'':m).trim().replace(/\.0+$/,'').replace(/^0+(?=\d)/,''); }
 async function natLoadAnag(){
@@ -6950,10 +6954,21 @@ async function natCarica(){
     natFillSelect('natAnno','Tutti gli anni',[...new Set(_natRiep.flatMap(p=>p.anni))].sort());
     natFillSelect('natStato','Tipo: tutti',uniq('stato'));
     natFillSelect('natComp','Compagnia: tutte',uniq('compagnia'));
+    natFillSelect('natQual','Qualifica: tutte',uniq('qualifica').filter(q=>q!=='—'));
     const t=tutte[0], d=t.imported_at?new Date(t.imported_at):null;
     document.getElementById('natInfo').textContent = (t.import_info||'') + (d?` · importato il ${d.toLocaleDateString('it-IT')} ${d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}`:'') + (t.imported_by?` da ${t.imported_by}`:'');
     natRender();
   } catch(ex){ body.innerHTML='<div style="text-align:center;color:#c0392b;font-size:12px;padding:40px;">Errore caricamento lista salvata: '+ex.message+'</div>'; }
+}
+function natToggleSort(tipo){
+  _natSort = (_natSort===tipo) ? '' : tipo;
+  const a=document.getElementById('natBtnAlfa'), n=document.getElementById('natBtnNat');
+  const on=el=>{ el.style.background='var(--navy)'; el.style.color='#fff'; el.style.borderColor='var(--navy)'; };
+  const off=el=>{ el.style.background='#fff'; el.style.color='#333'; el.style.borderColor='var(--border)'; };
+  a.textContent = _natSort==='za' ? '🔤 Z→A' : '🔤 A→Z';
+  _natSort==='za' ? on(a) : off(a);
+  _natSort==='nat' ? on(n) : off(n);
+  natRender();
 }
 function natFillSelect(id, label, vals){
   const el=document.getElementById(id), cur=el.value;
@@ -7013,6 +7028,7 @@ function natImport(inp){
         const uniq=k=>[...new Set(_natRiep.map(p=>p[k]).filter(Boolean))].sort();
         natFillSelect('natStato','Tipo: tutti',uniq('stato'));
         natFillSelect('natComp','Compagnia: tutte',uniq('compagnia'));
+        natFillSelect('natQual','Qualifica: tutte',uniq('qualifica').filter(q=>q!=='—'));
       } catch(ex){ alert('Impossibile leggere Dipendenti da VMC: '+ex.message); _natRiep.forEach(p=>{p.qualifica='—';}); }
       const anni = [...new Set(_natRiep.flatMap(p=>p.anni))].sort();
       document.getElementById('natAnno').innerHTML = '<option value="">Tutti gli anni</option>' + anni.map(a=>`<option value="${a}">${a}</option>`).join('');
@@ -7031,9 +7047,16 @@ function natFiltrati(){
   const a=document.getElementById('natAnno').value;
   const z=document.getElementById('natZero').value;
   const st=document.getElementById('natStato').value, co=document.getElementById('natComp').value;
+  const ql=document.getElementById('natQual').value;
   return _natRiep.filter(p=>(!q || p.nome.toLowerCase().includes(q) || p.matricola.includes(q)) && (!a || p.anni.includes(+a))
     && (!z || (z==='zero' ? p.anni.length===0 : p.anni.length>0))
-    && (!st || p.stato===st) && (!co || p.compagnia===co));
+    && (!st || p.stato===st) && (!co || p.compagnia===co) && (!ql || p.qualifica===ql))
+    .sort((x,y)=>{
+      const az = x.nome.localeCompare(y.nome,'it');
+      if(_natSort==='za') return -az;
+      if(_natSort==='nat') return (y.anni.length-x.anni.length) || az;
+      return az;
+    });
 }
 function natRender(){
   const body=document.getElementById('natBody');
